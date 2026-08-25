@@ -1,0 +1,53 @@
+@supports (-webkit-appearance: none) {
+  :root {
+    --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+    --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
+  }
+
+  /* Dark mode scrollbar colors (global + all product themes) */
+  [data-color-scheme='dark'],
+  [data-crm-color-scheme='dark'],
+  [data-ai-color-scheme='dark'],
+  [data-crypto-color-scheme='dark'],
+  [data-hosting-color-scheme='dark'],
+  [data-pms-color-scheme='dark'],
+  [data-hrm-color-scheme='dark'],
+  [data-plugin-color-scheme='dark'],
+  [data-lms-color-scheme='dark'] {
+    --scrollbar-thumb: rgba(255, 255, 255, 0.25);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.35);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent; /* track color */
+  }
+
+  /* target the scrollbar track (background) */
+  *::-webkit-scrollbar {
+    width: 8px; /* Adjust for desired thinness */
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  /* remove buttons */
+  *::-webkit-scrollbar-button {
+    display: none;
+  }
+}
+
+@supports (-moz-appearance: none) {
+  /* firefox specific styles */
+
+  /* adjust scrollbar width */
+  * {
+    scrollbar-width: thin; /* "auto" or "thin" for Firefox */
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "navbar": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "docs": "Docs",
+    "buyNow": "Buy Now"
+  },
+  "hero": {
+    "chipText": "One Kit, Endless",
+    "chipLabel": "Possibilities",
+    "headLine": "Multipurpose UI Kit and Dashboard Template",
+    "captionLine": "Design marketing pages and powerful admin dashboards with ease using our UI Kit, built following Material 3 guidelines.",
+    "primaryBtn": "Explore Blocks"
+  }
+}

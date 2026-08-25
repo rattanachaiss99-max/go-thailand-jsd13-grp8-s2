@@ -1,0 +1,24 @@
+{
+  "brandName": "Go Thailand",
+  "title": "เที่ยวไทยครบทุกเส้นทาง",
+  "company": {
+    "name": "JSD13 Team 8",
+    "url": "https://github.com/",
+    "socialLink": {
+      "linkedin": "#",
+      "instagram": "#",
+      "facebook": "#",
+      "youtube": "#",
+      "github": "https://github.com/",
+      "dribble": "#",
+      "discord": "#",
+      "support": "#"
+    }
+  },
+  "logo": {
+    "main": "",
+    "logoIcon": "",
+    "logoFab": "",
+    "logoWatermark": ""
+  }
+}

@@ -5,7 +5,7 @@ TASK
 - PO
 - MENG
 - WA
-- GUITAR
+- GUITAR -ร่างหน้า Sign In, Register, Forgot Password
 - YOK - ร่างแบบหน้าการจองที่พัก > ชำระเงิน > ยืนยัน
 
 # Team 8

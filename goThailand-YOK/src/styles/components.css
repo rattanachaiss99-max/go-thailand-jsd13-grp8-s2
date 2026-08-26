@@ -1,0 +1,386 @@
+/* ============================================================
+ * components.css
+ * ------------------------------------------------------------
+ * รวมสไตล์ของทุก component ในเว็บไซต์ จัดเป็นหมวดตามชื่อ component
+ * แต่ละหมวดมีคอมเมนต์อธิบายว่าใช้กับ component ไหน ทำหน้าที่อะไร
+ * ============================================================ */
+
+/* ---------- Header : แถบเมนูด้านบนสุด ใช้ทุกหน้า (Sticky) ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+.head-in { display: flex; align-items: center; gap: 28px; height: 72px; }
+.logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--color-primary); }
+.logo span { color: var(--color-secondary-dark); }
+.nav { display: flex; gap: 30px; margin: 0 auto; }
+.nav a {
+  font-size: .95rem; font-weight: 500; color: var(--color-muted);
+  padding: 6px 0; border-bottom: 2px solid transparent; transition: .2s;
+}
+.nav a:hover { color: var(--color-primary); }
+.nav a.active { color: var(--color-primary); font-weight: 600; border-bottom-color: var(--color-secondary); }
+.head-cta { display: flex; align-items: center; gap: 14px; }
+
+/* ---------- Footer : ท้ายเว็บ ใช้ทุกหน้า ---------- */
+.site-foot { background: var(--color-primary); color: #b9c7d8; margin-top: 90px; padding: 64px 0 0; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; }
+.site-foot .logo { color: #fff; }
+.site-foot h4 {
+  color: var(--color-secondary); font-family: var(--font-sans); font-size: .76rem;
+  letter-spacing: .16em; text-transform: uppercase; margin-bottom: 18px;
+}
+.site-foot ul { list-style: none; display: grid; gap: 11px; }
+.site-foot a { font-size: .93rem; color: #b9c7d8; transition: .2s; }
+.site-foot a:hover { color: var(--color-secondary); }
+.foot-bar { border-top: 1px solid rgba(255, 255, 255, .12); padding: 20px 0; font-size: .85rem; color: #8397ac; }
+
+/* ---------- Button : ปุ่มใช้ซ้ำได้ทุกหน้า (variant: primary/gold/ghost/link) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans); font-size: .95rem; font-weight: 600; letter-spacing: .3px;
+  padding: 12px 24px; border-radius: var(--radius-sm); border: 1px solid transparent;
+  cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: var(--color-primary-dark); box-shadow: var(--shadow-md); }
+.btn-gold { background: var(--color-secondary); color: var(--color-primary); box-shadow: 0 4px 14px rgba(239, 194, 101, .45); }
+.btn-gold:hover { background: #f5cf80; }
+.btn-ghost { background: transparent; color: var(--color-primary); border-color: var(--color-border); }
+.btn-ghost:hover { border-color: var(--color-primary); background: #fff; }
+.btn-link { background: transparent; color: var(--color-muted); font-weight: 500; padding: 12px 10px; }
+.btn-link:hover { color: var(--color-primary); }
+.btn-full { width: 100%; }
+.btn-lg { padding: 16px 28px; font-size: 1rem; }
+
+/* ---------- Stepper : แถบแสดงขั้นตอนการจอง ใช้ในหน้า Detail/Cart/Checkout/Success ---------- */
+.stepper { display: flex; align-items: flex-start; justify-content: center; padding: 34px 0 10px; flex-wrap: wrap; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 130px; text-align: center; }
+.step .dot {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: #fff; border: 2px solid var(--color-border); color: var(--color-muted);
+  font-size: .85rem; font-weight: 700;
+}
+.step .lbl { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted); font-weight: 600; }
+.step.done .dot { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.step.done .lbl { color: var(--color-primary); }
+.step.active .dot { background: var(--color-secondary); border-color: var(--color-secondary); color: var(--color-primary); box-shadow: 0 0 0 6px var(--color-secondary-100); }
+.step.active .lbl { color: var(--color-secondary-dark); }
+.step-bar { flex: 0 0 90px; height: 2px; background: var(--color-border); margin-top: 15px; border-radius: 2px; }
+.step-bar.fill { background: var(--color-primary); }
+
+/* ---------- PhotoPlaceholder : รูปภาพจำลองด้วย gradient (ไม่ใช้ไฟล์ภาพจริง) ---------- */
+.ph { position: relative; overflow: hidden; background: #cfd9e6; }
+.ph-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ph::after {
+  content: attr(data-cap); position: absolute; left: 12px; bottom: 10px; color: rgba(255, 255, 255, .92);
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
+}
+.ph-sunset { background: radial-gradient(circle at 74% 30%, rgba(255,236,190,.95) 0 4%, rgba(255,190,120,.55) 5% 13%, transparent 26%), linear-gradient(180deg,#F7C376 0%,#EE9A6A 26%,#B4657C 48%,#4C4670 68%,#12233C 100%); }
+.ph-villa { background: linear-gradient(180deg,#2A3E56 0%,#3C5872 34%,#6F8CA0 52%,#C7B393 62%,#8D6E4E 100%); }
+.ph-pool { background: radial-gradient(ellipse at 30% 78%, rgba(108,175,255,.85) 0 34%, transparent 60%), linear-gradient(180deg,#F3C98A 0%,#D9946B 24%,#59788F 52%,#1E4C6B 76%,#0E3550 100%); }
+.ph-room { background: linear-gradient(180deg,#4A3524 0%,#7A5A3C 30%,#C9B39A 55%,#EFE6DA 78%,#B9A288 100%); }
+.ph-jungle { background: linear-gradient(180deg,#12331F 0%,#25552F 32%,#4C7C42 58%,#8FA86A 80%,#D8CFA8 100%); }
+.ph-city { background: linear-gradient(180deg,#0B1B33 0%,#1B3557 40%,#3E5C7E 62%,#E5B27A 84%,#F2D6AE 100%); }
+.ph-beach { background: linear-gradient(180deg,#8FD4FF 0%,#6CAFFF 26%,#2E7FBF 46%,#1D9C9C 62%,#E7DCC3 82%,#D8C7A5 100%); }
+.ph-spa { background: linear-gradient(180deg,#20361F 0%,#3C5A34 34%,#7E9A63 58%,#CFC49A 82%,#9E8A63 100%); }
+.ph-dine { background: linear-gradient(180deg,#12233C 0%,#284561 34%,#8C6B52 60%,#E8C08A 82%,#F3DDBB 100%); }
+.ph-map { background: linear-gradient(180deg,#EAF0E4 0%,#E4EDE6 100%); }
+.ph-map::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 46%, #BBD6EE 46% 54%, transparent 54%),
+    repeating-linear-gradient(0deg, rgba(140,160,175,.22) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(90deg, rgba(140,160,175,.22) 0 1px, transparent 1px 46px);
+}
+
+/* ---------- Card / Tag / Badge / Chip / Stars : ชิ้นส่วน UI เล็ก ๆ ใช้ซ้ำหลายจุด ---------- */
+.card { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--color-border); background: #fff; color: var(--color-muted);
+  font-size: .85rem; font-weight: 500; cursor: pointer; transition: .2s;
+}
+.chip:hover { border-color: var(--color-accent); color: var(--color-primary); }
+.chip.on { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.tag { display: inline-block; padding: 5px 12px; border-radius: 999px; background: var(--color-accent-100); color: var(--color-primary-dark); font-size: .76rem; font-weight: 600; }
+.tag-gold { background: var(--color-secondary-100); color: var(--color-secondary-dark); }
+.badge-rate { display: inline-flex; align-items: center; gap: 5px; background: var(--color-primary); color: #fff; padding: 5px 11px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 700; }
+.badge-rate i { color: var(--color-secondary); font-style: normal; }
+.pill-img { position: absolute; top: 14px; left: 14px; background: rgba(255,255,255,.93); color: var(--color-primary); padding: 5px 12px; border-radius: 999px; font-size: .74rem; font-weight: 700; letter-spacing: .04em; }
+.stars { color: var(--color-secondary); letter-spacing: 2px; font-size: .95rem; }
+.price { font-family: var(--font-serif); font-size: 1.75rem; color: var(--color-primary); font-weight: 700; }
+.price small { font-family: var(--font-sans); font-size: .85rem; color: var(--color-muted); font-weight: 500; }
+
+/* ---------- Form controls : ใช้ในหน้า Search / Checkout ---------- */
+label.fl { display: block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted); font-weight: 600; margin-bottom: 8px; }
+.inp {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: .95rem; color: var(--color-ink); background: #fff; transition: .2s;
+}
+.inp:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-100); }
+.field { margin-bottom: 20px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.check { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; font-size: .95rem; }
+.check input { width: 17px; height: 17px; accent-color: var(--color-primary); cursor: pointer; }
+.radio-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.radio-card {
+  display: flex; align-items: center; justify-content: center; gap: 9px; padding: 14px;
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer;
+  font-size: .85rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); transition: .2s;
+}
+.radio-card input { accent-color: var(--color-primary); }
+.radio-card.selected { border-color: var(--color-primary); background: var(--color-primary-100); color: var(--color-primary); }
+
+/* ---------- OrderSummary : สรุปยอดเงิน ใช้ในหน้า Cart / Checkout / Success ---------- */
+.sum-row { display: flex; justify-content: space-between; padding: 11px 0; font-size: .95rem; color: var(--color-muted); }
+.sum-row b { color: var(--color-ink); font-weight: 600; }
+.sum-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 2px solid var(--color-primary); margin-top: 12px; padding-top: 16px; }
+.sum-total .price { font-size: 2rem; }
+
+/* ---------- Listing page (AccommodationListing) ---------- */
+.search-bar {
+  background: #fff; border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+  padding: 18px; margin-top: -36px; position: relative; z-index: 20;
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr auto; gap: 14px; align-items: end;
+}
+.hero-strip { background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-primary-dark) 60%, #134070 100%); padding: 52px 0 64px; color: #fff; }
+.hero-strip h1 { color: #fff; max-width: 640px; }
+.hero-strip p { color: #b9c7d8; max-width: 560px; margin-top: 14px; }
+.listing { display: grid; grid-template-columns: 290px 1fr; gap: 30px; margin-top: 34px; }
+.filter-title { font-size: .95rem; font-weight: 700; color: var(--color-primary); margin-bottom: 14px; }
+.chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+.pager { display: flex; gap: 10px; justify-content: center; margin-top: 44px; }
+.pager button {
+  width: 42px; height: 42px; display: grid; place-items: center; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border); background: #fff; color: var(--color-muted); font-weight: 600; font-size: .9rem; cursor: pointer;
+}
+.pager button.on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+/* ---------- PropertyCard (โหมด list แบบแนวนอน ใช้ในหน้ารายการค้นหา) ---------- */
+.hotel { display: grid; grid-template-columns: 340px 1fr; overflow: hidden; }
+.hotel .ph { min-height: 250px; }
+.hotel-body { padding: 26px 28px; display: flex; flex-direction: column; }
+.hotel-foot { margin-top: auto; border-top: 1px solid var(--color-border); padding-top: 16px; display: flex; justify-content: space-between; align-items: flex-end; }
+.loc { display: flex; align-items: center; gap: 7px; color: var(--color-muted); font-size: .92rem; margin: 8px 0 12px; }
+.loc a { color: var(--color-accent); text-decoration: underline; font-size: .85rem; }
+
+/* ---------- PropertyCard (โหมด grid แนวตั้ง ใช้ใน "You might also like") ---------- */
+.hotel-mini { overflow: hidden; }
+.hotel-mini .ph { height: 160px; }
+.hotel-mini-body { padding: 16px 18px; }
+.hotel-mini-body .between { align-items: flex-start; }
+
+/* ---------- Detail page ---------- */
+.gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 190px 190px; gap: 12px; margin-top: 26px; border-radius: var(--radius-lg); overflow: hidden; }
+.gallery .ph { border-radius: var(--radius-md); }
+.gallery .ph:first-child { grid-row: span 2; }
+.detail-layout { display: grid; grid-template-columns: 1fr 380px; gap: 44px; margin-top: 44px; }
+.rate-box { display: inline-flex; align-items: center; gap: 9px; background: var(--color-secondary-100); border: 1px solid #f0dfb8; border-radius: 999px; padding: 7px 16px; font-weight: 600; color: var(--color-primary); font-size: .92rem; }
+.amen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+.amen div { display: flex; align-items: center; gap: 10px; padding: 16px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: #fff; font-size: .92rem; font-weight: 500; }
+.book-box { padding: 26px; }
+.avail { background: #e9f7ef; color: #1e7a48; padding: 5px 12px; border-radius: 999px; font-size: .76rem; font-weight: 700; }
+.date-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden; margin: 18px 0 0; }
+.date-grid > div { padding: 12px 14px; }
+.date-grid > div + div { border-left: 1px solid var(--color-border); }
+
+/* ---------- DateRangeFields : input วันที่จริงในกล่องจอง (แทนตัวเลขนิ่ง ๆ) ---------- */
+.date-input {
+  width: 100%; border: none; background: transparent; padding: 0;
+  font-family: var(--font-sans); font-size: .95rem; font-weight: 700; color: var(--color-ink);
+  cursor: pointer;
+}
+.date-input:focus { outline: none; }
+
+/* ---------- GuestRoomSelector / QuantityStepper : ปุ่ม +/- เลือกจำนวนผู้เข้าพัก-ห้อง ---------- */
+.guest-editor {
+  border: 1px solid var(--color-border); border-top: 0; border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  padding: 4px 14px;
+}
+.qty-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+.qty-row + .qty-row { border-top: 1px solid var(--color-border); }
+.qty-label { font-size: .92rem; font-weight: 600; color: var(--color-ink); }
+.qty-hint { font-size: .78rem; color: var(--color-muted); }
+.qty-controls { display: flex; align-items: center; gap: 14px; }
+.qty-btn {
+  width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--color-border);
+  background: #fff; color: var(--color-primary); font-size: 1.1rem; line-height: 1; font-weight: 600;
+  display: grid; place-items: center; cursor: pointer; transition: .15s;
+}
+.qty-btn:hover:not(:disabled) { border-color: var(--color-primary); background: var(--color-primary-100); }
+.qty-btn:disabled { opacity: .35; cursor: not-allowed; }
+.qty-value { min-width: 20px; text-align: center; font-weight: 700; font-size: .95rem; }
+
+/* ---------- Edit-booking toggle (ใช้ในหน้า Cart) ---------- */
+.edit-panel { background: var(--color-bg); border-radius: var(--radius-sm); padding: 16px; margin-top: 14px; }
+.map-shell { height: 280px; border-radius: var(--radius-md); position: relative; overflow: hidden; margin-top: 18px; border: 1px solid var(--color-border); }
+.map-pin { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; padding: 10px 18px; border-radius: 999px; box-shadow: var(--shadow-md); font-size: .9rem; font-weight: 600; }
+.near { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; margin-top: 16px; }
+.near div { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--color-border); font-size: .92rem; }
+.near span { color: var(--color-muted); font-size: .85rem; }
+section.blk { margin-top: 44px; }
+
+/* ---------- Cart page ---------- */
+.cart-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; margin-top: 30px; align-items: start; }
+.cart-item { display: grid; grid-template-columns: 220px 1fr; gap: 22px; padding: 20px; }
+.cart-item .ph { height: 170px; border-radius: var(--radius-sm); }
+.cart-item-body { display: flex; flex-direction: column; }
+.perks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 22px; }
+.perks div { text-align: center; padding: 18px 10px; }
+.perks div .ico { font-size: 1.4rem; margin-bottom: 8px; }
+.also-like { margin-top: 60px; }
+.also-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 24px; }
+
+/* ---------- Checkout page ---------- */
+.checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; margin-top: 30px; align-items: start; }
+.form-card { padding: 28px; margin-bottom: 24px; }
+.summary-thumb { border-radius: var(--radius-sm); overflow: hidden; height: 140px; margin-bottom: 18px; }
+.sum-line { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: .92rem; }
+.sum-line .lbl-ico { display: flex; align-items: center; gap: 8px; color: var(--color-muted); }
+.pay-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 24px; }
+.pay-tab { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 14px; text-align: center; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: .82rem; color: var(--color-muted); cursor: pointer; }
+.pay-tab.selected { border-color: var(--color-primary); background: var(--color-primary-100); color: var(--color-primary); }
+.secure-note { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--color-muted); }
+.perk-row { display: flex; justify-content: space-around; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--color-border); }
+.perk-row div { text-align: center; font-size: .78rem; color: var(--color-muted); }
+.perk-row .ico { font-size: 1.2rem; display: block; margin-bottom: 6px; }
+
+/* ---------- Success page ---------- */
+.success-wrap { text-align: center; padding-top: 30px; }
+.success-icon {
+  width: 68px; height: 68px; border-radius: var(--radius-sm); background: var(--color-secondary);
+  display: grid; place-items: center; margin: 0 auto 22px; font-size: 1.8rem; color: var(--color-primary);
+}
+.success-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; max-width: 900px; margin: 34px auto 0; text-align: left; }
+.booking-id-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--color-border); }
+.status-pill { background: var(--color-accent-100); color: var(--color-primary-dark); padding: 5px 14px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+.confirm-item { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 20px; }
+.confirm-item .ph { height: 110px; border-radius: var(--radius-sm); }
+.pay-status { background: #e9f7ef; color: #1e7a48; border-radius: var(--radius-sm); padding: 12px 16px; font-size: .88rem; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+.help-box { background: var(--color-primary-100); border-radius: var(--radius-md); padding: 30px; text-align: center; margin-top: 50px; }
+.help-contacts { display: flex; justify-content: center; gap: 30px; margin-top: 16px; flex-wrap: wrap; font-size: .92rem; font-weight: 600; color: var(--color-primary); }
+
+/* ---------- Home (Landing) page ---------- */
+.hero-home {
+  position: relative; height: 640px; background-size: cover; background-position: center;
+  display: flex; align-items: center;
+}
+.hero-home-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,35,64,.55) 0%, rgba(8,35,64,.25) 45%, rgba(8,35,64,.75) 100%);
+}
+.hero-home-content { position: relative; z-index: 2; color: #fff; }
+.hero-home-content h1 { color: #fff; font-size: clamp(2.4rem, 5vw, 3.6rem); max-width: 780px; }
+.hero-home-content p { color: #e7edf5; max-width: 620px; margin-top: 18px; font-size: 1.05rem; }
+
+.services-intro { text-align: center; margin-top: 60px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; color: var(--color-secondary-dark);
+  font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.services-intro h2 { margin-top: 10px; }
+.services-intro p { max-width: 540px; margin: 12px auto 0; }
+
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 40px; }
+.service-card { padding: 28px; text-align: center; }
+.service-icon {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--color-secondary-100);
+  display: grid; place-items: center; font-size: 1.4rem; margin: 0 auto 14px;
+}
+.service-card h3 { margin-bottom: 16px; }
+.service-photo { border-radius: var(--radius-md); overflow: hidden; height: 190px; margin-bottom: 18px; }
+.service-photo img { width: 100%; height: 100%; object-fit: cover; }
+.service-desc { min-height: 72px; }
+.service-price { font-weight: 700; color: var(--color-ink); margin: 16px 0; }
+
+.trust-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 60px; padding: 30px 10px;
+}
+.trust-bar > div { padding: 0 20px; text-align: center; }
+.trust-bar > div + div { border-left: 1px solid var(--color-border); }
+.trust-bar .row { justify-content: center; gap: 10px; margin-bottom: 6px; }
+.trust-bar .ico { font-size: 1.3rem; }
+.trust-bar p { font-size: .88rem; margin-top: 4px; }
+
+/* ---------- Car Rental page ---------- */
+.car-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.car-card { display: flex; flex-direction: column; }
+.car-photo { height: 190px; position: relative; }
+.car-fav {
+  position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.93); border: none; cursor: pointer; font-size: 1.05rem;
+  color: var(--color-muted); display: grid; place-items: center;
+}
+.car-fav.on { color: #c0392b; }
+.car-card-body { padding: 20px 22px; display: flex; flex-direction: column; flex: 1; }
+.car-specs { display: flex; gap: 14px; font-size: .85rem; color: var(--color-muted); margin: 6px 0; }
+
+/* ---------- Car Detail page ---------- */
+.breadcrumb {
+  display: flex; gap: 10px; align-items: center; margin-top: 24px;
+  font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted);
+}
+.breadcrumb a:hover { color: var(--color-primary); }
+.breadcrumb .current { color: var(--color-primary); }
+
+.car-detail-gallery { margin-top: 18px; }
+.car-detail-main { position: relative; height: 460px; border-radius: var(--radius-lg); overflow: hidden; }
+.car-detail-main .ph { height: 100%; border-radius: 0; }
+.img-actions { position: absolute; top: 16px; right: 16px; display: flex; gap: 10px; }
+.img-action-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(255,255,255,.93); color: var(--color-primary); font-size: 1.05rem;
+  display: grid; place-items: center; box-shadow: var(--shadow-sm);
+}
+.img-action-btn.on { color: #c0392b; }
+
+.car-detail-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 12px; }
+.car-detail-thumb {
+  position: relative; height: 110px; border-radius: var(--radius-sm); overflow: hidden;
+  border: 2px solid transparent; padding: 0; cursor: pointer; background: none;
+}
+.car-detail-thumb.active { border-color: var(--color-secondary); }
+.car-detail-thumb .ph { height: 100%; border-radius: 0; }
+.car-detail-more {
+  position: absolute; inset: 0; background: rgba(8,35,64,.62); color: #fff;
+  display: grid; place-items: center; font-size: .8rem; font-weight: 700;
+}
+
+.spec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
+.spec-box { text-align: center; padding: 20px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: #fff; }
+.spec-icon { font-size: 1.3rem; margin-bottom: 10px; }
+.spec-label { font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 4px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .nav { display: none; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .search-bar { grid-template-columns: 1fr 1fr; }
+  .listing { grid-template-columns: 1fr; }
+  .hotel { grid-template-columns: 1fr; }
+  .detail-layout, .cart-layout, .checkout-layout, .success-layout { grid-template-columns: 1fr; }
+  .also-grid { grid-template-columns: 1fr 1fr; }
+  .amen, .near { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .trust-bar { grid-template-columns: 1fr 1fr; gap: 24px 0; }
+  .trust-bar > div:nth-child(2n+1) { border-left: none; }
+  .car-grid { grid-template-columns: 1fr 1fr; }
+  .spec-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .grid-2, .radio-row { grid-template-columns: 1fr; }
+  .step-bar { flex-basis: 34px; }
+  .step { width: 88px; }
+  .foot-grid { grid-template-columns: 1fr; }
+  .cart-item, .confirm-item { grid-template-columns: 1fr; }
+  .perks, .also-grid { grid-template-columns: 1fr 1fr; }
+  .hero-home { height: 560px; }
+  .trust-bar { grid-template-columns: 1fr; }
+  .trust-bar > div { border-left: none !important; }
+  .car-grid { grid-template-columns: 1fr; }
+  .car-detail-thumbs, .spec-grid { grid-template-columns: 1fr 1fr; }
+  .car-detail-main { height: 320px; }
+}

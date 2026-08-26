@@ -38,17 +38,6 @@ interface Props {
   secondaryBtn?: ButtonProps;
 }
 
-/***************************  HERO - 1  ***************************/
-
-/**
- *
- * Demos:
- * - [Hero1](https://www.saasable.io/blocks/hero/hero1)
- *
- * API:
- * - [Hero1 API](https://phoenixcoded.gitbook.io/saasable/ui-kit/development/components/hero/hero1#props-details)
- */
-
 export default function Hero1({ chip, headLine, captionLine, image, primaryBtn, secondaryBtn }: Props) {
   const imageRadius = { xs: 12, sm: 16, md: 20 };
   const cardPadding = { xs: 3, sm: 5, md: 8 };

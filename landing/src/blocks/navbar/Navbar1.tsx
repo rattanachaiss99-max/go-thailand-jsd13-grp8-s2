@@ -34,15 +34,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 /***************************  NAVBAR - 1  ***************************/
 
-/**
- *
- * Demos:
- * - [Navbar1](https://www.saasable.io/blocks/navbar/navbar1)
- *
- * API:
- * - [Navbar1 API](https://phoenixcoded.gitbook.io/saasable/ui-kit/development/components/navbar/navbar1#props-details)
- */
-
 export default function Navbar1({ children, isFixed = true, ...props }: NavbarProps) {
   return (
     <>

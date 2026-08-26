@@ -44,15 +44,6 @@ function SlideTransition(props: SlideProps) {
 
 /***************************  COMING SOON  ***************************/
 
-/**
- *
- * Demos:
- * - [ComingSoon](https://www.saasable.io/blocks/coming-soon)
- *
- *  * API
- * - [ComingSoon API](https://phoenixcoded.gitbook.io/saasable/ui-kit/development/components/comingsoon#props-details)
- */
-
 export default function ComingSoon({ chip, primaryBtn, description }: Props) {
   const [email, setEmail] = useState<string>('');
   const [snackbar, setSnackbar] = useState<SnackbarDataProps | null>(null);

@@ -24,7 +24,7 @@ import { ChildrenProps } from '@/types/root';
 const modeStorageKey = 'theme-mode';
 
 // Theme Map
-const themeMap: Record<Themes, (selector: string) => Theme> = {
+const themeMap: Partial<Record<Themes, (selector: string) => Theme>> = {
   [Themes.THEME_DEFAULT]: defaultTheme
   // [Themes.THEME_TRAVEL]: travelTheme
 };

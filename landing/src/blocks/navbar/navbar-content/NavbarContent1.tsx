@@ -24,15 +24,6 @@ import { NavbarContentProps } from '@/types/navbar';
 
 /***************************  NAVBAR - CONTENT 1  ***************************/
 
-/**
- *
- * Demos:
- * - [NavbarContent1](https://www.saasable.io/blocks/navbar/navbar1)
- *
- * API:
- * - [NavbarContent1 API](https://phoenixcoded.gitbook.io/saasable/ui-kit/development/components/navbar/navbar-content/navbarcontent1#props-details)
- */
-
 export default function NavbarContent1({
   landingBaseUrl,
   navItems,

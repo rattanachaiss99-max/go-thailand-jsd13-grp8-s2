@@ -59,11 +59,11 @@ const menuItems: FooterMenuProps[] = [
     menu: [
       {
         label: 'Pricing',
-        link: { href: 'https://mui.com/store/items/saasable-multipurpose-ui-kit-and-dashboard/', ...linkProps }
+        link: { href: '', ...linkProps }
       },
       {
         label: 'FAQ',
-        link: { href: 'https://phoenixcoded.gitbook.io/saasable/faq', ...linkProps }
+        link: { href: '', ...linkProps }
       },
       {
         label: 'Support',
@@ -85,9 +85,9 @@ const menuItems: FooterMenuProps[] = [
     title: 'Company',
     menu: [
       {
-        label: 'Why Phoenixcoded?',
+        label: '',
         link: {
-          href: 'https://blog.saasable.io/a-decade-of-expertise-the-phoenixcoded-story-and-why-you-should-trust-us',
+          href: '',
           ...linkProps
         }
       },

@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "author": {
-    "email": "phoenixcoded@gmail.com",
-    "name": "phoenixcoded"
+    "email": "",
+    "name": ""
   },
   "scripts": {
     "dev": "next dev",

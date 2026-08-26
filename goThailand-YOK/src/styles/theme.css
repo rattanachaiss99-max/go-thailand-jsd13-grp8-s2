@@ -1,0 +1,98 @@
+/* ============================================================
+ * theme.css
+ * ------------------------------------------------------------
+ * ไฟล์นี้คือ "ดีไซน์โทเค็น" (Design Tokens) ของทั้งเว็บไซต์
+ * เก็บสี, ฟอนต์, ระยะห่าง, เงา ฯลฯ ไว้เป็นตัวแปร CSS (:root)
+ * เพื่อให้ทุก component เรียกใช้ค่าเดียวกัน แก้ที่เดียวเปลี่ยนทั้งเว็บ
+ * ============================================================ */
+:root {
+  /* สีหลักตามที่กำหนด: โทนหลัก / โทนรอง / สีตรงข้าม */
+  --color-primary: #082340;      /* กรม-น้ำเงินเข้ม: โทนหลัก ใช้กับ header, ปุ่มหลัก, ตัวอักษรหัวเรื่อง */
+  --color-primary-dark: #0c3157; /* เฉดเข้มขึ้นสำหรับ hover ของโทนหลัก */
+  --color-primary-100: #e7edf5;  /* เฉดอ่อนของโทนหลัก ใช้เป็นพื้นหลังบางจุด */
+
+  --color-secondary: #efc265;    /* ทอง: โทนรอง ใช้กับปุ่ม CTA หลัก, badge, ราคา */
+  --color-secondary-dark: #c99a33;
+  --color-secondary-100: #fdf4e1;
+
+  --color-accent: #6cafff;       /* ฟ้า: สีตรงข้าม ใช้กับลิงก์, การเน้นข้อมูลรอง, badge แผนที่ */
+  --color-accent-100: #e8f2ff;
+
+  /* สีกลาง (Neutrals) สำหรับพื้นหลัง / ตัวอักษร / เส้นขอบ */
+  --color-bg: #f5f8fc;
+  --color-card: #ffffff;
+  --color-border: #e4eaf2;
+  --color-ink: #0e1b2a;          /* สีตัวอักษรหลัก */
+  --color-muted: #61738a;        /* สีตัวอักษรรอง */
+
+  /* รัศมีขอบมุม (Border radius) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  /* เงา (Shadow) ใช้ให้การ์ดดูมีมิติแบบหรูหรา */
+  --shadow-sm: 0 2px 10px rgba(8, 35, 64, 0.06);
+  --shadow-md: 0 10px 30px rgba(8, 35, 64, 0.09);
+  --shadow-lg: 0 20px 50px rgba(8, 35, 64, 0.14);
+
+  /* ฟอนต์: Playfair Display สำหรับหัวเรื่อง (ดูหรู), Barlow สำหรับเนื้อหา (อ่านง่าย) */
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Barlow", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --content-width: 1180px; /* ความกว้างสูงสุดของเนื้อหาแต่ละหน้า */
+}
+
+/* ------------------------------------------------------------
+ * Reset & base element styles
+ * ------------------------------------------------------------ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.18;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
+h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem); }
+h3 { font-size: 1.25rem; }
+button {
+  font-family: inherit;
+}
+
+/* ------------------------------------------------------------
+ * Utility classes ที่ใช้ซ้ำได้ทั่วทั้งเว็บ (แทนการเขียน inline style ซ้ำ ๆ)
+ * ------------------------------------------------------------ */
+.wrap {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.muted { color: var(--color-muted); }
+.center { text-align: center; }
+.row { display: flex; gap: 16px; align-items: center; }
+.between { display: flex; justify-content: space-between; align-items: center; }
+.divider { height: 1px; background: var(--color-border); margin: 20px 0; }
+.sticky { position: sticky; top: 100px; }

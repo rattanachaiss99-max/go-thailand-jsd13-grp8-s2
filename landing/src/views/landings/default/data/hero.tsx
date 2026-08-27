@@ -14,6 +14,7 @@ export const hero = {
   captionLine: 'ค้นหาและจองสถานที่ท่องเที่ยว ที่พัก และแพ็กเกจทัวร์ทั่วประเทศไทย ในที่เดียว',
   image: '/assets/images/hero/lady-2.png',
   primaryBtn: { children: 'เริ่มต้นเที่ยว', href: '/' },
+  secondaryBtn: { children: 'สมัครสมาชิก / ล็อกอิน', href: '/register', variant: 'outlined', component: 'a' } as object,
   listData: [
     { image: '/assets/images/shared/react.svg', title: 'React 19' },
     { image: '/assets/images/shared/next-js.svg', title: 'Next.js' },

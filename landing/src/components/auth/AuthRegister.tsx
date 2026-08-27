@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 // @third-party
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -32,12 +33,17 @@ interface Props {
   inputSx?: SxProps;
 }
 
+// API base — ปรับเป็นตัวแปรสภาพแวดล้อมได้
+const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
+
 /***************************  AUTH - REGISTER  ***************************/
 
 export default function AuthRegister({ inputSx }: Props) {
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   // Initialize react-hook-form
   const {
@@ -47,10 +53,44 @@ export default function AuthRegister({ inputSx }: Props) {
     formState: { errors }
   } = useForm<LoginFormInput>();
 
-  // Handle form submission
-  const onSubmit: SubmitHandler<LoginFormInput> = (data) => {
-    console.log(data);
-    reset();
+  // Handle form submission — calls the real /api/auth/register endpoint
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
+    setFeedback(null);
+
+    if (data.password !== data.confirmPassword) {
+      setFeedback({ type: 'error', msg: 'รหัสผ่านไม่ตรงกัน' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          firstName: data.firstname,
+          lastName: data.lastname,
+          role: 'customer'
+        })
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        setFeedback({ type: 'error', msg: result.error || 'สมัครสมาชิกไม่สำเร็จ' });
+        return;
+      }
+
+      // สำเร็จ — เก็บ token (ในระบบจริงควรเซฟใน httpOnly cookie หรือ context)
+      localStorage.setItem('gt_token', result.token);
+      setFeedback({ type: 'success', msg: 'สมัครสมาชิกสำเร็จ' });
+      reset();
+    } catch {
+      setFeedback({ type: 'error', msg: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -145,9 +185,14 @@ export default function AuthRegister({ inputSx }: Props) {
             sx={inputSx}
           />
         </Stack>
-        <Button fullWidth type="submit" color="primary" variant="contained" sx={{ mt: { xs: 0.5, sm: 1.5 } }}>
-          Sign Up
+        <Button fullWidth type="submit" color="primary" variant="contained" disabled={loading} sx={{ mt: { xs: 0.5, sm: 1.5 } }}>
+          {loading ? 'กำลังสมัคร...' : 'Sign Up'}
         </Button>
+        {feedback && (
+          <Alert severity={feedback.type} sx={{ mt: 1 }}>
+            {feedback.msg}
+          </Alert>
+        )}
       </Stack>
     </form>
   );

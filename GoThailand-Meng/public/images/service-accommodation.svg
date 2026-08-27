@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+  <!-- ====================================================
+       Service card illustration: ACCOMMODATION
+       Tropical resort with an infinity pool, villa and
+       sun loungers (flat cartoon style).
+       ==================================================== -->
+  <defs>
+    <linearGradient id="accSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9edcfa"/>
+      <stop offset="100%" stop-color="#e2f6fe"/>
+    </linearGradient>
+    <linearGradient id="accPool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5fd0ec"/>
+      <stop offset="100%" stop-color="#2a9ec9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky + sea -->
+  <rect width="600" height="400" fill="url(#accSky)"/>
+  <rect y="170" width="600" height="90" fill="#2fb3cf"/>
+  <ellipse cx="140" cy="60" rx="60" ry="14" fill="#ffffff" opacity="0.9"/>
+  <ellipse cx="470" cy="45" rx="70" ry="16" fill="#ffffff" opacity="0.9"/>
+
+  <!-- distant island -->
+  <path d="M330 172 L400 120 L470 172 Z" fill="#7fae94" opacity="0.8"/>
+
+  <!-- sand / deck -->
+  <rect y="255" width="600" height="145" fill="#f2e2c4"/>
+  <rect y="250" width="600" height="10" fill="#e8d3ac"/>
+
+  <!-- villa with wooden roof (right side) -->
+  <g>
+    <rect x="400" y="150" width="170" height="12" rx="4" fill="#8a5a33"/>
+    <rect x="408" y="162" width="10" height="95" fill="#a06a3d"/>
+    <rect x="552" y="162" width="10" height="95" fill="#a06a3d"/>
+    <rect x="425" y="180" width="120" height="75" rx="6" fill="#f7f1e3"/>
+    <rect x="437" y="192" width="40" height="34" rx="3" fill="#9ed3ea"/>
+    <rect x="492" y="192" width="40" height="34" rx="3" fill="#9ed3ea"/>
+    <rect x="437" y="234" width="95" height="21" rx="4" fill="#d9c7a8"/>
+  </g>
+
+  <!-- palm tree (left) -->
+  <g>
+    <path d="M96 260 C102 210 98 180 88 152 L100 148 C112 182 116 218 112 260 Z" fill="#8a5a33"/>
+    <g fill="#3f9d5f">
+      <path d="M94 150 C60 132 28 136 6 156 C36 144 66 146 92 160 Z"/>
+      <path d="M94 148 C74 118 44 108 14 114 C46 116 72 128 96 154 Z"/>
+      <path d="M96 146 C100 112 118 88 148 78 C122 98 108 124 104 152 Z"/>
+      <path d="M98 148 C120 122 150 112 180 118 C150 122 124 134 104 156 Z"/>
+      <path d="M100 152 C132 142 162 148 184 166 C156 154 128 152 104 160 Z"/>
+    </g>
+  </g>
+
+  <!-- infinity pool -->
+  <rect x="60" y="285" width="540" height="115" rx="18" fill="url(#accPool)"/>
+  <rect x="60" y="285" width="540" height="10" rx="5" fill="#ffffff" opacity="0.85"/>
+  <g stroke="#bdeffb" stroke-width="4" opacity="0.8" fill="none">
+    <path d="M150 330 q22 -10 44 0 t44 0"/>
+    <path d="M330 355 q22 -10 44 0 t44 0"/>
+    <path d="M480 325 q22 -10 44 0 t44 0"/>
+  </g>
+
+  <!-- sun loungers (bottom left) -->
+  <g>
+    <g transform="translate(95 300)">
+      <rect x="0" y="16" width="90" height="13" rx="6" fill="#ffffff"/>
+      <path d="M72 16 L98 2 L102 10 L80 24 Z" fill="#dfe6ec"/>
+      <rect x="26" y="16" width="22" height="13" fill="#4fa3d1"/>
+      <rect x="10" y="29" width="7" height="16" fill="#8f979f"/>
+      <rect x="72" y="29" width="7" height="16" fill="#8f979f"/>
+    </g>
+    <g transform="translate(210 306)">
+      <rect x="0" y="16" width="90" height="13" rx="6" fill="#ffffff"/>
+      <path d="M72 16 L98 2 L102 10 L80 24 Z" fill="#dfe6ec"/>
+      <rect x="26" y="16" width="22" height="13" fill="#4fa3d1"/>
+      <rect x="10" y="29" width="7" height="16" fill="#8f979f"/>
+      <rect x="72" y="29" width="7" height="16" fill="#8f979f"/>
+    </g>
+  </g>
+</svg>

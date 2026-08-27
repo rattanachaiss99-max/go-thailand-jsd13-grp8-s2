@@ -1,0 +1,42 @@
+/* ============================================================
+   Global stylesheet for the GoThailand website
+   - Loads Google Fonts (Playfair Display for headings / logo,
+     Inter for normal text)
+   - Imports Tailwind CSS v4
+   - Defines the GoThailand color palette + fonts as Tailwind
+     theme tokens so we can use classes such as
+     `bg-thai-navy`, `text-thai-gold`, `font-display`, ...
+   ============================================================ */
+
+/* Google fonts must be imported first (CSS @import rule order) */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+
+@import "tailwindcss";
+
+/* Custom design tokens for the whole website */
+@theme {
+  /* Fonts: "font-display" = headings/logo, "font-sans" = body text */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Brand colors taken from the GoThailand design */
+  --color-thai-navy: #0f1d55;        /* dark blue used by header / footer / titles */
+  --color-thai-navy-light: #1c2f7d;  /* lighter navy for hover states / silhouettes */
+  --color-thai-gold: #f2b429;        /* main gold color (buttons, logo, accents) */
+  --color-thai-gold-light: #ffc95e;  /* gold used on hover */
+  --color-thai-gold-dark: #d3940a;   /* gold used while the button is pressed */
+  --color-thai-cream: #faf3e7;       /* cream page background */
+
+  /* The 4 colors of the Thailand regions map on the hero banner */
+  --color-region-green: #4caf50;     /* Northern region  */
+  --color-region-orange: #f57c00;    /* Northeastern (Isaan) region */
+  --color-region-yellow: #ffc21a;    /* Central region   */
+  --color-region-blue: #2f9fe0;      /* Southern region  */
+}
+
+/* Base settings applied to the whole page */
+body {
+  font-family: var(--font-sans); /* use Inter as the default font */
+  background-color: var(--color-thai-cream);
+  color: var(--color-thai-navy);
+}

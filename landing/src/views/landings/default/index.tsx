@@ -20,6 +20,10 @@ export default function Main() {
     primaryBtn: {
       ...hero.primaryBtn,
       children: t('hero.primaryBtn')
+    },
+    secondaryBtn: {
+      ...hero.secondaryBtn,
+      children: t('hero.secondaryBtn')
     }
   };
 

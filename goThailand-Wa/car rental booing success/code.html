@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoThailand - Booking Confirmation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed": "#baeaff",
+                        "surface-container": "#edeeef",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#001f29",
+                        "inverse-surface": "#2e3132",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed": "#ffe088",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "background": "#f8f9fa",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#3a5f94",
+                        "outline-variant": "#c3c6d1",
+                        "secondary": "#735c00",
+                        "on-surface-variant": "#43474f",
+                        "on-surface": "#191c1d",
+                        "on-secondary-container": "#745c00",
+                        "primary": "#001e40",
+                        "surface": "#f8f9fa",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#fed65b",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-secondary-fixed-variant": "#574500",
+                        "outline": "#737780",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary-container": "#5da4c0",
+                        "on-primary-container": "#799dd6",
+                        "on-secondary-fixed": "#241a00",
+                        "inverse-primary": "#a7c8ff",
+                        "on-tertiary-fixed-variant": "#004d62",
+                        "tertiary-container": "#003848",
+                        "on-primary-fixed": "#001b3c",
+                        "primary-fixed": "#d5e3ff",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#00212c",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#003366",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "tertiary-fixed-dim": "#89d0ed",
+                        "inverse-on-surface": "#f0f1f2"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.125rem",
+                        lg: "0.25rem",
+                        xl: "0.5rem",
+                        full: "0.75rem"
+                    },
+                    spacing: {
+                        "stack-lg": "24px",
+                        "margin-desktop": "80px",
+                        "gutter": "32px",
+                        "stack-sm": "8px",
+                        "margin-mobile": "24px",
+                        "stack-md": "16px",
+                        "section-gap": "120px"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Playfair Display"],
+                        "body-lg": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-sm": ["Montserrat"],
+                        "label-md": ["Montserrat"]
+                    },
+                    fontSize: {
+                        "display-lg": ["64px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "1.4", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "600" }],
+                        "display-lg-mobile": ["40px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "1.2", letterSpacing: "0.03em", fontWeight: "500" }],
+                        "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar: Inherits styling from JSON (No Nav logic needed as this is a linear transactional end state, but preserving TopAppBar for brand consistency as requested) -->
+<header class="bg-surface-container-lowest shadow-sm shadow-[0px_12px_32px_rgba(0,51,102,0.05)] w-full top-0 z-50 transition-all">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-20 max-w-[1280px] mx-auto">
+<a class="font-headline-lg text-headline-lg text-primary tracking-tight" href="#">GoThailand</a>
+<!-- Nav hidden on transactional success page as per "Linear/Transactional" rule, but CTA remains if applicable -->
+<div class="hidden md:flex items-center gap-6">
+<!-- Suppressed nav links per shell relevance rule -->
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded hover:bg-primary-container transition-colors shadow-sm">
+                Return Home
+            </button>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg md:py-margin-desktop min-h-[80vh] flex flex-col items-center justify-center">
+<!-- Success Hero -->
+<div class="text-center w-full max-w-2xl mx-auto space-y-stack-md mb-section-gap pt-12">
+<div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-secondary-fixed mb-6 shadow-sm shadow-[0px_12px_32px_rgba(0,51,102,0.05)]">
+<span class="material-symbols-outlined text-[48px] text-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Your Car Rental is Confirmed!</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Your Toyota Fortuner rental has been successfully booked.</p>
+<div class="inline-block bg-surface-container-low px-6 py-3 rounded-lg border border-outline-variant/30 mt-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block mb-1">Booking Reference ID</span>
+<span class="font-headline-md text-headline-md text-primary">GT-CR-2026-00128</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-6">Thank you for booking with GoThailand. Your booking confirmation has been sent to your email address.</p>
+</div>
+<!-- Next Steps Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter w-full mb-section-gap">
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant/20 shadow-[0px_12px_32px_rgba(0,51,102,0.02)] flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl text-secondary-fixed-dim mb-4" style="font-variation-settings: 'FILL' 1;">mail</span>
+<h3 class="font-label-md text-label-md text-primary mb-2">01 Check Your Email</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Review your detailed itinerary and receipt.</p>
+</div>
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant/20 shadow-[0px_12px_32px_rgba(0,51,102,0.02)] flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl text-secondary-fixed-dim mb-4" style="font-variation-settings: 'FILL' 1;">description</span>
+<h3 class="font-label-md text-label-md text-primary mb-2">02 Prepare Documents</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Have your driver's license and passport ready.</p>
+</div>
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant/20 shadow-[0px_12px_32px_rgba(0,51,102,0.02)] flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-3xl text-secondary-fixed-dim mb-4" style="font-variation-settings: 'FILL' 1;">car_rental</span>
+<h3 class="font-label-md text-label-md text-primary mb-2">03 Pick Up Your Car</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Arrive at the designated pickup point.</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-stack-md justify-center w-full max-w-md mx-auto">
+<button class="flex-1 bg-secondary-fixed hover:bg-secondary-container text-on-secondary-fixed font-label-md text-label-md px-6 py-4 rounded-lg transition-colors shadow-sm text-center">
+                View My Booking
+            </button>
+<button class="flex-1 bg-transparent border border-primary text-primary hover:bg-primary/5 font-label-md text-label-md px-6 py-4 rounded-lg transition-colors text-center">
+                Back to Home
+            </button>
+</div>
+</main>
+<!-- Footer: Inherits styling from JSON -->
+<footer class="bg-primary text-on-primary mt-auto w-full border-t border-outline-variant/20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap w-full max-w-[1280px] mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-md text-headline-md text-secondary-fixed block mb-6">GoThailand</span>
+<p class="font-body-md text-body-md text-on-primary/80">© 2024 GoThailand Luxury Travel. All rights reserved.</p>
+</div>
+<div class="col-span-1">
+<h4 class="font-label-md text-label-md text-secondary-fixed mb-4 uppercase tracking-wider">Company</h4>
+<ul class="space-y-3 font-body-md text-body-md">
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">About Us</a></li>
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="font-label-md text-label-md text-secondary-fixed mb-4 uppercase tracking-wider">Legal</h4>
+<ul class="space-y-3 font-body-md text-body-md">
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="font-label-md text-label-md text-secondary-fixed mb-4 uppercase tracking-wider">Connect</h4>
+<ul class="space-y-3 font-body-md text-body-md">
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">Press Kit</a></li>
+<li><a class="text-on-primary/80 hover:text-on-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+</footer>
+</body></html>

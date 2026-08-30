@@ -2,8 +2,8 @@
 - PO - scrum master , Database Design (USER)
 - MENG
 - WA
-- GUITAR -ร่างหน้า Sign In, Register, Forgot Password
-- YOK - ร่างแบบ Accomodation \*\*Product Card/List, ตะกร้า, ชำระเงิน
+- GUITAR - Component : Sign In, Register, Forgot Password
+- YOK - Component : Accomodation , Product Card/List, Shopping Cart, Check out
 
 # Team 8
 

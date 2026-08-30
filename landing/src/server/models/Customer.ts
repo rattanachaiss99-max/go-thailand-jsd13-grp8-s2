@@ -15,6 +15,13 @@ export interface ICoupon {
   expiresAt?: Date;
 }
 
+export interface IFeedback {
+  rating: number; // 1-5 stars
+  comment?: string;
+  topic?: string; // e.g. "ทัวร์เชียงใหม่", "แอป", "เว็บ"
+  createdAt?: Date;
+}
+
 export interface ICustomer extends IUser {
   role: 'customer';
   membershipTier: MembershipTier;
@@ -26,6 +33,11 @@ export interface ICustomer extends IUser {
   // Booking history is referenced from the bookings collection, kept lightweight here.
   bookingCount: number;
   wishlist?: string[]; // product/tour ids
+  // Feedback left by the user (reviews, suggestions)
+  feedbacks: IFeedback[];
+  // Free-form bucket for future data points without schema changes:
+  // user.metadata.set('favoriteRegion', 'ภาคเหนือ') / ('newsletterOptIn', true)
+  metadata: Map<string, any>;
 }
 
 const couponSchema = new Schema<ICoupon>(
@@ -46,7 +58,18 @@ const customerSchema = new Schema<ICustomer>(
     preferredLanguage: { type: String, default: 'th' },
     preferredCountry: { type: String },
     bookingCount: { type: Number, default: 0, min: 0 },
-    wishlist: { type: [String], default: [] }
+    wishlist: { type: [String], default: [] },
+    // User feedback / reviews
+    feedbacks: [
+      {
+        rating: { type: Number, min: 1, max: 5 },
+        comment: { type: String },
+        topic: { type: String },
+        createdAt: { type: Date, default: Date.now }
+      }
+    ],
+    // Flexible bucket for any future data points without schema changes.
+    metadata: { type: Map, of: Schema.Types.Mixed, default: {} }
   },
   { timestamps: true }
 );

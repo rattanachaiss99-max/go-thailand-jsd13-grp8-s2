@@ -12,8 +12,6 @@ TASK
 
 # Team 8
 
-=======
-
 ## Notion board
 
 https://app.notion.com/p/Sprint-Board-a10330c3805f41ad9bd15224e8a0bc43?source=copy_link

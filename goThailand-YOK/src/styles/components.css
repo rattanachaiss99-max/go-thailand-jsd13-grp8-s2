@@ -79,15 +79,7 @@
   content: attr(data-cap); position: absolute; left: 12px; bottom: 10px; color: rgba(255, 255, 255, .92);
   font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
 }
-.ph-sunset { background: radial-gradient(circle at 74% 30%, rgba(255,236,190,.95) 0 4%, rgba(255,190,120,.55) 5% 13%, transparent 26%), linear-gradient(180deg,#F7C376 0%,#EE9A6A 26%,#B4657C 48%,#4C4670 68%,#12233C 100%); }
 .ph-villa { background: linear-gradient(180deg,#2A3E56 0%,#3C5872 34%,#6F8CA0 52%,#C7B393 62%,#8D6E4E 100%); }
-.ph-pool { background: radial-gradient(ellipse at 30% 78%, rgba(108,175,255,.85) 0 34%, transparent 60%), linear-gradient(180deg,#F3C98A 0%,#D9946B 24%,#59788F 52%,#1E4C6B 76%,#0E3550 100%); }
-.ph-room { background: linear-gradient(180deg,#4A3524 0%,#7A5A3C 30%,#C9B39A 55%,#EFE6DA 78%,#B9A288 100%); }
-.ph-jungle { background: linear-gradient(180deg,#12331F 0%,#25552F 32%,#4C7C42 58%,#8FA86A 80%,#D8CFA8 100%); }
-.ph-city { background: linear-gradient(180deg,#0B1B33 0%,#1B3557 40%,#3E5C7E 62%,#E5B27A 84%,#F2D6AE 100%); }
-.ph-beach { background: linear-gradient(180deg,#8FD4FF 0%,#6CAFFF 26%,#2E7FBF 46%,#1D9C9C 62%,#E7DCC3 82%,#D8C7A5 100%); }
-.ph-spa { background: linear-gradient(180deg,#20361F 0%,#3C5A34 34%,#7E9A63 58%,#CFC49A 82%,#9E8A63 100%); }
-.ph-dine { background: linear-gradient(180deg,#12233C 0%,#284561 34%,#8C6B52 60%,#E8C08A 82%,#F3DDBB 100%); }
 .ph-map { background: linear-gradient(180deg,#EAF0E4 0%,#E4EDE6 100%); }
 .ph-map::before {
   content: ''; position: absolute; inset: 0;
@@ -106,7 +98,6 @@
 .chip:hover { border-color: var(--color-accent); color: var(--color-primary); }
 .chip.on { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
 .tag { display: inline-block; padding: 5px 12px; border-radius: 999px; background: var(--color-accent-100); color: var(--color-primary-dark); font-size: .76rem; font-weight: 600; }
-.tag-gold { background: var(--color-secondary-100); color: var(--color-secondary-dark); }
 .badge-rate { display: inline-flex; align-items: center; gap: 5px; background: var(--color-primary); color: #fff; padding: 5px 11px; border-radius: var(--radius-sm); font-size: .85rem; font-weight: 700; }
 .badge-rate i { color: var(--color-secondary); font-style: normal; }
 .pill-img { position: absolute; top: 14px; left: 14px; background: rgba(255,255,255,.93); color: var(--color-primary); padding: 5px 12px; border-radius: 999px; font-size: .74rem; font-weight: 700; letter-spacing: .04em; }
@@ -125,15 +116,6 @@ label.fl { display: block; font-size: .72rem; letter-spacing: .12em; text-transf
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .check { display: flex; align-items: center; gap: 10px; padding: 7px 0; cursor: pointer; font-size: .95rem; }
 .check input { width: 17px; height: 17px; accent-color: var(--color-primary); cursor: pointer; }
-.radio-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
-.radio-card {
-  display: flex; align-items: center; justify-content: center; gap: 9px; padding: 14px;
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer;
-  font-size: .85rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); transition: .2s;
-}
-.radio-card input { accent-color: var(--color-primary); }
-.radio-card.selected { border-color: var(--color-primary); background: var(--color-primary-100); color: var(--color-primary); }
-
 /* ---------- OrderSummary : สรุปยอดเงิน ใช้ในหน้า Cart / Checkout / Success ---------- */
 .sum-row { display: flex; justify-content: space-between; padding: 11px 0; font-size: .95rem; color: var(--color-muted); }
 .sum-row b { color: var(--color-ink); font-weight: 600; }
@@ -152,12 +134,6 @@ label.fl { display: block; font-size: .72rem; letter-spacing: .12em; text-transf
 .listing { display: grid; grid-template-columns: 290px 1fr; gap: 30px; margin-top: 34px; }
 .filter-title { font-size: .95rem; font-weight: 700; color: var(--color-primary); margin-bottom: 14px; }
 .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
-.pager { display: flex; gap: 10px; justify-content: center; margin-top: 44px; }
-.pager button {
-  width: 42px; height: 42px; display: grid; place-items: center; border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border); background: #fff; color: var(--color-muted); font-weight: 600; font-size: .9rem; cursor: pointer;
-}
-.pager button.on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
 
 /* ---------- PropertyCard (โหมด list แบบแนวนอน ใช้ในหน้ารายการค้นหา) ---------- */
 .hotel { display: grid; grid-template-columns: 340px 1fr; overflow: hidden; }
@@ -371,7 +347,7 @@ section.blk { margin-top: 44px; }
   .spec-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 760px) {
-  .grid-2, .radio-row { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
   .step-bar { flex-basis: 34px; }
   .step { width: 88px; }
   .foot-grid { grid-template-columns: 1fr; }

@@ -17,6 +17,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 // @project
 import { emailSchema, passwordSchema, firstNameSchema, lastNameSchema } from '@/utils/validationSchema';
+import { useUser } from '@/contexts/UserContext';
 
 // @assets
 import { CloseEye, OpenEye } from '@/icons';
@@ -40,6 +41,7 @@ const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 export default function AuthRegister({ inputSx }: Props) {
   const theme = useTheme();
+  const { register: registerUserCtx } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,7 +55,7 @@ export default function AuthRegister({ inputSx }: Props) {
     formState: { errors }
   } = useForm<LoginFormInput>();
 
-  // Handle form submission — calls the real /api/auth/register endpoint
+  // Handle form submission — uses centralized api + UserContext
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     setFeedback(null);
 
@@ -64,30 +66,17 @@ export default function AuthRegister({ inputSx }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          firstName: data.firstname,
-          lastName: data.lastname,
-          role: 'customer'
-        })
+      await registerUserCtx({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstname,
+        lastName: data.lastname,
+        role: 'customer'
       });
-
-      const result = await res.json();
-      if (!res.ok) {
-        setFeedback({ type: 'error', msg: result.error || 'สมัครสมาชิกไม่สำเร็จ' });
-        return;
-      }
-
-      // สำเร็จ — เก็บ token (ในระบบจริงควรเซฟใน httpOnly cookie หรือ context)
-      localStorage.setItem('gt_token', result.token);
       setFeedback({ type: 'success', msg: 'สมัครสมาชิกสำเร็จ' });
       reset();
-    } catch {
-      setFeedback({ type: 'error', msg: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
+    } catch (err) {
+      setFeedback({ type: 'error', msg: err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
     } finally {
       setLoading(false);
     }

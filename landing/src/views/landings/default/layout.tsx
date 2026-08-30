@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { Navbar1 } from '@/blocks/navbar';
 import { NavbarContent1 } from '@/blocks/navbar/navbar-content';
 import ThemeProviders from '@/components/ThemeProvider';
+import { UserProvider } from '@/contexts/UserContext';
 
 // @data
 import { navbar } from './data';
@@ -21,17 +22,19 @@ const headerColor = { bgcolor: 'grey.100' };
 export default function MainLayout({ children }: ChildrenProps) {
   return (
     <ThemeProviders>
-      <>
-        {/* header section */}
-        <Box sx={headerColor}>
-          <Navbar1 triggerSX={headerColor}>
-            <NavbarContent1 {...navbar} />
-          </Navbar1>
-        </Box>
+      <UserProvider>
+        <>
+          {/* header section */}
+          <Box sx={headerColor}>
+            <Navbar1 triggerSX={headerColor}>
+              <NavbarContent1 {...navbar} />
+            </Navbar1>
+          </Box>
 
-        {/* app/(landing)/* */}
-        <main>{children}</main>
-      </>
+          {/* app/(landing)/* */}
+          <main>{children}</main>
+        </>
+      </UserProvider>
     </ThemeProviders>
   );
 }

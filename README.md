@@ -1,16 +1,11 @@
-# SPRINT 2
-
-TASK
-
-- PO
+# SPRINT 2 ROLES
+- PO - scrum master , Database Design (USER)
 - MENG
 - WA
 - GUITAR -ร่างหน้า Sign In, Register, Forgot Password
 - YOK - ร่างแบบ Accomodation \*\*Product Card/List, ตะกร้า, ชำระเงิน
 
 # Team 8
-
-=======
 
 ## Notion board
 

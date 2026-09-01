@@ -15,6 +15,7 @@ export interface JwtPayload {
   sub: string; // user id
   role: 'customer' | 'admin';
   email: string;
+  type?: string; // e.g., 'password-reset'
 }
 
 export async function hashPassword(plain: string): Promise<string> {

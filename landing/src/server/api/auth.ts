@@ -66,3 +66,12 @@ export async function submitFeedback(token: string, input: { rating: number; com
   });
   return handle(res);
 }
+
+export async function forgotPassword(email: string): Promise<{ message: string }> {
+  const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+  return handle(res);
+}

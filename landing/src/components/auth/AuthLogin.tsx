@@ -13,12 +13,14 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 // @third-party
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 // @project
 import { emailSchema, passwordSchema } from '@/utils/validationSchema';
+import { useUser } from '@/contexts/UserContext';
 
 // @assets
 import { CloseEye, OpenEye } from '@/icons';
@@ -36,7 +38,10 @@ interface Props {
 
 export default function AuthLogin({ inputSx }: Props) {
   const theme = useTheme();
+  const { login } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   // Initialize react-hook-form
   const {
@@ -46,10 +51,19 @@ export default function AuthLogin({ inputSx }: Props) {
     formState: { errors }
   } = useForm<LoginFormInput>();
 
-  // Handle form submission
-  const onSubmit: SubmitHandler<LoginFormInput> = (data) => {
-    console.log(data);
-    reset();
+  // Handle form submission — uses centralized api + UserContext
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
+    setFeedback(null);
+    setLoading(true);
+    try {
+      await login(data.email, data.password);
+      setFeedback({ type: 'success', msg: 'เข้าสู่ระบบสำเร็จ' });
+      reset();
+    } catch (err) {
+      setFeedback({ type: 'error', msg: err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,16 +116,21 @@ export default function AuthLogin({ inputSx }: Props) {
               component={NextLink}
               underline="hover"
               variant="caption2"
-              href=""
+              href="/register?tab=2"
               sx={{ textAlign: 'right', '&:hover': { color: 'primary.dark' } }}
             >
-              Forgot Password?
+              ลืมรหัสผ่าน?
             </Link>
           </Stack>
         </Stack>
-        <Button fullWidth type="submit" color="primary" variant="contained" sx={{ mt: { xs: 0.5, sm: 1.5 } }}>
-          Sign In
+        <Button fullWidth type="submit" color="primary" variant="contained" disabled={loading} sx={{ mt: { xs: 0.5, sm: 1.5 } }}>
+          {loading ? 'กำลังเข้าสู่ระบบ...' : 'Sign In'}
         </Button>
+        {feedback && (
+          <Alert severity={feedback.type} sx={{ mt: 1 }}>
+            {feedback.msg}
+          </Alert>
+        )}
       </Stack>
     </form>
   );

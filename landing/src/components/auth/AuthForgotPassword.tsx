@@ -1,17 +1,21 @@
 'use client';
 
+import { useState } from 'react';
+
 // @mui
 import { SxProps } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 // @third-party
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 // @project
 import { emailSchema } from '@/utils/validationSchema';
+import { forgotPassword } from '@/server/api/auth';
 
 interface ForgotPasswordFormInput {
   email: string;
@@ -24,6 +28,9 @@ interface Props {
 /***************************  AUTH - FORGOT PASSWORD  ***************************/
 
 export default function AuthForgotPassword({ inputSx }: Props) {
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
+
   // Initialize react-hook-form
   const {
     register,
@@ -32,10 +39,19 @@ export default function AuthForgotPassword({ inputSx }: Props) {
     formState: { errors }
   } = useForm<ForgotPasswordFormInput>();
 
-  // Handle form submission
-  const onSubmit: SubmitHandler<ForgotPasswordFormInput> = (data) => {
-    console.log(data);
-    reset();
+  // Handle form submission — calls centralized api
+  const onSubmit: SubmitHandler<ForgotPasswordFormInput> = async (data) => {
+    setFeedback(null);
+    setLoading(true);
+    try {
+      await forgotPassword(data.email);
+      setFeedback({ type: 'success', msg: 'ส่งรหัสรีเซ็ตรหัสผ่านไปที่อีเมลแล้ว' });
+      reset();
+    } catch (err) {
+      setFeedback({ type: 'error', msg: err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,9 +73,14 @@ export default function AuthForgotPassword({ inputSx }: Props) {
           </Typography>
         )}
       </Stack>
-      <Button fullWidth type="submit" color="primary" variant="contained" sx={{ mt: { xs: 3, sm: 4 } }}>
-        Send Code
+      <Button fullWidth type="submit" color="primary" variant="contained" disabled={loading} sx={{ mt: { xs: 3, sm: 4 } }}>
+        {loading ? 'กำลังส่ง...' : 'Send Code'}
       </Button>
+      {feedback && (
+        <Alert severity={feedback.type} sx={{ mt: 2 }}>
+          {feedback.msg}
+        </Alert>
+      )}
     </form>
   );
 }

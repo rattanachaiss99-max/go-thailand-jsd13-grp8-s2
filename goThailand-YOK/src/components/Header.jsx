@@ -44,16 +44,19 @@ export default function Header() {
               <Button to="/accommodations" variant="link">
                 ← Back to search
               </Button>
-              <Button to="/checkout" variant="primary">
-                Book Now
+              <Button to="/cart" variant="primary">
+                🛒 Cart
               </Button>
             </>
           ) : (
             <>
-              <Button to="/checkout" variant="link">
+              <Button to="/cart" variant="link" style={{ marginRight: "10px" }}>
+                🛒 Cart
+              </Button>
+              <Button to="#" variant="link">
                 Login
               </Button>
-              <Button to="/checkout" variant="primary">
+              <Button to="#" variant="primary">
                 Register
               </Button>
             </>

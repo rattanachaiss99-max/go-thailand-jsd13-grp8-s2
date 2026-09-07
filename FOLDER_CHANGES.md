@@ -123,8 +123,13 @@ go-thailand-jsd13-grp8-s2/
 - ✅ **หน้าเว็บและเส้นทางใหม่**:
   - `landing/src/app/(landings)/(default)/guides/page.tsx`: หน้ารวมไกด์ท่องเที่ยว (`/guides`) พร้อม Hero Banner, แถบกรองปลายทาง (Bangkok/Chiang Mai/ทั้งหมด), และ Pagination
   - เมนู Navbar: เพิ่มเมนู "ไกด์นำเที่ยว" (`/guides`) บน Navigation Bar
-- ✅ **เอกสารคู่มือและการต่อเติม**:
-  - `landing/MENG_INTEGRATION_GUIDE.md`: บันทึกจุดต่อเติม สถาปัตยกรรม SVG/React 19 และแนวทางการเชื่อมโยงกับระบบจอง
+### 7. สถาปัตยกรรมและคู่มือการเชื่อมต่อ User Backend กลาง (รอบหก: 2026-09-07)
+- ✅ **Central API Handler**:
+  - `landing/src/app/api/auth/me/route.ts`: อัปเดตเปิด CORS Headers (`Access-Control-Allow-Origin: *`), รองรับ Preflight Method `OPTIONS` และนำเข้า `Customer` model ให้ Mongoose คืนฟิลด์ discriminator ครบถ้วน
+- ✅ **Centralized Auth Service**:
+  - `landing/src/services/authService.ts`: จัดทำโมดูลตรวจสอบสถานะผู้ใช้งานกลาง รองรับทั้ง Next.js และก็อปปี้ไปใช้ในโปรเจกต์ Vite ของเพื่อนๆ พร้อมระบบ Mock Fallback ป้องกัน UI พังระหว่าง Dev
+- ✅ **เอกสารข้อกำหนดและคู่มือกลางสำหรับทีม**:
+  - `landing/USER_AUTH_INTEGRATION_GUIDE.md`: คู่มือรายละเอียด API Contract (`GET /api/auth/me`), รูปร่าง JSON ข้อมูลผู้ใช้, วิธีการต่อใช้งานในแต่ละโฟลเดอร์ (Yok, Wa, Guitar, Meng) และตัวอย่าง Custom Hook
 
 ---
 

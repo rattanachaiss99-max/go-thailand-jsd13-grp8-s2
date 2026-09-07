@@ -6,10 +6,17 @@ const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 export interface AuthUser {
   id: string;
+  _id?: string;
   email: string;
   role: 'customer' | 'admin';
   firstName?: string;
   lastName?: string;
+  phone?: string;
+  membershipTier?: 'bronze' | 'silver' | 'gold' | 'platinum';
+  points?: number;
+  bookingCount?: number;
+  wishlist?: string[];
+  addresses?: any[];
 }
 
 export interface RegisterInput {

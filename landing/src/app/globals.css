@@ -14,6 +14,9 @@
 /* react-leaflet map */
 @import 'leaflet/dist/leaflet.css';
 
+/* yok component styles */
+@import '../styles/yok.css';
+
 /* to remove default browser focus-visible */
 body * {
   &:focus-visible,

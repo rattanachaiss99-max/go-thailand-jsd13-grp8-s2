@@ -1,5 +1,6 @@
 import { ConfigProvider } from '@/contexts/ConfigContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { BookingProvider } from '@/contexts/BookingContext';
 
 // @types
 import { ChildrenProps } from '@/types/root';
@@ -9,7 +10,10 @@ import { ChildrenProps } from '@/types/root';
 export default function ProviderWrapper({ children }: ChildrenProps) {
   return (
     <LanguageProvider>
-      <ConfigProvider>{children}</ConfigProvider>
+      <ConfigProvider>
+        <BookingProvider>{children}</BookingProvider>
+      </ConfigProvider>
     </LanguageProvider>
   );
 }
+

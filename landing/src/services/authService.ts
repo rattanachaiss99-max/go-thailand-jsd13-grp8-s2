@@ -5,7 +5,10 @@
  * Can be used in Next.js or copied to Vite React apps.
  */
 
-export const BACKEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+export const BACKEND_URL =
+  process.env.NEXT_PUBLIC_AUTH_API_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://go-thailand-jsd13-grp8-s2.onrender.com';
 export const TOKEN_KEY = 'gt_token';
 
 export interface CurrentUser {

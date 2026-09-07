@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+  <!-- ====================================================
+       Service card illustration: CAR RENTAL
+       A white SUV driving on a coastal road
+       (flat cartoon style).
+       ==================================================== -->
+  <defs>
+    <linearGradient id="carSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8fd4f7"/>
+      <stop offset="100%" stop-color="#e6f7fe"/>
+    </linearGradient>
+    <linearGradient id="carBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d9e0e7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="600" height="400" fill="url(#carSky)"/>
+  <ellipse cx="130" cy="55" rx="55" ry="13" fill="#ffffff" opacity="0.9"/>
+  <ellipse cx="460" cy="42" rx="65" ry="15" fill="#ffffff" opacity="0.9"/>
+
+  <!-- sea (right side) -->
+  <rect y="150" width="600" height="70" fill="#2fb3cf"/>
+  <g fill="#ffffff" opacity="0.4">
+    <ellipse cx="480" cy="170" rx="40" ry="4"/>
+    <ellipse cx="380" cy="190" rx="30" ry="3"/>
+    <ellipse cx="540" cy="200" rx="35" ry="4"/>
+  </g>
+
+  <!-- green cliff (left side) -->
+  <path d="M0 220 L0 90 L60 70 L140 110 L200 220 Z" fill="#4c8f56"/>
+  <path d="M0 220 L0 130 L50 115 L110 150 L140 220 Z" fill="#3a7a46"/>
+
+  <!-- coastal road sweeping from bottom-left to the right -->
+  <path d="M0 400 L0 250 C160 240 300 260 600 235 L600 400 Z" fill="#6b7076"/>
+  <!-- road edge -->
+  <path d="M0 250 C160 240 300 260 600 235" stroke="#e8e8e8" stroke-width="6" fill="none"/>
+  <!-- center dashes -->
+  <g fill="#ffffff">
+    <rect x="30" y="292" width="42" height="7" rx="3" transform="rotate(-2 30 292)"/>
+    <rect x="120" y="298" width="42" height="7" rx="3" transform="rotate(-1 120 298)"/>
+    <rect x="215" y="302" width="42" height="7" rx="3"/>
+    <rect x="315" y="302" width="42" height="7" rx="3" transform="rotate(1 315 302)"/>
+    <rect x="420" y="298" width="42" height="7" rx="3" transform="rotate(2 420 298)"/>
+    <rect x="520" y="290" width="42" height="7" rx="3" transform="rotate(3 520 290)"/>
+  </g>
+
+  <!-- ================= white SUV ================= -->
+  <g>
+    <!-- shadow under the car -->
+    <ellipse cx="290" cy="330" rx="170" ry="14" fill="#000000" opacity="0.2"/>
+
+    <!-- main body -->
+    <path d="M130 300 L138 250 C140 236 150 226 168 222 L232 196 C244 192 258 190 272 190 L340 192 C356 192 370 198 380 210 L408 244 C432 246 448 252 452 266 L456 292 C456 302 448 308 438 308 L150 308 C138 308 130 306 130 300 Z" fill="url(#carBody)"/>
+    <!-- lower body line -->
+    <path d="M136 282 L452 276 L454 292 C454 300 448 306 438 306 L150 306 C140 306 134 296 136 282 Z" fill="#c3ccd5"/>
+
+    <!-- windows -->
+    <path d="M244 200 L262 196 L262 228 L216 230 Z" fill="#22355e"/>
+    <path d="M276 195 L330 196 L332 226 L276 227 Z" fill="#22355e"/>
+    <path d="M344 197 L368 202 L390 228 L344 227 Z" fill="#22355e"/>
+
+    <!-- roof rails -->
+    <rect x="230" y="186" width="150" height="6" rx="3" fill="#8f979f"/>
+
+    <!-- headlight + taillight -->
+    <ellipse cx="446" cy="262" rx="9" ry="6" fill="#f2b429"/>
+    <rect x="134" y="256" width="10" height="8" rx="3" fill="#e05555"/>
+
+    <!-- door lines + handles -->
+    <path d="M270 196 L268 300 M340 196 L342 300" stroke="#b8c2cc" stroke-width="3" fill="none"/>
+    <rect x="284" y="242" width="18" height="5" rx="2.5" fill="#8f979f"/>
+    <rect x="352" y="240" width="18" height="5" rx="2.5" fill="#8f979f"/>
+
+    <!-- wheels -->
+    <g>
+      <circle cx="205" cy="306" r="34" fill="#23272b"/>
+      <circle cx="205" cy="306" r="16" fill="#cfd6dd"/>
+      <circle cx="205" cy="306" r="6" fill="#8f979f"/>
+    </g>
+    <g>
+      <circle cx="392" cy="304" r="34" fill="#23272b"/>
+      <circle cx="392" cy="304" r="16" fill="#cfd6dd"/>
+      <circle cx="392" cy="304" r="6" fill="#8f979f"/>
+    </g>
+  </g>
+</svg>

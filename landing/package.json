@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "seed": "tsx scripts/seed-users.ts",
+    "seed": "tsx --env-file=.env scripts/seed-users.ts",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {

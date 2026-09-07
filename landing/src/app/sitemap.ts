@@ -4,7 +4,7 @@ import type { MetadataRoute } from 'next';
 // @project
 import { PAGE_PATH } from '@/path';
 
-const baseUrl = process.env.NEXT_PUBLIC_METADATA_BASE || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_METADATA_BASE || 'http://localhost:3100';
 
 const routes = [
   { url: ``, priority: 1 },

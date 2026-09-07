@@ -32,7 +32,7 @@ export const mainMetadata = {
     'travel Thailand'
   ],
   creator: `${branding.company.name}`,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_METADATA_BASE || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_METADATA_BASE || 'http://localhost:3100'),
   alternates: {
     canonical: '/'
   },

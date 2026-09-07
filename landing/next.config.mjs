@@ -9,7 +9,7 @@ const cspHeader = `
     base-uri 'self';
     form-action 'self';
     media-src 'self' https://*.cloudfront.net;
-    connect-src 'self' https://www.googletagmanager.com https://raw.githubusercontent.com https://fomo.codedthemes.com https://*.clarity.ms https://*.azurewebsites.net;
+    connect-src 'self' https://*.onrender.com https://www.googletagmanager.com https://raw.githubusercontent.com https://fomo.codedthemes.com https://*.clarity.ms https://*.azurewebsites.net;
 `;
 
 const nextConfig = {

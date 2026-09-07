@@ -82,7 +82,21 @@ go-thailand-jsd13-grp8-s2/
   - `landing/src/app/(landings)/(default)/accommodations/page.tsx`: หน้ารวมที่พัก 13 แห่งพร้อม FilterSidebar แบบเต็มระบบ
   - เมนู Navbar: เพิ่มเมนู "ที่พัก" (`/accommodations`)
 
+### 3. ระบบ CRM Customer Dashboard จาก goThailand-Wa (รอบสาม: 2026-09-07)
+- ✅ **Data & Service**:
+  - `landing/src/data/crm/mockData.ts`: ข้อมูลจำลองลูกค้า, ประวัติการจอง 13 รายการ (ครอบคลุมทั้งที่จะถึง เสร็จสิ้น และยกเลิก), และสถานที่ท่องเที่ยวใน Wishlist
+  - `landing/src/services/dashboardService.ts`: คำนวณสถิติ 4 หมวด (Upcoming Trips, Total Bookings, Rewards Points, Saved Places) ตรงตามข้อกำหนดของ Mongoose Customer
+- ✅ **Components ใน `landing/src/components/crm/`**:
+  - `StatCard.tsx`: การ์ดสรุปตัวเลขสถิติ รองรับโหมด Highlight สีกรมทอง และโหมดปกติ
+  - `DashboardStats.tsx`: Grid รวม 4 การ์ด พร้อม Skeleton Loading ตอนรอโหลดข้อมูล
+  - `BookingList.tsx`: แสดงการ์ดรายการจอง พร้อม Badge ประเภทบริการ (ที่พัก/รถเช่า/ไกด์), วันที่, ยอดเงิน และรหัสอ้างอิง
+  - `NextStepsBento.tsx`: Bento แนะนำ 3 ขั้นตอนเตรียมตัวก่อนเดินทาง (เช็คอีเมล, เตรียมเอกสาร, ออกเดินทาง)
+- ✅ **หน้าเว็บและเส้นทางใหม่**:
+  - `landing/src/app/(landings)/(default)/dashboard/page.tsx`: หน้า CRM Dashboard สมาชิกเต็มรูปแบบ เชื่อมโยงกับ `UserContext` แสดงชื่อผู้ใช้จริง และระดับสมาชิก (Gold Member)
+  - เมนู Navbar: ปรับลิงก์ "แดชบอร์ด" ใน `landing/src/views/landings/default/data/navbar.tsx` ให้เปิดหน้า `/dashboard` ภายในแอปทันที
+
 ---
 
 _เอกสารนี้เขียนขึ้นเพื่อบันทึกประวัติการพัฒนาและการรวมโค้ดเข้าสู่โฟลเดอร์หลัก landing_
+
 

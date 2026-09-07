@@ -2,7 +2,10 @@
 // All auth-related fetch calls live here (per react-crm-lifecycle skill:
 // "ALL fetch() calls live here, separated from UI").
 
-const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
+const API_URL =
+  process.env.NEXT_PUBLIC_AUTH_API_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://go-thailand-jsd13-grp8-s2.onrender.com';
 
 export interface AuthUser {
   id: string;

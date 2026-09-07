@@ -57,15 +57,32 @@ go-thailand-jsd13-grp8-s2/
 
 ## 📌 สิ่งที่เพิ่มเข้ามาใน Landing (สรุป)
 
+### 1. ระบบ Auth & Backend MongoDB (รอบแรก: 2026-08-27)
 - MongoDB models: `User` (base) / `Customer` (สมาชิก) / `Admin`
-- Auth API: `/api/auth/register`, `/api/auth/login`, `/api/auth/me`
+- Auth API: `/api/auth/register`, `/api/auth/login`, `/api/auth/me`, `/api/auth/forgot-password`, `/api/auth/reset-password`
 - หน้า `/register` (แท็บ สมัคร/ล็อกอิน/ลืมรหัส)
 - ปุ่ม "สมัครสมาชิก / ล็อกอิน" บน Hero หน้าแรก → ลิงก์ `/register`
 - `.env.example` + `TODO_BACKEND.md`
 
-ดูรายละเอียด backend เพิ่มเติมใน `landing/src/server/README.md`
-ดูสิ่งที่ยังไม่ทำใน `landing/TODO_BACKEND.md`
+### 2. ระบบที่พัก & Component จาก goThailand-YOK (รอบสอง: 2026-09-07)
+- ✅ **Assets รูปภาพ**: คัดลอกโฟลเดอร์รูปภาพที่พักทั้งหมดจาก `goThailand-YOK/public/images/` มาไว้ที่ `landing/public/images/`
+- ✅ **Data & State กลาง**:
+  - `landing/src/data/properties.ts` และ `regions.ts`: Mock data ที่พัก 13 แห่งทั่วไทย พร้อม TypeScript types และตัวกรอง
+  - `landing/src/contexts/BookingContext.tsx`: Context สิทธิ์การจอง คำนวณจำนวนคืน เก็บสถานะที่พักที่เลือก และครอบไว้ใน `ProviderWrapper.tsx`
+- ✅ **Component สไตล์ Yok (แปลงเป็น Next.js Client Components)**:
+  - `landing/src/components/yok/SearchBar.tsx`: กล่องค้นหาจุดหมาย, วันเข้าพัก-ออก, จำนวนผู้เข้าพัก
+  - `landing/src/components/yok/PropertyCard.tsx`: การ์ดที่พัก รองรับทั้งโหมด `mini` และ `list`
+  - `landing/src/components/yok/PhotoPlaceholder.tsx` & `Button.tsx`: กล่องรูปภาพและปุ่มพร้อม Next.js `Link`
+  - `landing/src/components/yok/FilterSidebar.tsx` & `Chip.tsx`: ตัวกรองราคา สิ่งอำนวยความสะดวก และห้องนอน
+- ✅ **สไตล์เฉพาะ**:
+  - `landing/src/styles/yok.css`: รวม Design Tokens และ Component classes โดยตัด reset รุนแรงออกเพื่อไม่ให้กระทบ MUI
+  - นำเข้าใน `landing/src/app/globals.css`
+- ✅ **หน้าเว็บและเส้นทางใหม่**:
+  - `landing/src/views/landings/default/FeaturedAccommodations.tsx`: แสดง SearchBar + การ์ดที่พักแนะนำ 4 แห่งต่อท้าย Hero
+  - `landing/src/app/(landings)/(default)/accommodations/page.tsx`: หน้ารวมที่พัก 13 แห่งพร้อม FilterSidebar แบบเต็มระบบ
+  - เมนู Navbar: เพิ่มเมนู "ที่พัก" (`/accommodations`)
 
 ---
 
-_เอกสารนี้เขียนขึ้นเพื่อบันทึกว่าสถานที่เก็บโค้ดเปลี่ยนจาก go-thailand-app-dev มาที่โฟลเดอร์ทีมแล้ว_
+_เอกสารนี้เขียนขึ้นเพื่อบันทึกประวัติการพัฒนาและการรวมโค้ดเข้าสู่โฟลเดอร์หลัก landing_
+

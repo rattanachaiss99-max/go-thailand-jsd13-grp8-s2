@@ -95,8 +95,21 @@ go-thailand-jsd13-grp8-s2/
   - `landing/src/app/(landings)/(default)/dashboard/page.tsx`: หน้า CRM Dashboard สมาชิกเต็มรูปแบบ เชื่อมโยงกับ `UserContext` แสดงชื่อผู้ใช้จริง และระดับสมาชิก (Gold Member)
   - เมนู Navbar: ปรับลิงก์ "แดชบอร์ด" ใน `landing/src/views/landings/default/data/navbar.tsx` ให้เปิดหน้า `/dashboard` ภายในแอปทันที
 
+### 4. ระบบ Checkout & PaymentPanel จาก go-Thailand-Guitar (รอบสี่: 2026-09-07)
+- ✅ **Components ใน `landing/src/components/checkout/`**:
+  - `PaymentPanel.tsx`: แผงตัวเลือกการชำระเงิน 3 แบบ (Card, PromptPay QR, Bank Transfer)
+  - `BookingSummary.tsx`: การ์ดสรุปยอดเงิน คำนวณราคาจริงจาก `BookingContext` (ยอดรวม, ภาษี 7%) พร้อมปุ่ม Confirm & Pay
+  - `CheckoutSection.tsx`: กล่องครอบการ์ดฟอร์มแต่ละส่วน
+  - `FormField.tsx`: ฟิลด์อินพุตพร้อม Label และการแจ้งเตือน Error
+- ✅ **หน้าเว็บและเส้นทางใหม่**:
+  - `landing/src/app/(landings)/(default)/checkout/page.tsx`: หน้า Checkout เต็มรูปแบบ เชื่อมโยง Autofill ชื่อ/อีเมลจาก `UserContext`
+  - `landing/src/app/(landings)/(default)/booking-success/page.tsx`: หน้ายืนยันการจองสำเร็จ พร้อมรหัสอ้างอิง (Reference ID)
+- ✅ **เอกสารคู่มือและการต่อเติม**:
+  - `landing/GUITAR_INTEGRATION_GUIDE.md`: บันทึกจุดต่อเติมจากโค้ดเดิมของ Guitar, สถาปัตยกรรม Context, และแนวทางการต่อเชื่อม Payment Gateway จริง (Omise/Stripe) ในอนาคต
+
 ---
 
 _เอกสารนี้เขียนขึ้นเพื่อบันทึกประวัติการพัฒนาและการรวมโค้ดเข้าสู่โฟลเดอร์หลัก landing_
+
 
 

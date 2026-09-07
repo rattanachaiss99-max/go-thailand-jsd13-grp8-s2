@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+  <!-- ====================================================
+       Service card illustration: TOURIST GUIDE
+       A guide with a red flag leading a small group of
+       tourists in front of a Thai temple
+       (flat cartoon style).
+       ==================================================== -->
+  <defs>
+    <linearGradient id="gdSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a5def9"/>
+      <stop offset="100%" stop-color="#eaf8fe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky + ground -->
+  <rect width="600" height="400" fill="url(#gdSky)"/>
+  <ellipse cx="150" cy="55" rx="55" ry="13" fill="#ffffff" opacity="0.9"/>
+  <ellipse cx="470" cy="48" rx="60" ry="14" fill="#ffffff" opacity="0.9"/>
+  <rect y="300" width="600" height="100" fill="#f2e2c4"/>
+  <rect y="295" width="600" height="8" fill="#e8d3ac"/>
+
+  <!-- ================= temple (left) ================= -->
+  <g>
+    <!-- white base platform -->
+    <rect x="60" y="252" width="220" height="48" rx="6" fill="#ffffff"/>
+    <rect x="80" y="216" width="180" height="40" rx="6" fill="#f7f1e3"/>
+    <!-- golden door -->
+    <rect x="150" y="228" width="40" height="60" rx="18" fill="#c99a2e"/>
+
+    <!-- main golden prang (tower) -->
+    <path d="M150 216 C154 170 162 140 168 96 L172 96 C178 140 186 170 190 216 Z" fill="#f2b429"/>
+    <path d="M166 96 L174 96 L170 62 Z" fill="#f2b429"/>
+    <circle cx="170" cy="58" r="6" fill="#d3940a"/>
+
+    <!-- two small side spires -->
+    <path d="M104 216 C106 186 112 166 116 138 L120 138 C124 166 130 186 132 216 Z" fill="#e8ac33"/>
+    <path d="M208 216 C210 186 216 166 220 138 L224 138 C228 166 234 186 236 216 Z" fill="#e8ac33"/>
+
+    <!-- golden roofed chapel on the right of the temple -->
+    <path d="M282 252 L282 214 L306 190 L330 214 L330 252 Z" fill="#f2b429"/>
+    <path d="M278 216 L306 188 L334 216 L326 216 L306 198 L286 216 Z" fill="#d3940a"/>
+  </g>
+
+  <!-- ================= tourist group (middle) ================= -->
+  <!-- simple small figures: head + body + legs -->
+  <g>
+    <!-- tourist 1 (blue shirt) -->
+    <g transform="translate(300 236)">
+      <circle cx="0" cy="0" r="13" fill="#f2c19a"/>
+      <path d="M-13 -4 C-13 -14 13 -14 13 -4 L13 -10 C10 -22 -10 -22 -13 -10 Z" fill="#3a2c22"/>
+      <rect x="-14" y="12" width="28" height="40" rx="10" fill="#4f7fd1"/>
+      <rect x="-11" y="52" width="9" height="34" fill="#33415c"/>
+      <rect x="2" y="52" width="9" height="34" fill="#33415c"/>
+    </g>
+    <!-- tourist 2 (red shirt, hat) -->
+    <g transform="translate(345 244)">
+      <circle cx="0" cy="0" r="12" fill="#eab68b"/>
+      <ellipse cx="0" cy="-9" rx="17" ry="5" fill="#d9c7a8"/>
+      <rect x="-13" y="11" width="26" height="38" rx="10" fill="#d9534f"/>
+      <rect x="-10" y="49" width="8" height="32" fill="#4a4038"/>
+      <rect x="2" y="49" width="8" height="32" fill="#4a4038"/>
+    </g>
+    <!-- tourist 3 (green shirt) -->
+    <g transform="translate(388 238)">
+      <circle cx="0" cy="0" r="12" fill="#f4c79f"/>
+      <path d="M-12 -3 C-14 -16 14 -16 12 -3 L14 6 L-14 6 Z" fill="#2b2320"/>
+      <rect x="-13" y="11" width="26" height="39" rx="10" fill="#3f9d5f"/>
+      <rect x="-10" y="50" width="8" height="33" fill="#3a4453"/>
+      <rect x="2" y="50" width="8" height="33" fill="#3a4453"/>
+    </g>
+  </g>
+
+  <!-- ================= the guide (right, bigger) ================= -->
+  <g>
+    <!-- shadow -->
+    <ellipse cx="480" cy="356" rx="52" ry="9" fill="#000000" opacity="0.15"/>
+
+    <!-- legs -->
+    <rect x="458" y="292" width="14" height="58" rx="6" fill="#33415c"/>
+    <rect x="484" y="292" width="14" height="58" rx="6" fill="#33415c"/>
+    <!-- shoes -->
+    <rect x="454" y="344" width="22" height="10" rx="5" fill="#23272b"/>
+    <rect x="480" y="344" width="22" height="10" rx="5" fill="#23272b"/>
+
+    <!-- orange shirt / body -->
+    <rect x="446" y="212" width="64" height="90" rx="20" fill="#e8862e"/>
+    <!-- traditional sash -->
+    <path d="M450 232 L506 218 L509 232 L453 246 Z" fill="#f2b429"/>
+
+    <!-- left arm holding the map -->
+    <path d="M450 226 C432 238 420 252 414 268" stroke="#e8862e" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <!-- the map in his hand -->
+    <g transform="translate(386 262) rotate(-12)">
+      <rect width="44" height="32" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="2"/>
+      <path d="M8 22 C16 12 28 26 36 10" stroke="#4fa3d1" stroke-width="3" fill="none"/>
+      <circle cx="12" cy="9" r="3" fill="#d9534f"/>
+    </g>
+
+    <!-- right arm raised holding the flag pole -->
+    <path d="M506 226 C520 210 528 194 530 176" stroke="#e8862e" stroke-width="16" stroke-linecap="round" fill="none"/>
+
+    <!-- head -->
+    <circle cx="478" cy="186" r="24" fill="#f0c49c"/>
+    <!-- hair -->
+    <path d="M454 184 C452 164 462 156 478 156 C494 156 504 164 502 184 C498 170 490 164 478 164 C466 164 458 170 454 184 Z" fill="#241d18"/>
+    <!-- eyes + smile -->
+    <circle cx="470" cy="186" r="2.6" fill="#20304e"/>
+    <circle cx="487" cy="186" r="2.6" fill="#20304e"/>
+    <path d="M469 196 Q478 203 488 196" stroke="#8a4b38" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- flag pole + red flag -->
+    <rect x="528" y="96" width="5" height="150" rx="2.5" fill="#8a5a33"/>
+    <path d="M533 100 L583 112 L533 126 Z" fill="#d9453c"/>
+  </g>
+</svg>

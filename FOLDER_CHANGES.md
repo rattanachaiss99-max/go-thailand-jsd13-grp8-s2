@@ -107,6 +107,25 @@ go-thailand-jsd13-grp8-s2/
 - ✅ **เอกสารคู่มือและการต่อเติม**:
   - `landing/GUITAR_INTEGRATION_GUIDE.md`: บันทึกจุดต่อเติมจากโค้ดเดิมของ Guitar, สถาปัตยกรรม Context, และแนวทางการต่อเชื่อม Payment Gateway จริง (Omise/Stripe) ในอนาคต
 
+### 5. เอกสารสรุปสถานะและ Gap Analysis ของ YOK และ Wa (2026-09-07)
+- ✅ `landing/YOK_INTEGRATION_STATUS.md`: สรุปสิ่งที่นำเข้าแล้วจาก `goThailand-YOK` และสิ่งที่ยังขาด (หน้ารายละเอียดที่พัก `/accommodations/[id]`, ระบบรถเช่า, หน้าตะกร้า `/cart`)
+- ✅ `landing/WA_INTEGRATION_STATUS.md`: สรุปสิ่งที่นำเข้าแล้วจาก `goThailand-Wa` และสิ่งที่รอต่อยอด (หน้ารับรถเช่าสำเร็จ, เชื่อมต่อ MongoDB จริง, Saved Places interaction)
+
+### 6. ระบบ Tourist Guide จาก GoThailand-Meng (รอบห้า: 2026-09-07)
+- ✅ **Assets รูปภาพ**: ย้ายภาพทั้งหมดจาก `GoThailand-Meng/public/images/` มาไว้ที่ `landing/public/images/` (`hero-beach.jpg`, `cta-sunset.jpg`, `Guide01-09.jpg`, `ThailandMapByRegion.png`, ฯลฯ)
+- ✅ **Data & Type Safety**:
+  - `landing/src/data/guides.ts`: Mock Data ไกด์ 27 ท่าน พร้อม TypeScript types (`Guide`, `GuideAvatarConfig`) และฟังก์ชันคำนวณวันว่าง `getAvailableDays` ตามสูตรเดิมของ Meng
+- ✅ **Components ใน `landing/src/components/guides/`**:
+  - `GuideAvatar.tsx`: วาดรูปอวาตาร์การ์ตูนด้วย SVG พร้อมใช้ React `useId()` ป้องกัน Gradient ID ชนกัน
+  - `AvailabilityCalendar.tsx`: มินิปฏิทินแสดงวันว่าง รองรับการเลื่อนดูเดือนย้อนหลัง/ถัดไป และ Badge วันว่างสีทอง
+  - `GuideCard.tsx`: การ์ดข้อมูลไกด์ พร้อมปุ่ม "More information" แบบแคปซูล และ Dialog แสดงรายละเอียดภาษา/ราคา/ปุ่มจอง
+  - `CtaBanner.tsx`: แบนเนอร์จองท้ายหน้า ปรับใช้ Next.js `<Link>` และ MUI Layout
+- ✅ **หน้าเว็บและเส้นทางใหม่**:
+  - `landing/src/app/(landings)/(default)/guides/page.tsx`: หน้ารวมไกด์ท่องเที่ยว (`/guides`) พร้อม Hero Banner, แถบกรองปลายทาง (Bangkok/Chiang Mai/ทั้งหมด), และ Pagination
+  - เมนู Navbar: เพิ่มเมนู "ไกด์นำเที่ยว" (`/guides`) บน Navigation Bar
+- ✅ **เอกสารคู่มือและการต่อเติม**:
+  - `landing/MENG_INTEGRATION_GUIDE.md`: บันทึกจุดต่อเติม สถาปัตยกรรม SVG/React 19 และแนวทางการเชื่อมโยงกับระบบจอง
+
 ---
 
 _เอกสารนี้เขียนขึ้นเพื่อบันทึกประวัติการพัฒนาและการรวมโค้ดเข้าสู่โฟลเดอร์หลัก landing_

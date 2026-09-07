@@ -9,6 +9,7 @@ export const navbar = {
   navItems: [
     { id: 'home', title: 'หน้าแรก', link: '/' },
     { id: 'accommodations', title: 'ที่พัก', link: '/accommodations' },
+    { id: 'guides', title: 'ไกด์นำเที่ยว', link: '/guides' },
     { id: 'dashboard', title: 'แดชบอร์ด', link: '/dashboard' }
   ]
 };

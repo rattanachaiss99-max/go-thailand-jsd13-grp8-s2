@@ -7,6 +7,7 @@ import { hero } from './data';
 
 // @project
 import { Hero1 } from '@/blocks/hero';
+import FeaturedAccommodations from './FeaturedAccommodations';
 
 /***************************  PAGE - MAIN  ***************************/
 
@@ -27,5 +28,11 @@ export default function Main() {
     }
   };
 
-  return <Hero1 {...translatedHero} />;
+  return (
+    <>
+      <Hero1 {...translatedHero} />
+      <FeaturedAccommodations />
+    </>
+  );
 }
+

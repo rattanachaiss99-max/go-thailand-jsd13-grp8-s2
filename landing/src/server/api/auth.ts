@@ -2,14 +2,24 @@
 // All auth-related fetch calls live here (per react-crm-lifecycle skill:
 // "ALL fetch() calls live here, separated from UI").
 
-const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
+const API_URL =
+  process.env.NEXT_PUBLIC_AUTH_API_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://go-thailand-jsd13-grp8-s2.onrender.com';
 
 export interface AuthUser {
   id: string;
+  _id?: string;
   email: string;
   role: 'customer' | 'admin';
   firstName?: string;
   lastName?: string;
+  phone?: string;
+  membershipTier?: 'bronze' | 'silver' | 'gold' | 'platinum';
+  points?: number;
+  bookingCount?: number;
+  wishlist?: string[];
+  addresses?: any[];
 }
 
 export interface RegisterInput {
@@ -72,6 +82,15 @@ export async function forgotPassword(email: string): Promise<{ message: string }
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email })
+  });
+  return handle(res);
+}
+
+export async function resetPassword(token: string, password: string): Promise<{ message: string }> {
+  const res = await fetch(`${API_URL}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, password })
   });
   return handle(res);
 }

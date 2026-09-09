@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" preserveAspectRatio="xMidYMid slice">
+  <!-- ====================================================
+       CTA banner background: sunset over the sea with a
+       resort infinity pool in the foreground.
+       Used above the footer on both pages.
+       ==================================================== -->
+  <defs>
+    <!-- sunset sky -->
+    <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#37507f"/>
+      <stop offset="45%" stop-color="#c96f63"/>
+      <stop offset="75%" stop-color="#f2a45c"/>
+      <stop offset="100%" stop-color="#ffd9a0"/>
+    </linearGradient>
+    <!-- evening sea -->
+    <linearGradient id="eveningSea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8a5f92"/>
+      <stop offset="100%" stop-color="#4b3f77"/>
+    </linearGradient>
+    <!-- pool water -->
+    <linearGradient id="pool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#49c6e8"/>
+      <stop offset="100%" stop-color="#2a8ec4"/>
+    </linearGradient>
+    <!-- soft glow around the sun -->
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#ffe9ad" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ffe9ad" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="1440" height="420" fill="url(#dusk)"/>
+
+  <!-- sun with glow -->
+  <circle cx="985" cy="205" r="110" fill="url(#glow)"/>
+  <circle cx="985" cy="205" r="42" fill="#ffe9ad"/>
+
+  <!-- distant islands -->
+  <path d="M0 260 L120 215 L260 260 Z" fill="#5a4a7a" opacity="0.85"/>
+  <path d="M300 262 L430 225 L560 262 Z" fill="#65538a" opacity="0.8"/>
+  <path d="M1150 262 L1300 220 L1440 262 Z" fill="#5a4a7a" opacity="0.85"/>
+
+  <!-- sea -->
+  <rect y="258" width="1440" height="80" fill="url(#eveningSea)"/>
+
+  <!-- sun reflection on the water -->
+  <g fill="#ffd9a0" opacity="0.75">
+    <rect x="955" y="270" width="60" height="5" rx="2.5"/>
+    <rect x="965" y="284" width="42" height="5" rx="2.5"/>
+    <rect x="950" y="298" width="70" height="5" rx="2.5"/>
+    <rect x="972" y="312" width="36" height="5" rx="2.5"/>
+  </g>
+
+  <!-- palm tree silhouette (left) -->
+  <g fill="#2a2338">
+    <path d="M150 420 C158 350 152 300 138 262 L152 258 C168 300 172 355 166 420 Z"/>
+    <path d="M145 260 C110 240 75 242 48 262 C82 252 112 254 140 268 Z"/>
+    <path d="M145 258 C120 228 88 216 55 222 C92 222 120 234 148 264 Z"/>
+    <path d="M148 256 C150 220 168 194 200 182 C172 202 158 228 156 260 Z"/>
+    <path d="M150 258 C170 230 202 216 236 220 C202 226 176 240 158 264 Z"/>
+    <path d="M152 262 C186 250 220 256 244 276 C214 262 184 260 156 270 Z"/>
+  </g>
+
+  <!-- wooden deck in the foreground -->
+  <rect y="330" width="1440" height="90" fill="#2a2338"/>
+  <!-- deck plank lines -->
+  <g stroke="#3a3049" stroke-width="2">
+    <line x1="0" y1="352" x2="1440" y2="352"/>
+    <line x1="0" y1="374" x2="1440" y2="374"/>
+    <line x1="0" y1="396" x2="1440" y2="396"/>
+  </g>
+
+  <!-- infinity pool on the right -->
+  <rect x="560" y="342" width="880" height="70" rx="16" fill="url(#pool)"/>
+  <rect x="572" y="350" width="856" height="10" rx="5" fill="#7fdcf2" opacity="0.8"/>
+  <g stroke="#bdeffb" stroke-width="3" opacity="0.7" fill="none">
+    <path d="M640 380 q20 -8 40 0 t40 0"/>
+    <path d="M880 392 q20 -8 40 0 t40 0"/>
+    <path d="M1150 378 q20 -8 40 0 t40 0"/>
+  </g>
+
+  <!-- two sun loungers on the deck -->
+  <g>
+    <g transform="translate(360 352)">
+      <rect x="0" y="14" width="86" height="12" rx="6" fill="#f4f6f8"/>
+      <path d="M70 14 L96 0 L100 8 L78 22 Z" fill="#e3e8ee"/>
+      <rect x="8" y="26" width="6" height="14" fill="#9aa2ad"/>
+      <rect x="70" y="26" width="6" height="14" fill="#9aa2ad"/>
+      <rect x="26" y="14" width="20" height="12" fill="#f2b429"/>
+    </g>
+    <g transform="translate(470 356)">
+      <rect x="0" y="14" width="86" height="12" rx="6" fill="#f4f6f8"/>
+      <path d="M70 14 L96 0 L100 8 L78 22 Z" fill="#e3e8ee"/>
+      <rect x="8" y="26" width="6" height="14" fill="#9aa2ad"/>
+      <rect x="70" y="26" width="6" height="14" fill="#9aa2ad"/>
+      <rect x="26" y="14" width="20" height="12" fill="#f2b429"/>
+    </g>
+  </g>
+</svg>

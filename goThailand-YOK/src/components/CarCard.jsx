@@ -6,19 +6,24 @@ import Button from "./Button";
  * CarCard
  * ------------------------------------------------------------
  * การ์ดแสดงรถให้เช่า 1 คัน ใช้ในหน้า CarRental (Available Cars grid)
- * โครงหน้าตาเลียนแบบ PropertyCard โหมด "mini" (รูปด้านบน + เนื้อหา
- * ด้านล่าง) แต่เปลี่ยนรายละเอียดให้ตรงกับข้อมูลรถ (ที่นั่ง/เกียร์/
- * เชื้อเพลิง แทนที่จะเป็นทำเล) และมีปุ่มหัวใจ (บันทึกรถที่ถูกใจ) ที่
- * เก็บสถานะ on/off ไว้ในตัวเอง เพราะเป็น UI-only เหมือน Chip
+ * และ "You Might Also Like"
  * ------------------------------------------------------------
  */
 export default function CarCard({ car }) {
   const [saved, setSaved] = useState(false);
+  const typeLabel = (car.category || car.type || "CAR").toUpperCase();
+  const dailyPrice = car.daily_rate || car.pricePerDay || 0;
+  const ratingValue = car.reviews_summary?.average_star || car.rating || 4.8;
+  const reviewsCount = car.reviews_summary?.total_reviews || car.reviews || 0;
+  const seatsCount = car.specs?.seats || car.seats || 5;
+  const transmissionType = car.specs?.transmission || car.transmission || "Auto";
+  const fuelType = car.specs?.fuel_type || car.fuel || "Petrol";
+  const carImage = car.pictures?.[0] || car.image;
 
   return (
     <article className="card car-card">
-      <PhotoPlaceholder src={car.image} alt={car.name} className="car-photo">
-        <span className="pill-img">{car.type.toUpperCase()}</span>
+      <PhotoPlaceholder src={carImage} alt={car.name} className="car-photo">
+        <span className="pill-img">{typeLabel}</span>
         <button
           type="button"
           className={`car-fav ${saved ? "on" : ""}`}
@@ -33,22 +38,22 @@ export default function CarCard({ car }) {
         <div className="between">
           <h3 style={{ fontSize: "1.05rem" }}>{car.name}</h3>
           <span className="badge-rate">
-            {car.rating} <i>★</i>
+            {ratingValue} <i>★</i>
           </span>
         </div>
         <div className="muted" style={{ fontSize: ".85rem", marginBottom: 4 }}>
-          ({car.reviews} Reviews)
+          ({reviewsCount} Reviews)
         </div>
 
         <div className="car-specs">
-          <span>🧑 {car.seats}</span>
-          <span>⚙️ {car.transmission}</span>
-          <span>⛽ {car.fuel}</span>
+          <span>🧑 {seatsCount}</span>
+          <span>⚙️ {transmissionType}</span>
+          <span>⛽ {fuelType}</span>
         </div>
 
         <div style={{ margin: "12px 0" }}>
           <div className="price" style={{ fontSize: "1.15rem" }}>
-            ฿{car.pricePerDay.toLocaleString()} <small>/ day</small>
+            ฿{dailyPrice.toLocaleString()} <small>/ day</small>
           </div>
           <div className="muted" style={{ fontSize: ".8rem" }}>All taxes included</div>
         </div>

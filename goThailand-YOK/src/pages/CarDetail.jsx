@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PhotoPlaceholder from "../components/PhotoPlaceholder";
 import Button from "../components/Button";
 import { cars, getCarById, pickupLocations } from "../data/cars";
+import { useBooking } from "../context/BookingContext";
 
-/** แปลง Date เป็นสตริง YYYY-MM-DD สำหรับ <input type="date"> (แพทเทิร์นเดียวกับไฟล์อื่น ๆ ในโปรเจกต์) */
 function toISODate(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -24,21 +24,15 @@ const DEFAULT_DROPOFF = addDays(TODAY, 3);
 /**
  * CarDetail (หน้ารายละเอียดรถเช่า)
  * ------------------------------------------------------------
- * แสดงรายละเอียดรถ 1 คัน (อ่าน id จาก URL ผ่าน useParams เหมือน
- * AccommodationDetail) พร้อมแกลเลอรีรูป (คลิก thumbnail เพื่อเปลี่ยน
- * รูปหลักได้), รายละเอียด/สเปครถ และกล่องจองด้านขวาที่คำนวณราคารวม
- * ตามจำนวนวันที่เลือกจริง
- *
- * ตั้งใจ "ไม่" ผูกกับ BookingContext ของที่พัก และ "ไม่" สร้าง context
- * กลางใหม่สำหรับรถ เพราะยังไม่มีหน้าตะกร้า/checkout ของรถเช่าให้ส่ง
- * ข้อมูลต่อ (ดูสรุปเหตุผลในแชท) — ฟอร์มวันที่/เวลา/ทำเลรับรถทั้งหมดจึง
- * เป็น local state อยู่ในหน้านี้หน้าเดียว ปุ่ม "Book Now" ยังเป็นปุ่ม
- * โชว์ดีไซน์เฉย ๆ เหมือน "View Detail" ก่อนหน้านี้ รอวันที่ทีมออกแบบ
- * flow การจองรถจริงแล้วค่อยตัดสินใจว่าจะทำ context ร่วมกับที่พักหรือไม่
+ * แสดงรายละเอียดรถ 1 คัน พร้อมแกลเลอรีรูป, สเปค, ใบอนุญาต, ประกันภัย
+ * และเชื่อมต่อกับ BookingContext ให้กด "Book Now" แล้วส่งข้อมูลไปยัง
+ * ตะกร้าสินค้า (/cart) ได้จริงตาม Data Schema
  * ------------------------------------------------------------
  */
 export default function CarDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { selectCar } = useBooking();
   const car = getCarById(id) || cars[0];
 
   const [activeImage, setActiveImage] = useState(0);
@@ -51,8 +45,6 @@ export default function CarDetail() {
   const [dropoffDate, setDropoffDate] = useState(DEFAULT_DROPOFF);
   const [dropoffTime, setDropoffTime] = useState("10:00");
 
-  // เปลี่ยนวันรับรถ: ถ้าวันคืนรถเดิมไม่เลยวันรับรถใหม่แล้ว ให้เลื่อนวันคืนรถ
-  // ตามไปอัตโนมัติ (อย่างน้อย 1 วัน) กันกรอกวันคืนรถมาก่อนวันรับรถ
   const handlePickupDateChange = (value) => {
     setPickupDate(value);
     if (new Date(dropoffDate) <= new Date(value)) {
@@ -60,24 +52,35 @@ export default function CarDetail() {
     }
   };
 
-  // จำนวนวันเช่า คำนวณจากวันรับ-คืนรถ ใช้คูณราคา/วันเป็นยอดรวม
   const days = useMemo(() => {
     const diff = Math.round(
       (new Date(dropoffDate) - new Date(pickupDate)) / (1000 * 60 * 60 * 24),
     );
     return diff > 0 ? diff : 1;
   }, [pickupDate, dropoffDate]);
-  const total = car.pricePerDay * days;
+  const total = (car.daily_rate || car.pricePerDay) * days;
 
-  // คัดลอกลิงก์หน้านี้ไปยัง clipboard แทนปุ่ม share ของจริง (ยังไม่มีระบบ share)
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // เบราว์เซอร์บางตัว/บาง context (เช่นไม่ใช่ https) อาจ copy ไม่ได้ ปล่อยผ่านเงียบ ๆ
+      // ignore
     }
+  };
+
+  const handleBookNow = () => {
+    selectCar({
+      carId: car.id,
+      pickupLocation,
+      dropoffLocation: pickupLocation,
+      pickupDate,
+      pickupTime,
+      dropoffDate,
+      dropoffTime,
+    });
+    navigate("/cart");
   };
 
   return (
@@ -85,7 +88,7 @@ export default function CarDetail() {
       <Header />
 
       <div className="wrap">
-        {/* ---------- Breadcrumb: Home > Car Rental > ชื่อรถ ---------- */}
+        {/* ---------- Breadcrumb ---------- */}
         <nav className="breadcrumb">
           <Link to="/">Home</Link>
           <span>›</span>
@@ -94,7 +97,7 @@ export default function CarDetail() {
           <span className="current">{car.name}</span>
         </nav>
 
-        {/* ---------- แกลเลอรี: รูปใหญ่ + แถบ thumbnail 4 รูป ---------- */}
+        {/* ---------- แกลเลอรี ---------- */}
         <div className="car-detail-gallery">
           <div className="car-detail-main">
             <PhotoPlaceholder src={car.images[activeImage]} alt={car.name} />
@@ -141,12 +144,14 @@ export default function CarDetail() {
         <div className="detail-layout">
           {/* ---------- คอลัมน์ซ้าย: รายละเอียด + สเปครถ ---------- */}
           <div>
-            <div className="row" style={{ marginBottom: 14 }}>
-              <span className="tag">{car.type.toUpperCase()}</span>
+            <div className="row" style={{ marginBottom: 14, gap: 10, flexWrap: "wrap" }}>
+              <span className="tag" style={{ background: "var(--color-brand)", color: "#fff" }}>
+                {car.category.toUpperCase()}
+              </span>
               <span className="rate-box">
-                ★ {car.rating}{" "}
+                ★ {car.reviews_summary?.average_star || car.rating}{" "}
                 <span className="muted" style={{ fontWeight: 400 }}>
-                  ({car.reviews} Reviews)
+                  ({car.reviews_summary?.total_reviews || car.reviews} Reviews)
                 </span>
               </span>
             </div>
@@ -155,9 +160,11 @@ export default function CarDetail() {
             <p className="muted" style={{ marginTop: 16 }}>
               {car.description}
             </p>
-            <p className="muted" style={{ marginTop: 14 }}>
-              {car.descriptionExtra}
-            </p>
+            {car.descriptionExtra && (
+              <p className="muted" style={{ marginTop: 14 }}>
+                {car.descriptionExtra}
+              </p>
+            )}
 
             <div className="divider" />
 
@@ -167,34 +174,68 @@ export default function CarDetail() {
                 <div className="spec-box">
                   <div className="spec-icon">⚙️</div>
                   <div className="spec-label">Transmission</div>
-                  <b>{car.transmission}</b>
+                  <b>{car.specs?.transmission || car.transmission}</b>
                 </div>
                 <div className="spec-box">
                   <div className="spec-icon">🧑</div>
                   <div className="spec-label">Seats</div>
-                  <b>{car.seats} Seats</b>
+                  <b>{car.specs?.seats || car.seats} Seats</b>
                 </div>
                 <div className="spec-box">
                   <div className="spec-icon">⛽</div>
                   <div className="spec-label">Fuel</div>
-                  <b>{car.fuel}</b>
+                  <b>{car.specs?.fuel_type || car.fuel}</b>
                 </div>
                 <div className="spec-box">
                   <div className="spec-icon">🧳</div>
                   <div className="spec-label">Luggage</div>
-                  <b>{car.luggage}</b>
+                  <b>{car.specs?.luggage || car.luggage}</b>
                 </div>
+              </div>
+            </section>
+
+            {/* ---------- ข้อมูลการจดทะเบียนและประกันภัยตาม Schema ---------- */}
+            <section className="blk">
+              <h2>Registration &amp; Insurance</h2>
+              <div className="grid-2" style={{ marginTop: 14 }}>
+                <div style={{ padding: "14px", background: "var(--color-bg)", borderRadius: "var(--radius-sm)" }}>
+                  <b>📋 Commercial License</b>
+                  <div className="muted" style={{ fontSize: ".85rem", marginTop: 6, lineHeight: 1.6 }}>
+                    ประเภท: {car.registration_and_license?.license_category || "ป้ายเขียวบริการธุรกิจ"}<br />
+                    เลขใบอนุญาต: {car.registration_and_license?.transport_permit_number || "TP-BKK-2026-0089"}<br />
+                    ภาษีสิ้นสุด: {car.registration_and_license?.tax_expiry_date || "2027-03-31"}
+                  </div>
+                </div>
+                <div style={{ padding: "14px", background: "var(--color-bg)", borderRadius: "var(--radius-sm)" }}>
+                  <b>🛡️ First Class Commercial Insurance</b>
+                  <div className="muted" style={{ fontSize: ".85rem", marginTop: 6, lineHeight: 1.6 }}>
+                    บริษัท: {car.registration_and_license?.commercial_insurance?.insurance_company || "Viriyah Insurance"}<br />
+                    กรมธรรม์: {car.registration_and_license?.commercial_insurance?.policy_number || "INS-COMM-998822"}<br />
+                    ความคุ้มครอง: ชั้น 1 เพื่อการพาณิชย์/รถเช่า
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* ---------- จุดให้บริการ / Station ---------- */}
+            <section className="blk">
+              <h2>Station Location</h2>
+              <div style={{ padding: "16px", background: "var(--color-bg)", borderRadius: "var(--radius-sm)", marginTop: 14 }}>
+                <b>🏢 {car.current_station?.name || "Suvarnabhumi Airport Branch"}</b>
+                <p className="muted" style={{ fontSize: ".88rem", marginTop: 4, marginBottom: 0 }}>
+                  Station ID: {car.current_station?.station_id || "ST-01"} · City: {car.current_station?.city || "Bangkok"} · Counter: Gate 3, Arrival Hall
+                </p>
               </div>
             </section>
           </div>
 
-          {/* ---------- คอลัมน์ขวา: กล่องจอง (ทำเลรับรถ + วันเวลา + ยอดรวม) ---------- */}
+          {/* ---------- คอลัมน์ขวา: กล่องจอง ---------- */}
           <aside>
             <div className="card book-box sticky">
               <div className="between">
                 <div>
                   <div className="price">
-                    ฿{car.pricePerDay.toLocaleString()}
+                    ฿{(car.daily_rate || car.pricePerDay).toLocaleString()}
                   </div>
                   <div className="muted" style={{ fontSize: ".8rem" }}>
                     per day
@@ -282,7 +323,13 @@ export default function CarDetail() {
                 </div>
               </div>
 
-              <Button variant="gold" full size="lg">
+              <Button
+                variant="gold"
+                full
+                size="lg"
+                onClick={handleBookNow}
+                id="bookCarNowBtn"
+              >
                 Book Now →
               </Button>
               <p

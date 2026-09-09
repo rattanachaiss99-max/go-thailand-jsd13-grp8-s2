@@ -8,6 +8,10 @@ export const navbar = {
   customization: true,
   navItems: [
     { id: 'home', title: 'หน้าแรก', link: '/' },
-    { id: 'dashboard', title: 'แดชบอร์ด', link: ADMIN_PATH, ...linkProps }
+    { id: 'accommodations', title: 'ที่พัก', link: '/accommodations' },
+    { id: 'guides', title: 'ไกด์นำเที่ยว', link: '/guides' },
+    { id: 'dashboard', title: 'แดชบอร์ด', link: '/dashboard' }
   ]
 };
+
+

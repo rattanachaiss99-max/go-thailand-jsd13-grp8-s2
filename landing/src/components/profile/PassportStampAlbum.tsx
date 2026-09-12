@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,7 @@ import Alert from '@mui/material/Alert';
 import ProvincePostageStamp from './ProvincePostageStamp';
 import { THAILAND_PROVINCES, Province, REGION_METAS, RegionKey, getProvinceByIdOrSlug } from '@/data/thailandProvinces';
 import { BookingData } from '@/services/bookingService';
+import { prefetchRegionVectors } from '@/services/provinceVectorService';
 
 interface PassportStampAlbumProps {
   visitedProvinceIds: string[];
@@ -32,6 +33,11 @@ export default function PassportStampAlbum({
   const [selectedRegion, setSelectedRegion] = useState<RegionKey | 'all'>('north');
   const [statusFilter, setStatusFilter] = useState<'all' | 'visited' | 'unvisited'>('all');
   const [inspectProvince, setInspectProvince] = useState<Province | null>(null);
+
+  // Prefetch all province vectors in the active region from MongoDB Atlas
+  useEffect(() => {
+    prefetchRegionVectors(selectedRegion);
+  }, [selectedRegion]);
 
   // Helper check
   const isVisitedProvince = (province: Province) => {

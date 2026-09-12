@@ -33,17 +33,24 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      province: {
-        provinceId: doc.provinceId,
-        slug: doc.slug,
-        nameTh: doc.nameTh,
-        nameEn: doc.nameEn,
-        region: doc.region
+    return NextResponse.json(
+      {
+        success: true,
+        province: {
+          provinceId: doc.provinceId,
+          slug: doc.slug,
+          nameTh: doc.nameTh,
+          nameEn: doc.nameEn,
+          region: doc.region
+        },
+        vectorData: doc.vectorData
       },
-      vectorData: doc.vectorData
-    });
+      {
+        headers: {
+          'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800'
+        }
+      }
+    );
   } catch (error: any) {
     console.error('Error fetching province vector:', error);
     return NextResponse.json(

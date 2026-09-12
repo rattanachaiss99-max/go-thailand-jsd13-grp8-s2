@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { mockUser, mockBookings, BookingRecord, CRMUser } from '@/data/crm/mockData';
+import { fetchExternalCarBookings } from './carBookingService';
 
 export interface DashboardStatsData {
   upcomingTrips: number;
@@ -38,18 +39,19 @@ export function computeStats(
 export async function fetchDashboardStats(
   currentUser?: Partial<CRMUser> | null
 ): Promise<DashboardStatsData> {
-  if (USE_MOCK) {
-    await delay(MOCK_DELAY_MS);
-    return computeStats(currentUser || mockUser, mockBookings);
+  const allBookings = await fetchUserBookings(currentUser?.email);
+  return computeStats(currentUser || mockUser, allBookings);
+}
+
+export async function fetchUserBookings(userEmail?: string): Promise<BookingRecord[]> {
+  await delay(MOCK_DELAY_MS);
+  
+  // เรียกอ่านข้อมูลการจองรถจริงจาก Car-Service (Read-Only)
+  const externalCars = await fetchExternalCarBookings(userEmail);
+  if (externalCars.length > 0) {
+    return [...externalCars, ...mockBookings];
   }
 
-  const res = await fetch(`/api/dashboard`);
-  if (!res.ok) throw new Error('DASHBOARD_FETCH_FAILED');
-  const data = await res.json();
-  return data.stats;
-}
-
-export async function fetchUserBookings(): Promise<BookingRecord[]> {
-  await delay(MOCK_DELAY_MS);
   return mockBookings;
 }
+

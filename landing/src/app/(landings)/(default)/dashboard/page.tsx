@@ -37,11 +37,12 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tabIndex, setTabIndex] = useState(0);
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'car' | 'hotel' | 'guide'>('all');
 
   const loadData = () => {
     setLoading(true);
     setError(null);
-    Promise.all([fetchDashboardStats(user as any), fetchUserBookings()])
+    Promise.all([fetchDashboardStats(user as any), fetchUserBookings(user?.email)])
       .then(([statsData, bookingsData]) => {
         setStats(statsData);
         setBookings(bookingsData);
@@ -60,7 +61,7 @@ export default function DashboardPage() {
     setLoading(true);
     setError(null);
 
-    Promise.all([fetchDashboardStats(user as any), fetchUserBookings()])
+    Promise.all([fetchDashboardStats(user as any), fetchUserBookings(user?.email)])
       .then(([statsData, bookingsData]) => {
         if (active) {
           setStats(statsData);
@@ -176,16 +177,36 @@ export default function DashboardPage() {
           <Tabs
             value={tabIndex}
             onChange={(_, val) => setTabIndex(val)}
-            sx={{ mb: 3, borderBottom: 1, borderColor: 'divider' }}
+            sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
           >
             <Tab label={`ทริปเร็วๆ นี้ (${upcomingBookings.length})`} sx={{ fontWeight: 700 }} />
             <Tab label={`ประวัติการจองทั้งหมด (${bookings.length})`} sx={{ fontWeight: 700 }} />
           </Tabs>
 
+          {/* ปุ่มกรองหมวดหมู่ย่อย */}
+          <Stack direction="row" spacing={1} sx={{ mb: 3 }} flexWrap="wrap" useFlexGap>
+            {[
+              { id: 'all', label: 'ทั้งหมด' },
+              { id: 'car', label: '🚗 รถเช่า' },
+              { id: 'hotel', label: '🏨 ที่พัก' },
+              { id: 'guide', label: '🧭 ไกด์นำเที่ยว' }
+            ].map((cat) => (
+              <Chip
+                key={cat.id}
+                label={cat.label}
+                clickable
+                color={categoryFilter === cat.id ? 'primary' : 'default'}
+                variant={categoryFilter === cat.id ? 'filled' : 'outlined'}
+                onClick={() => setCategoryFilter(cat.id as any)}
+                sx={{ fontWeight: 600 }}
+              />
+            ))}
+          </Stack>
+
           {tabIndex === 0 ? (
-            <BookingList bookings={upcomingBookings} />
+            <BookingList bookings={upcomingBookings} filterCategory={categoryFilter} />
           ) : (
-            <BookingList bookings={bookings} />
+            <BookingList bookings={bookings} filterCategory={categoryFilter} />
           )}
         </Box>
 

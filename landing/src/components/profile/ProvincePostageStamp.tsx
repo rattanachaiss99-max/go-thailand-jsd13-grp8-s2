@@ -3,8 +3,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 import { Province, REGION_METAS } from '@/data/thailandProvinces';
-import { getProvinceSvgData } from '@/data/northernProvincesSvg';
+import { useProvinceVector, ProvinceVectorData } from '@/services/provinceVectorService';
 
 export interface ProvincePostageStampProps {
   province: Province;
@@ -13,6 +14,7 @@ export interface ProvincePostageStampProps {
   onClick?: (province: Province) => void;
   showRegionTag?: boolean;
   className?: string;
+  initialVectorData?: ProvinceVectorData | null;
 }
 
 export default function ProvincePostageStamp({
@@ -21,9 +23,10 @@ export default function ProvincePostageStamp({
   size = 'medium',
   onClick,
   showRegionTag = true,
-  className
+  className,
+  initialVectorData
 }: ProvincePostageStampProps) {
-  const svgData = getProvinceSvgData(province.slug);
+  const { vectorData, isLoading } = useProvinceVector(province.slug, initialVectorData);
   const regionMeta = REGION_METAS[province.region];
 
   // Scale dimensions
@@ -150,9 +153,9 @@ export default function ProvincePostageStamp({
               filter: isVisited ? 'none' : 'grayscale(1)'
             }}
           >
-            {svgData ? (
+            {vectorData ? (
               <svg
-                viewBox={svgData.viewBox}
+                viewBox={vectorData.viewBox}
                 style={{
                   width: '100%',
                   height: dims.svgH,
@@ -161,7 +164,7 @@ export default function ProvincePostageStamp({
                 }}
               >
                 <path
-                  d={svgData.d}
+                  d={vectorData.d}
                   fill={isVisited ? '#10B981' : '#94A3B8'}
                   stroke={isVisited ? '#047857' : '#64748B'}
                   strokeWidth="3.5"
@@ -171,8 +174,30 @@ export default function ProvincePostageStamp({
                   }}
                 />
               </svg>
+            ) : isLoading ? (
+              // กำลังโหลดเวกเตอร์จาก MongoDB Atlas แบบ On-Demand
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: dims.svgH
+                }}
+              >
+                <Skeleton
+                  variant="rounded"
+                  animation="wave"
+                  width="70%"
+                  height={dims.svgH * 0.8}
+                  sx={{
+                    borderRadius: 2,
+                    bgcolor: isVisited ? 'rgba(16, 185, 129, 0.1)' : 'rgba(148, 163, 184, 0.15)'
+                  }}
+                />
+              </Box>
             ) : (
-              // Fallback สัญลักษณ์สำหรับจังหวัดที่ยังไม่มีเส้นเวกเตอร์เฉพาะ
+              // Fallback สัญลักษณ์สำหรับกรณีไม่มีเส้นเวกเตอร์
               <Box
                 sx={{
                   textAlign: 'center',

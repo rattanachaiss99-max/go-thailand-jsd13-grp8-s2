@@ -38,6 +38,37 @@ export interface BookingPricing {
   currency: string;
 }
 
+export interface RawCarBooking {
+  carName?: string;
+  carImage?: string;
+  carDetails?: string;
+  carRating?: string;
+  pickupReturn?: string;
+  dates?: string;
+  rentalPrice?: number;
+  serviceFee?: number;
+  totalPrice?: number;
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  country?: string;
+  driverName?: string;
+  licenseCountry?: string;
+  driverAge?: string | number;
+  licenseNumber?: string;
+  paymentMethod?: string;
+  cardName?: string;
+  cardNumber?: string;
+  maskedCardNumber?: string;
+  expiryDate?: string;
+  saveCard?: boolean;
+  sameAsTraveler?: boolean;
+  termsAccepted?: boolean;
+  status?: string;
+  createdAt?: string;
+  [key: string]: any;
+}
+
 export interface BookingRecord {
   _id: string;
   bookingReference: string;
@@ -51,6 +82,7 @@ export interface BookingRecord {
     email: string;
     phone: string;
   };
+  rawCarBooking?: RawCarBooking;
 }
 
 export interface CRMPlace {
@@ -69,7 +101,7 @@ export const mockUser: CRMUser = {
   phone: '081-234-5678',
   membershipTier: 'gold',
   points: 4500,
-  bookingCount: 12,
+  bookingCount: 6,
   wishlist: [
     'wat-arun-bkk',
     'doi-inthanon',
@@ -134,26 +166,15 @@ const makeOrder = (
 };
 
 export const mockBookings: BookingRecord[] = [
-  // 2 Upcoming (confirmed in future)
-  makeOrder('GT20260901', 'confirmed', 'Toyota Yaris ATIV (Sedan)', 'car', 4, 3, 890, 'สนามบินสุวรรณภูมิ (BKK)'),
+  // 1 Upcoming Hotel (confirmed in future)
   makeOrder('GT20260902', 'confirmed', 'Emerald Jungle Retreat (Villa)', 'hotel', 18, 2, 9500, 'แม่ริม, เชียงใหม่'),
 
-  // 9 Completed in past
-  makeOrder('GT20260801', 'completed', 'Honda City Hatchback', 'car', -10, 2, 990, 'สนามบินดอนเมือง (DMK)'),
+  // 5 Completed Hotel & Guide in past
   makeOrder('GT20260715', 'completed', 'Four Seasons Samui Cove', 'hotel', -25, 3, 18500, 'เกาะสมุย, สุราษฎร์ธานี'),
   makeOrder('GT20260701', 'completed', 'Local Guide: วัดพระแก้วและพระบรมมหาราชวัง', 'guide', -40, 1, 1500, 'กรุงเทพมหานคร'),
-  makeOrder('GT20260618', 'completed', 'Toyota Fortuner 4x4', 'car', -55, 4, 2400, 'สนามบินเชียงใหม่ (CNX)'),
   makeOrder('GT20260520', 'completed', 'Ayutthaya Heritage Riverside', 'hotel', -80, 1, 3800, 'พระนครศรีอยุธยา'),
-  makeOrder('GT20260412', 'completed', 'Isuzu MU-X Family SUV', 'car', -120, 5, 2100, 'สนามบินภูเก็ต (HKT)'),
   makeOrder('GT20260310', 'completed', 'Khao Yai Vineyard Villas', 'hotel', -150, 2, 6200, 'เขาใหญ่, นครราชสีมา'),
-  makeOrder('GT20260214', 'completed', 'BMW 330e M Sport', 'car', -180, 2, 4500, 'สยามพารากอน, กรุงเทพฯ'),
-  makeOrder('GT20260105', 'completed', 'Lanna Riverside Boutique', 'hotel', -220, 3, 4200, 'ริมแม่น้ำปิง, เชียงใหม่'),
-
-  // 1 Confirmed in past (counted in total, not upcoming)
-  makeOrder('GT20251225', 'confirmed', 'MG ZS EV (100% Electric)', 'car', -240, 2, 1200, 'พัทยา, ชลบุรี'),
-
-  // 1 Cancelled (not counted in either)
-  makeOrder('GT20260810', 'cancelled', 'Toyota Corolla Cross Hybrid', 'car', -15, 3, 1600, 'สนามบินภูเก็ต (HKT)')
+  makeOrder('GT20260105', 'completed', 'Lanna Riverside Boutique', 'hotel', -220, 3, 4200, 'ริมแม่น้ำปิง, เชียงใหม่')
 ];
 
 export const mockPlaces: CRMPlace[] = [

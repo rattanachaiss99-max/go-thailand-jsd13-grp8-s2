@@ -51,3 +51,7 @@ yarn-error.log*
 /docs/
 /scratch/
 
+# car-service (ignore for now)
+/car-service/
+
+

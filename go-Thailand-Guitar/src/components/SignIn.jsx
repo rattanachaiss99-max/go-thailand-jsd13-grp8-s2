@@ -1,15 +1,35 @@
-import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password, rememberMe });
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
+
+      alert(`ยินดีต้อนรับ ${data.user.fullName}!`);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      // สามารถสั่งให้เปลี่ยนหน้าได้ เช่น navigate('/checkout') หรือหน้าหลัก
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +57,6 @@ export default function SignIn() {
         padding: '80px',
         boxSizing: 'border-box',
       }}>
-        {/* เลเยอร์มืดบางๆ */}
         <div style={{
           position: 'absolute',
           inset: 0,
@@ -45,7 +64,6 @@ export default function SignIn() {
           zIndex: 1
         }} />
 
-        {/* ข้อความตรงกลาง */}
         <div style={{ position: 'relative', zIndex: 2, margin: 'auto 0', maxWidth: '580px' }}>
           <h1 style={{
             fontSize: '64px',
@@ -70,7 +88,6 @@ export default function SignIn() {
           </p>
         </div>
 
-        {/* ข้อความด้านล่าง */}
         <div style={{ position: 'relative', zIndex: 2 }}>
           <p style={{
             fontFamily: '"Playfair Display", Georgia, serif',
@@ -115,7 +132,6 @@ export default function SignIn() {
           </h2>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* Email */}
             <div>
               <label style={{ display: 'block', fontSize: '17px', color: '#1A1A1A', marginBottom: '8px', fontWeight: '500' }}>
                 Email Address
@@ -140,7 +156,6 @@ export default function SignIn() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label style={{ display: 'block', fontSize: '17px', color: '#1A1A1A', marginBottom: '8px', fontWeight: '500' }}>
                 Password
@@ -165,7 +180,6 @@ export default function SignIn() {
               />
             </div>
 
-            {/* Remember Me & Forget Password */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '16px', color: '#2C2C2C' }}>
                 <input
@@ -177,38 +191,35 @@ export default function SignIn() {
                 Remember me
               </label>
               
-                Forget password?
               <Link to="/forgot-password" style={{ fontSize: '16px', color: '#2C2C2C', textDecoration: 'none' }}>
-  Forget password?
-</Link>
+                Forget password?
+              </Link>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
+              disabled={loading}
               style={{
                 marginTop: '10px',
                 width: '100%',
                 padding: '16px 0',
                 borderRadius: '6px',
                 border: '1px solid #C4A545',
-                backgroundColor: '#DEBA5A',
+                backgroundColor: loading ? '#ccc' : '#DEBA5A',
                 fontSize: '16px',
                 fontWeight: '700',
                 letterSpacing: '0.8px',
                 color: '#1A1A1A',
-                cursor: 'pointer',
+                cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              CONTINUE YOUR JOURNEY
+              {loading ? 'SIGNING IN...' : 'CONTINUE YOUR JOURNEY'}
             </button>
 
-            {/* Divider */}
             <div style={{ textAlign: 'center', fontSize: '15px', color: '#4A4A4A', margin: '4px 0' }}>
               --Or Sign In With--
             </div>
 
-            {/* Google Button */}
             <div>
               <button
                 type="button"
@@ -233,14 +244,11 @@ export default function SignIn() {
               </button>
             </div>
 
-            {/* Register Footer */}
             <div style={{ textAlign: 'center', fontSize: '16px', color: '#1A1A1A' }}>
               Don’t have an account?{' '}
-             
               <Link to="/register" style={{ fontWeight: '700', color: '#000000', textDecoration: 'none' }}>
-  Register
-  
-</Link>
+                Register
+              </Link>
             </div>
           </form>
         </div>

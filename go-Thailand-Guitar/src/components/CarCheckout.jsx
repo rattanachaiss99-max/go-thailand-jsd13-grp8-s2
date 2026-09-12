@@ -30,6 +30,7 @@ export default function CarCheckout() {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [loading, setLoading] = useState(false);
   const summaryRef = useRef(null);
 
   const handleChange = (field) => (event) => {
@@ -38,8 +39,8 @@ export default function CarCheckout() {
     if (error) setError("");
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (event) => {
+    if (event) event.preventDefault();
     if (!form.fullName || !form.email || !form.driverName || !form.licenseNumber) {
       setError("Please complete the traveler and driver information.");
       return;
@@ -48,8 +49,55 @@ export default function CarCheckout() {
       setError("Please accept the Terms of Service and Rental Policy to continue.");
       return;
     }
+
     setError("");
-    setIsConfirmed(true);
+    setLoading(true);
+
+    try {
+      // ส่งข้อมูลฟอร์มพร้อมข้อมูลสรุปค่าใช้จ่ายไปยัง Backend
+      const payload = {
+        carName: "Toyota Fortuner",
+        carImage: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=240",
+        carDetails: "SUV · 7 Seats · Diesel",
+        carRating: "4.9",
+        pickupReturn: "Suvarnabhumi Airport (BKK), Bangkok",
+        dates: "Oct 15, 10:00 AM - Oct 18, 10:00 AM (3 Days)",
+        rentalPrice: 7500,
+        serviceFee: 0,
+        totalPrice: 7500,
+        fullName: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        driverName: form.driverName,
+        licenseCountry: form.licenseCountry,
+        driverAge: form.driverAge,
+        licenseNumber: form.licenseNumber,
+        paymentMethod: paymentMethod,
+        cardName: form.cardName,
+        cardNumber: form.cardNumber,
+        expiryDate: form.expiryDate,
+        cvv: form.cvv,
+        saveCard: form.saveCard,
+        sameAsTraveler: form.sameAsTraveler,
+        termsAccepted: form.terms
+      };
+
+      const res = await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to create booking");
+
+      setIsConfirmed(true);
+    } catch (err) {
+      setError(err.message || "Something went wrong while connecting to the server.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBack = () => summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -74,7 +122,9 @@ export default function CarCheckout() {
               </label>
               {error && <p role="alert" className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
             </div>
-            <div ref={summaryRef}><BookingSummary onConfirm={handleSubmit} onBack={handleBack} /></div>
+            <div ref={summaryRef}>
+              <BookingSummary onConfirm={handleSubmit} onBack={handleBack} loading={loading} />
+            </div>
           </form>
         </main>
       )}
@@ -104,5 +154,5 @@ function Step({ label, done, active }) {
 }
 
 function Confirmation() {
-  return <main className="mx-auto max-w-2xl px-6 py-24 text-center"><div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#F3CB68] text-2xl">✓</div><h1 className="font-serif text-3xl font-bold">Booking Confirmed</h1><p className="mt-3 text-gray-600">Your Toyota Fortuner booking has been confirmed. This is a demo checkout.</p><Button variant="primary" className="mt-8 rounded px-6 py-3 text-sm" onClick={() => window.location.reload()}>Return to Checkout</Button></main>;
+  return <main className="mx-auto max-w-2xl px-6 py-24 text-center"><div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#F3CB68] text-2xl">✓</div><h1 className="font-serif text-3xl font-bold">Booking Confirmed</h1><p className="mt-3 text-gray-600">Your Toyota Fortuner booking has been confirmed and saved to MongoDB.</p><Button variant="primary" className="mt-8 rounded px-6 py-3 text-sm" onClick={() => window.location.reload()}>Book Another Car</Button></main>;
 }

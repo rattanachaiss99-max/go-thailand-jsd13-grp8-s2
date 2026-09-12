@@ -10,20 +10,42 @@ export default function Register() {
     password: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert('รหัสผ่านไม่ตรงกัน');
       return;
     }
-    console.log(formData);
-    // สมัครเสร็จแล้วเปลี่ยนหน้ากลับไปที่ Sign In
-    navigate('/');
+
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'เกิดข้อผิดพลาดในการลงทะเบียน');
+
+      alert('ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ');
+      navigate('/');
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +59,7 @@ export default function Register() {
       fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
       boxSizing: 'border-box'
     }}>
-      {/* ฝั่งซ้าย: รูปภาพและข้อความหรูหรา 50% */}
+      {/* ฝั่งซ้าย: รูปภาพและข้อความ 50% */}
       <div style={{
         position: 'relative',
         width: '50%',
@@ -253,28 +275,28 @@ export default function Register() {
 
             <button
               type="submit"
+              disabled={loading}
               style={{
                 marginTop: '10px',
                 width: '100%',
                 padding: '15px 0',
                 borderRadius: '6px',
                 border: '1px solid #C4A545',
-                backgroundColor: '#DEBA5A',
+                backgroundColor: loading ? '#ccc' : '#DEBA5A',
                 fontSize: '15px',
                 fontWeight: '700',
                 letterSpacing: '0.8px',
                 color: '#1A1A1A',
-                cursor: 'pointer',
+                cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              CONTINUE YOUR JOURNEY
+              {loading ? 'REGISTERING...' : 'CONTINUE YOUR JOURNEY'}
             </button>
 
-            {/* ปุ่มกดกลับหน้า Sign In */}
             <div style={{ textAlign: 'center', fontSize: '15px', color: '#1A1A1A', marginTop: '6px' }}>
               Already have an account?{' '}
               <Link 
-                to="/" 
+                to="/signin" 
                 style={{ fontWeight: '700', color: '#000000', textDecoration: 'none' }}
               >
                 Sign In

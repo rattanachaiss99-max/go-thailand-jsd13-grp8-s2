@@ -4,6 +4,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Province, REGION_METAS } from '@/data/thailandProvinces';
 import { useProvinceVector, ProvinceVectorData } from '@/services/provinceVectorService';
 
@@ -15,6 +16,8 @@ export interface ProvincePostageStampProps {
   showRegionTag?: boolean;
   className?: string;
   initialVectorData?: ProvinceVectorData | null;
+  animated?: boolean;
+  interactiveHover?: boolean;
 }
 
 export default function ProvincePostageStamp({
@@ -24,7 +27,9 @@ export default function ProvincePostageStamp({
   onClick,
   showRegionTag = true,
   className,
-  initialVectorData
+  initialVectorData,
+  animated = false,
+  interactiveHover = false
 }: ProvincePostageStampProps) {
   const { vectorData, isLoading } = useProvinceVector(province.slug, initialVectorData);
   const regionMeta = REGION_METAS[province.region];
@@ -163,16 +168,36 @@ export default function ProvincePostageStamp({
                   transition: 'all 0.3s ease'
                 }}
               >
-                <path
-                  d={vectorData.d}
-                  fill={isVisited ? '#10B981' : '#94A3B8'}
-                  stroke={isVisited ? '#047857' : '#64748B'}
-                  strokeWidth="3.5"
-                  strokeMiterlimit="10"
-                  style={{
-                    filter: isVisited ? 'drop-shadow(0 4px 6px rgba(16,185,129,0.3))' : 'none'
-                  }}
-                />
+                {animated ? (
+                  <motion.path
+                    key={`animated-path-${province.slug}-${isVisited}`}
+                    d={vectorData.d}
+                    fill={isVisited ? (regionMeta?.color || '#10B981') : '#94A3B8'}
+                    stroke={isVisited ? '#047857' : '#64748B'}
+                    strokeWidth="3.5"
+                    strokeMiterlimit="10"
+                    initial={{ pathLength: 0, fillOpacity: 0 }}
+                    animate={{ pathLength: 1, fillOpacity: 1 }}
+                    transition={{
+                      pathLength: { duration: 1.2, ease: [0.25, 1, 0.5, 1] },
+                      fillOpacity: { duration: 0.5, delay: 0.8 }
+                    }}
+                    style={{
+                      filter: isVisited ? `drop-shadow(0 4px 6px ${regionMeta?.color || '#10B981'}40)` : 'none'
+                    }}
+                  />
+                ) : (
+                  <path
+                    d={vectorData.d}
+                    fill={isVisited ? (regionMeta?.color || '#10B981') : '#94A3B8'}
+                    stroke={isVisited ? '#047857' : '#64748B'}
+                    strokeWidth="3.5"
+                    strokeMiterlimit="10"
+                    style={{
+                      filter: isVisited ? `drop-shadow(0 4px 6px ${regionMeta?.color || '#10B981'}40)` : 'none'
+                    }}
+                  />
+                )}
               </svg>
             ) : isLoading ? (
               // กำลังโหลดเวกเตอร์จาก MongoDB Atlas แบบ On-Demand
@@ -316,79 +341,111 @@ export default function ProvincePostageStamp({
       </Box>
 
       {/* 2. ตราประทับไปรษณีย์ (Rubber Cancellation Postmark Seal) */}
-      {isVisited && (
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: size === 'small' ? -8 : -10,
-            right: size === 'small' ? -8 : -10,
-            width: size === 'small' ? 68 : size === 'medium' ? 84 : 105,
-            height: size === 'small' ? 68 : size === 'medium' ? 84 : 105,
-            borderRadius: '50%',
-            border: '2px dashed #DC2626',
-            p: 0.3,
-            transform: 'rotate(-14deg)',
-            pointerEvents: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: 'rgba(254, 242, 242, 0.85)',
-            boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)',
-            opacity: 0.95
-          }}
-        >
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              border: '1.5px solid #DC2626',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              px: 0.5
+      <AnimatePresence>
+        {isVisited && (
+          <motion.div
+            key={`postmark-seal-${province.id}`}
+            initial={animated ? { scale: 2.5, opacity: 0, rotate: 25 } : { scale: 1, opacity: 0.95, rotate: -14 }}
+            animate={{ scale: 1, opacity: 0.95, rotate: -14 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{
+              type: 'spring',
+              stiffness: 400,
+              damping: 18,
+              delay: animated ? 0.35 : 0
+            }}
+            style={{
+              position: 'absolute',
+              bottom: size === 'small' ? -8 : -10,
+              right: size === 'small' ? -8 : -10,
+              zIndex: 5,
+              pointerEvents: 'none'
             }}
           >
-            <Typography
-              variant="caption"
+            <Box
               sx={{
-                fontSize: size === 'small' ? '0.45rem' : '0.55rem',
-                fontWeight: 900,
-                color: '#DC2626',
-                letterSpacing: 0.5,
-                lineHeight: 1
+                width: size === 'small' ? 68 : size === 'medium' ? 84 : 105,
+                height: size === 'small' ? 68 : size === 'medium' ? 84 : 105,
+                borderRadius: '50%',
+                border: '2px dashed #DC2626',
+                p: 0.3,
+                bgcolor: 'rgba(254, 242, 242, 0.92)',
+                boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              VISITED
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: size === 'small' ? '0.5rem' : '0.65rem',
-                fontWeight: 900,
-                color: '#B91C1C',
-                lineHeight: 1,
-                my: 0.2
-              }}
-            >
-              ✓ CHECKED
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{
-                fontSize: size === 'small' ? '0.4rem' : '0.48rem',
-                fontWeight: 700,
-                color: '#DC2626',
-                lineHeight: 1
-              }}
-            >
-              GO THAILAND
-            </Typography>
-          </Box>
-        </Box>
-      )}
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  border: '1.5px solid #DC2626',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  px: 0.5
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontSize: size === 'small' ? '0.45rem' : '0.55rem',
+                    fontWeight: 900,
+                    color: '#DC2626',
+                    letterSpacing: 0.5,
+                    lineHeight: 1
+                  }}
+                >
+                  VISITED
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontSize: size === 'small' ? '0.5rem' : '0.65rem',
+                    fontWeight: 900,
+                    color: '#B91C1C',
+                    lineHeight: 1,
+                    my: 0.2
+                  }}
+                >
+                  ✓ CHECKED
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontSize: size === 'small' ? '0.4rem' : '0.48rem',
+                    fontWeight: 700,
+                    color: '#DC2626',
+                    lineHeight: 1
+                  }}
+                >
+                  GO THAILAND
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Micro ink particles burst when animated */}
+            {animated && (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0.9 }}
+                animate={{ scale: 1.6, opacity: 0 }}
+                transition={{ duration: 0.7, delay: 0.45 }}
+                style={{
+                  position: 'absolute',
+                  inset: -4,
+                  borderRadius: '50%',
+                  border: '2px dotted rgba(220, 38, 38, 0.7)',
+                  pointerEvents: 'none'
+                }}
+              />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }

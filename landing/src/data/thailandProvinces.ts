@@ -71,6 +71,7 @@ export interface Province {
   simplifiedRegion: 'north' | 'isan' | 'central' | 'south'; // สำหรับกรอง 4 ภาคหลัก
   popularDestinations?: string[];
   approxStayCount?: number;
+  slogan?: string;
 }
 
 export const THAILAND_PROVINCES: Province[] = [

@@ -719,6 +719,7 @@ export default function ThailandInteractiveMap({
             {/* Stamp สะสมประจำจังหวัด (Collectible Stamp Preview) */}
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
               <ProvincePostageStamp
+                key={`drawer-stamp-${selectedProvince.slug}`}
                 province={selectedProvince}
                 isVisited={visitedProvinceIds.some(
                   (id) =>
@@ -728,6 +729,7 @@ export default function ThailandInteractiveMap({
                     getProvinceByIdOrSlug(id)?.id === selectedProvince.id
                 )}
                 size="small"
+                animated={true}
                 onClick={onToggleVisited ? () => onToggleVisited(selectedProvince) : undefined}
               />
             </Box>

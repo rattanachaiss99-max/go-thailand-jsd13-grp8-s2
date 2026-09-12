@@ -54,8 +54,30 @@ export default function DashboardPage() {
       });
   };
 
+  // Mount/User change lifecycle per react-crm-lifecycle: active cleanup flag prevents setState on unmounted component
   useEffect(() => {
-    loadData();
+    let active = true;
+    setLoading(true);
+    setError(null);
+
+    Promise.all([fetchDashboardStats(user as any), fetchUserBookings()])
+      .then(([statsData, bookingsData]) => {
+        if (active) {
+          setStats(statsData);
+          setBookings(bookingsData);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          setError(err.message || 'FAILED_TO_LOAD');
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, [user]);
 
   const greetingName = user ? `${user.firstName} ${user.lastName}` : `${mockUser.firstName} ${mockUser.lastName}`;

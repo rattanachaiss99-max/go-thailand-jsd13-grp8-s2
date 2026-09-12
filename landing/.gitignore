@@ -44,3 +44,10 @@ yarn-error.log*
 /user-service/.env.local
 /user-service/.env.*.local
 
+# antigravity skills
+.agents/
+
+# internal documentation & scratch
+/docs/
+/scratch/
+

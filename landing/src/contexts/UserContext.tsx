@@ -2,11 +2,11 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-import { AuthUser, loginUser, registerUser, fetchMe } from '@/server/api/auth';
+import { AuthUser, loginUser, registerUser, fetchMe, updateUserProfile } from '@/server/api/auth';
 
 // @description UserContext — central auth state shared across pages
 // (per react-crm-lifecycle: "state used by many components → Context").
-// Holds user + token, persists token in localStorage, exposes login/register/logout.
+// Holds user + token, persists token in localStorage, exposes login/register/logout/updateProfile.
 
 interface UserContextValue {
   user: AuthUser | null;
@@ -15,6 +15,8 @@ interface UserContextValue {
   login: (email: string, password: string) => Promise<void>;
   register: (input: { email: string; password: string; firstName: string; lastName: string; role?: 'customer' | 'admin' }) => Promise<void>;
   logout: () => void;
+  updateProfile: (data: Partial<AuthUser>) => Promise<AuthUser>;
+  refreshUser: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextValue | undefined>(undefined);
@@ -35,6 +37,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
       return;
     }
     setToken(saved);
+
+    // Safety timeout: รับประกันว่าหน้าจอจะไม่ค้าง loading เกิน 3.5 วินาทีไม่ว่ากรณีใดๆ
+    const safetyTimer = setTimeout(() => {
+      if (active) setLoading(false);
+    }, 3500);
+
     fetchMe(saved)
       .then((d) => {
         if (active) setUser(d.user);
@@ -45,10 +53,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
         if (active) setToken(null);
       })
       .finally(() => {
+        clearTimeout(safetyTimer);
         if (active) setLoading(false);
       });
+
     return () => {
       active = false;
+      clearTimeout(safetyTimer);
     };
   }, []);
 
@@ -72,8 +83,25 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const refreshUser = async () => {
+    if (!token) return;
+    try {
+      const res = await fetchMe(token);
+      setUser(res.user);
+    } catch {
+      // ignore
+    }
+  };
+
+  const updateProfile = async (data: Partial<AuthUser>): Promise<AuthUser> => {
+    if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนทำการแก้ไขข้อมูล');
+    const res = await updateUserProfile(token, data);
+    setUser(res.user);
+    return res.user;
+  };
+
   return (
-    <UserContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <UserContext.Provider value={{ user, token, loading, login, register, logout, updateProfile, refreshUser }}>
       {children}
     </UserContext.Provider>
   );

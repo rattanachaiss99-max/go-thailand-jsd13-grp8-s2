@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // @mui
 import { useTheme, SxProps } from '@mui/material/styles';
@@ -40,6 +41,7 @@ const API_URL = process.env.NEXT_PUBLIC_SITE_URL || '';
 /***************************  AUTH - REGISTER  ***************************/
 
 export default function AuthRegister({ inputSx }: Props) {
+  const router = useRouter();
   const theme = useTheme();
   const { register: registerUserCtx } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -73,8 +75,13 @@ export default function AuthRegister({ inputSx }: Props) {
         lastName: data.lastname,
         role: 'customer'
       });
-      setFeedback({ type: 'success', msg: 'สมัครสมาชิกสำเร็จ' });
+      setFeedback({ type: 'success', msg: 'สมัครสมาชิกสำเร็จ กำลังนำคุณไปยังหน้าโปรไฟล์...' });
       reset();
+      setTimeout(() => {
+        const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+        const redirect = searchParams.get('redirect') || '/profile';
+        router.push(redirect);
+      }, 500);
     } catch (err) {
       setFeedback({ type: 'error', msg: err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
     } finally {

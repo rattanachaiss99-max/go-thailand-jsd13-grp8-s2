@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 // @next
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // @mui
 import { useTheme, SxProps } from '@mui/material/styles';
@@ -37,6 +38,7 @@ interface Props {
 /***************************  AUTH - LOGIN  ***************************/
 
 export default function AuthLogin({ inputSx }: Props) {
+  const router = useRouter();
   const theme = useTheme();
   const { login } = useUser();
   const [isOpen, setIsOpen] = useState(false);
@@ -57,8 +59,13 @@ export default function AuthLogin({ inputSx }: Props) {
     setLoading(true);
     try {
       await login(data.email, data.password);
-      setFeedback({ type: 'success', msg: 'เข้าสู่ระบบสำเร็จ' });
+      setFeedback({ type: 'success', msg: 'เข้าสู่ระบบสำเร็จ กำลังนำคุณไปยังหน้าโปรไฟล์...' });
       reset();
+      setTimeout(() => {
+        const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+        const redirect = searchParams.get('redirect') || '/profile';
+        router.push(redirect);
+      }, 500);
     } catch (err) {
       setFeedback({ type: 'error', msg: err instanceof Error ? err.message : 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' });
     } finally {

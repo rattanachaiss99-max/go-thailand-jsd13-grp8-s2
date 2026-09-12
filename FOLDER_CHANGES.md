@@ -131,6 +131,51 @@ go-thailand-jsd13-grp8-s2/
 - ✅ **เอกสารข้อกำหนดและคู่มือกลางสำหรับทีม**:
   - `landing/USER_AUTH_INTEGRATION_GUIDE.md`: คู่มือรายละเอียด API Contract (`GET /api/auth/me`), รูปร่าง JSON ข้อมูลผู้ใช้, วิธีการต่อใช้งานในแต่ละโฟลเดอร์ (Yok, Wa, Guitar, Meng) และตัวอย่าง Custom Hook
 
+### 8. การพัฒนา Standalone User Microservice บน Render & แก้ไขระบบ Frontend (รอบเจ็ด: 2026-09-07)
+- ✅ **Microservice โครงสร้างแยกอิสระ (`landing/user-service/`)**:
+  - สร้างโครงสร้าง Clean Architecture สำหรับ User Service แยกต่างหาก: `server.js`, `src/app.js`, `src/config/db.js`, `src/routes/authRoutes.js`, `src/controllers/authController.js`, `src/models/User.js`, `src/models/Customer.js`, `src/middlewares/authMiddleware.js`
+  - รองรับการเชื่อมต่อ MongoDB Atlas Database `gothailand_user` คอลเลกชัน `users`
+  - Deploy สำเร็จและเปิดให้บริการบน Render Web Service: `https://go-thailand-jsd13-grp8-s2.onrender.com`
+- ✅ **การเชื่อมต่อและแก้ไข Frontend (`landing/`)**:
+  - เปลี่ยน Port การทดสอบและพัฒนาเป็นพอร์ต 3100 (`next dev -p 3100`) ใน `package.json`
+  - อัปเดต `NEXT_PUBLIC_AUTH_API_URL=https://go-thailand-jsd13-grp8-s2.onrender.com` ใน `.env`
+  - แก้ไขปัญหา Content Security Policy (CSP) ใน `next.config.mjs` โดยเพิ่ม `https://*.onrender.com` ในคำสั่ง `connect-src`
+  - ครอบ `<UserProvider>` ใน `landing/src/app/ProviderWrapper.tsx` แก้ปัญหา `useUser must be used within UserProvider` ข้าม Route groups
+  - ทำการทดสอบ End-to-End ผ่านหน้าเว็บจริง สมัครสมาชิกลง MongoDB Atlas สำเร็จ 100%
+
+### 9. จัดทำคู่มือมาตรฐาน CRUD Microservice สำหรับสมาชิกทุกคนในทีม
+- ✅ **คู่มือกลางและแม่แบบมาตรฐาน (`landing/TEAM_CRUD_SERVICE_GUIDE.md`)**:
+  - สรุปสถาปัตยกรรม Distributed Microservices และระบบแชร์ JWT Token ระหว่างบริการ
+  - รวม 5 ปัญหาและวิธีแก้ปัญหาสำคัญที่พบ (CSP, CORS, Context Scope, Atlas 0.0.0.0/0 Whitelist, Port 3100)
+  - แม่แบบโครงสร้างโฟลเดอร์และโค้ดมาตรฐาน (`package.json`, `server.js`, `db.js`, `authMiddleware.js`, `app.js`)
+  - โค้ด Model และ CRUD Controller เฉพาะทางของสมาชิกแต่ละคน:
+    - **Yok** (`stay-service`): Stays & Cars CRUD
+    - **Wa** (`order-service`): Bookings & Orders CRUD
+    - **Guitar** (`payment-service`): Checkout & Payments CRUD
+    - **Meng** (`guide-service`): Tourist Guides CRUD
+### 10. พัฒนาระบบ MERN E-Commerce ครบวงจรสำหรับ Sprint 2 (2026-09-08)
+- ✅ **Task 7: โครงสร้างข้อมูลและการเชื่อมต่อ MongoDB Atlas**:
+  - `landing/src/server/models/Product.ts`: Model สินค้า/บริการท่องเที่ยว (Name, Description, Price, Quantity, Date, Tag, isService, ImageUrl)
+  - `landing/src/server/models/Cart.ts`: Model ตะกร้าสินค้า (userRef, items[], status)
+- ✅ **Admin Product CRUD API (Admin Features)**:
+  - `landing/src/app/api/products/route.ts`: `GET` สินค้าทั้งหมด (พร้อม Auto-seed) และ `POST` สร้างสินค้าใหม่
+  - `landing/src/app/api/products/[id]/route.ts`: `GET`, `PUT`, `DELETE` สินค้าตาม ID พร้อมรองรับ `GET /products/<user_id>` ตาม Rubric
+- ✅ **Task 6: User Cart API**:
+  - `landing/src/app/api/cart/route.ts`: `GET` สินค้าในตะกร้า และ `POST` บันทึกสินค้าลงตะกร้า
+  - `landing/src/app/api/cart/[id]/route.ts`: `PUT` อัปเดตจำนวน (quantity) และ `DELETE` ลบสินค้าออกจากตะกร้า
+- ✅ **Task 5: E-Commerce UI Components & Cart Context**:
+  - `landing/src/contexts/CartContext.tsx`: จัดการ State ตะกร้าสินค้าส่วนกลางตามหลัก `react-crm-lifecycle` พร้อม sync MongoDB และ localStorage
+  - `landing/src/components/ecommerce/ProductCard.tsx`: การ์ดสินค้าและปุ่มเพิ่มลงตะกร้า
+  - `landing/src/components/ecommerce/ProductList.tsx`: แสดงรายการสินค้าพร้อมตัวกรองหมวดหมู่และช่องค้นหา
+  - `landing/src/app/(landings)/(default)/products/page.tsx`: หน้ารวมแพ็กเกจท่องเที่ยว (`/products`)
+  - `landing/src/app/(landings)/(default)/products/[id]/page.tsx`: หน้ารายละเอียดสินค้า (`/products/[id]`)
+  - `landing/src/app/(landings)/(default)/cart/page.tsx`: หน้าสรุปตะกร้าสินค้า (`/cart`) พร้อมคำนวณยอดเงินและปุ่มไปสู่การชำระเงิน
+- ✅ **Task 4: Form Validation & Admin Product Management**:
+  - `landing/src/app/(landings)/(default)/admin/products/page.tsx`: หน้า Admin จัดการสินค้า พร้อมระบบ Validation ครบทุกช่อง (Name, Description, Price, Quantity, Date, Tag) และแจ้งเตือน Error Message ที่ชัดเจน
+- ✅ **การทดสอบและการตั้งค่า**:
+  - สคริปต์ทดสอบ E2E: `landing/scripts/test-sprint2-ecommerce.mjs` ผ่าน 100%
+  - Next.js Build: `npm run build` ผ่านสมบูรณ์ทุก Route
+
 ---
 
 _เอกสารนี้เขียนขึ้นเพื่อบันทึกประวัติการพัฒนาและการรวมโค้ดเข้าสู่โฟลเดอร์หลัก landing_

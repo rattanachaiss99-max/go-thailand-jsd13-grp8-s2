@@ -29,6 +29,11 @@ export interface IUser extends Document {
   firebaseUid?: string; // linked when using Firebase Auth
   emailVerified: boolean;
   isActive: boolean;
+  // AI Travel Copilot Access Control & Quota (Database-driven)
+  canAccessAi: boolean;
+  aiCredits: number;
+  // Future-Proof Web3 EVM wallet address (optional)
+  walletAddress?: string;
   addresses: IAddress[];
   createdAt: Date;
   updatedAt: Date;
@@ -59,6 +64,9 @@ const userSchema = new Schema<IUser>(
     firebaseUid: { type: String, index: true, sparse: true },
     emailVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
+    canAccessAi: { type: Boolean, default: false, index: true },
+    aiCredits: { type: Number, default: 0, min: 0 },
+    walletAddress: { type: String, trim: true },
     addresses: { type: [addressSchema], default: [] }
   },
   { timestamps: true, discriminatorKey: 'role', collection: 'users' }

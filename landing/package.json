@@ -7,18 +7,20 @@
     "name": ""
   },
   "scripts": {
-    "dev": "next dev -p 3100",
+    "dev": "next dev -p 3200",
     "build": "next build",
-    "start": "next start -p 3100",
+    "start": "next start -p 3200",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "seed": "tsx --env-file=.env scripts/seed-users.ts",
+    "grant-ai": "tsx --env-file=.env scripts/grant-ai-access.ts",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
     "@emotion/cache": "11.14.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
+    "@google/generative-ai": "^0.24.1",
     "@mui/lab": "7.0.1-beta.20",
     "@mui/material": "7.3.6",
     "@mui/material-nextjs": "7.3.6",

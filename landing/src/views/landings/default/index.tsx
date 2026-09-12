@@ -8,6 +8,8 @@ import { hero } from './data';
 // @project
 import { Hero1 } from '@/blocks/hero';
 import FeaturedAccommodations from './FeaturedAccommodations';
+import ExploreDestinations from './ExploreDestinations';
+import TripBundleBar from '@/components/ecommerce/TripBundleBar';
 
 /***************************  PAGE - MAIN  ***************************/
 
@@ -31,7 +33,9 @@ export default function Main() {
   return (
     <>
       <Hero1 {...translatedHero} />
+      <ExploreDestinations />
       <FeaturedAccommodations />
+      <TripBundleBar />
     </>
   );
 }

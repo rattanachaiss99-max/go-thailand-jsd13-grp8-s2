@@ -35,6 +35,8 @@ export interface ICustomer extends IUser {
   wishlist?: string[]; // product/tour ids
   // Feedback left by the user (reviews, suggestions)
   feedbacks: IFeedback[];
+  // จังหวัดที่เคยไปเที่ยวมาแล้ว (สำหรับระบบ Travel Passport & Trophy)
+  visitedProvinces: string[];
   // Free-form bucket for future data points without schema changes:
   // user.metadata.set('favoriteRegion', 'ภาคเหนือ') / ('newsletterOptIn', true)
   metadata: Map<string, any>;
@@ -59,6 +61,8 @@ const customerSchema = new Schema<ICustomer>(
     preferredCountry: { type: String },
     bookingCount: { type: Number, default: 0, min: 0 },
     wishlist: { type: [String], default: [] },
+    // บันทึกจังหวัดที่เคยไปมาแล้ว
+    visitedProvinces: { type: [String], default: [] },
     // User feedback / reviews
     feedbacks: [
       {

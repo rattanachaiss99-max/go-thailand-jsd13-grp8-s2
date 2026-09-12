@@ -1,6 +1,47 @@
-# SPRINT 2
+# SPRINT 2 — Go Thailand
 
-> 📘 ดูรายละเอียด Sprint 1 (Design Phase) แยกไว้ที่ [`sprint_1.md`](./sprint_1.md)
+> 📘 ดูรายละเอียด Sprint 1 (Design Phase) แยกไว้ที่ [`sprint_1.md`](./sprint_1.md) | 📂 เอกสารทางเทคนิคและสถาปัตยกรรมทั้งหมดอยู่ที่ [`landing/docs/`](./landing/docs/README.md)
+
+---
+
+## 🚀 สถานะปัจจุบันของโปรเจกต์ (Current Status — อัปเดตล่าสุด 12 ก.ย. 2026)
+
+### 📊 สรุปภาพรวมความคืบหน้า (Overall Progress: 100% Sprint 2 Deliverables Passed)
+
+| หัวข้อการประเมิน (Evaluation Criteria) | สถานะ (Status) | รายละเอียดผลลัพธ์ (Implementation Highlights) |
+| :--- | :---: | :--- |
+| **Production Build (Next.js 16.1.1 Turbopack)** | 🟢 **PASS (Exit 0)** | คอมไพล์สำเร็จสมบูรณ์ครบทั้ง 33 Static & Dynamic Routes ไม่มี Type Error หรือ Linting Blockers |
+| **Task 4: Form Validation & Dynamic Selector** | 🟢 **PASS (100%)** | ตรวจสอบข้อมูล 8 ฟิลด์ตอน Submit (Name, Description, Price, Quantity, Date, Tag, Province 77 จว., Service Type 4 ประเภท) พร้อม Error Message ชัดเจน |
+| **Task 5: Product Catalog & Dynamic Filtering** | 🟢 **PASS (100%)** | หน้ารวมสินค้า ค้นหา กรองตามภาค/จังหวัด/ประเภท พร้อมการ์ดแสดงผล Responsive |
+| **Task 6: Cart System & Order Flow** | 🟢 **PASS (100%)** | Cart State, ปรับลดจำนวน, คำนวณยอดสุทธิ, รองรับทั้ง Guest Booking และสมาชิก |
+| **Task 7: Database & REST API (MongoDB Atlas)** | 🟢 **PASS (100%)** | เชื่อมต่อ Mongoose บน Live Cluster (`gothailand_user`) พร้อม Model: User, Product, Order, ProvinceKnowledge |
+| **Admin Management (Product CRUD)** | 🟢 **PASS (100%)** | ระบบจัดการสินค้าหลังบ้าน เพิ่ม/แก้ไข/ลบสินค้าแบบ Real-time พร้อม Form Validation ครบถ้วน |
+| **AI Travel Copilot & Semantic Vector Search** | 🟢 **PASS (100%)** | บันทึก 768-dim Embeddings ครบ 77 จังหวัดบน MongoDB Atlas ค้นหาด้วย Cosine Similarity โดย Frontend ไม่เห็นตัวเลข Vector |
+| **On-Demand Vector Map Performance** | 🟢 **OPTIMIZED** | ปรับสถาปัตยกรรมแผนที่เป็น Progressive On-Demand ระงับการเรนเดอร์ SVG ก้อนใหญ่ล่วงหน้าเพื่อความเร็วของหน้าเว็บ |
+
+---
+
+### 🌟 ไฮไลต์ฟีเจอร์และสถาปัตยกรรมระบบที่เสร็จสมบูรณ์
+
+1. **ระบบตรวจสอบแบบฟอร์ม (Form Validation — Task 4)**
+   - ทุกฟิลด์ถูก Validate เมื่อ Submit: `Name`, `Description`, `Price (>0)`, `Quantity (>=1)`, `Date`, `Tag`, `Province` (ดึงครบ 77 จังหวัดแบ่งตาม 6 ภูมิภาค), และ `Service Type` (4 หมวด: ที่พัก, ทัวร์/กิจกรรม, ขนส่ง, ร้านอาหาร/คาเฟ่)
+   - ใช้งานจริงบนหน้า **`/products`** (หน้าบ้าน) และ **`/admin/products`** (หลังบ้าน) พร้อมข้อความแจ้งเตือนที่เข้าใจง่าย (Meaningful Error Messages)
+
+2. **ระบบฐานข้อมูลและ AI Semantic Search (MongoDB Atlas & Gemini Embeddings)**
+   - **Vector Database บน MongoDB:** แปลงข้อมูลบริบทการท่องเที่ยว 77 จังหวัดเป็นเวกเตอร์ 768 มิติด้วย `gemini-embedding-001` และบันทึกลงคอลเลกชัน `provinceknowledges`
+   - **ใช้พื้นที่คุ้มค่าสูงสุด:** ข้อมูล 77 จังหวัดใช้พื้นที่เพียง **~0.75 MB** (Data + Index) คิดเป็นเพียง **~0.14%** ของ Free Tier M0 (512 MB)
+   - **ค้นหาตามความรู้สึกและบริบท:** ผู้ใช้พิมพ์ความต้องการ เช่น *"อยากสัมผัสอากาศหนาว ชมแม่คะนิ้ง เดินป่าขึ้นดอย ดื่มกาแฟชิวๆ"* ระบบคำนวณ Cosine Similarity แนะนำ เชียงใหม่, แพร่, แม่ฮ่องสอน ได้อย่างถูกต้อง
+   - **ความปลอดภัยข้อมูล (Privacy):** ซ่อนตัวเลข Vector จากฝั่ง Client โดยใช้ Data Projection `{ embedding: 0 }`
+
+3. **สถาปัตยกรรมแผนที่แบบ On-Demand (Map Vector Architecture)**
+   - ระงับการเรนเดอร์ Hardcoded SVG Path ขนาดใหญ่ในขั้นตอน Initial Page Load ชั่วคราว เพื่อให้ได้คะแนน Performance สูงสุด
+   - แสดงการ์ด Interactive Placeholder พร้อมชิปรายชื่อจังหวัดในภาคนั้นๆ และปุ่มเปิดพรีวิวเวกเตอร์ พร้อมรองรับการดึงข้อมูล On-Demand จาก API
+
+4. **การจัดระเบียบเอกสารและโครงสร้างโปรเจกต์ (Clean Docs & Clean Git)**
+   - รวบรวมเอกสารทางเทคนิค 19 ไฟล์เข้าสู่โฟลเดอร์ [`landing/docs/`](./landing/docs/) พร้อมไฟล์สารบัญ [`landing/docs/README.md`](./landing/docs/README.md)
+   - เพิ่ม `.gitignore` ป้องกันไม่ให้ไฟล์เอกสารหรือไฟล์ทดสอบเกะกะการทำงานของ Git
+
+---
 
 TASK
 

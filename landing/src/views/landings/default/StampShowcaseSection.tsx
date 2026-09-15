@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -15,7 +15,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ContainerWrapper from '@/components/ContainerWrapper';
 import FloatingStamp from '@/components/animations/FloatingStamp';
 import ProvincePostageStamp from '@/components/profile/ProvincePostageStamp';
+import { StampVariant } from '@/components/profile/stamps/types';
 import { THAILAND_PROVINCES, Province, REGION_METAS, getProvinceByIdOrSlug } from '@/data/thailandProvinces';
+import { useUser } from '@/contexts/UserContext';
 
 // Curated highlight provinces from all regions
 const FEATURED_PROVINCE_SLUGS = [
@@ -32,15 +34,31 @@ const FEATURED_PROVINCE_SLUGS = [
 ];
 
 export default function StampShowcaseSection() {
-  // Find featured provinces
-  const marqueeProvinces = FEATURED_PROVINCE_SLUGS.map((slug) => getProvinceByIdOrSlug(slug)).filter(
-    (p): p is Province => Boolean(p)
-  );
+  const { user } = useUser();
 
-  // Interactive demo state
+  // Find featured provinces
+  const marqueeProvinces = FEATURED_PROVINCE_SLUGS.map((slug) => getProvinceByIdOrSlug(slug)).filter((p): p is Province => Boolean(p));
+
+  // Interactive demo state — หากยังไม่ได้เข้าสู่ระบบ เริ่มต้นที่ 0/77 อย่างเคร่งครัด
   const [selectedSlug, setSelectedSlug] = useState<string>('chiang-mai');
-  const [stampedProvinces, setStampedProvinces] = useState<Set<string>>(new Set(['bangkok', 'phuket']));
+  const [stampVariant, setStampVariant] = useState<StampVariant>('stamp_1');
+  const [stampedProvinces, setStampedProvinces] = useState<Set<string>>(new Set());
   const [showRewardToast, setShowRewardToast] = useState(false);
+
+  // Sync ข้อมูลจังหวัดที่เคยไปจริงจาก Database เมื่อมีการล็อกอิน
+  useEffect(() => {
+    if (user && Array.isArray(user.visitedProvinces) && user.visitedProvinces.length > 0) {
+      const provs = user.visitedProvinces.map((p) =>
+        p
+          .toLowerCase()
+          .trim()
+          .replace(/[-_]province$/, '')
+      );
+      setStampedProvinces(new Set(provs));
+    } else {
+      setStampedProvinces(new Set());
+    }
+  }, [user, user?.visitedProvinces]);
 
   const currentProvince = getProvinceByIdOrSlug(selectedSlug) || marqueeProvinces[0];
   const isCurrentStamped = stampedProvinces.has(currentProvince.slug);
@@ -62,6 +80,8 @@ export default function StampShowcaseSection() {
 
   return (
     <Box
+      id="recommended-features"
+      component="section"
       sx={{
         py: { xs: 8, md: 12 },
         bgcolor: '#FAF8F5',
@@ -110,7 +130,7 @@ export default function StampShowcaseSection() {
             transition={{ duration: 0.6 }}
           >
             <Chip
-              label="GAMIFICATION & DIGITAL PASSPORT"
+              label="แนะนำฟีเจอร์ • DIGITAL PASSPORT & STAMPS"
               size="small"
               sx={{
                 fontWeight: 800,
@@ -143,21 +163,15 @@ export default function StampShowcaseSection() {
                 lineHeight: 1.6
               }}
             >
-              เปิดมิติใหม่ของการเที่ยวไทย ทุกครั้งที่จองที่พัก รถเช่า หรือไกด์ท้องถิ่น
-              จะได้รับแสตมป์เวกเตอร์ประจำจังหวัด ปลดล็อกถ้วยรางวัลและคะแนนสะสมในสมุด Travel Passport ของคุณ
+              เปิดมิติใหม่ของการเที่ยวไทย ทุกครั้งที่จองที่พัก รถเช่า หรือไกด์ท้องถิ่น จะได้รับแสตมป์เวกเตอร์ประจำจังหวัด
+              ปลดล็อกถ้วยรางวัลและคะแนนสะสมในสมุด Travel Passport ของคุณ
             </Typography>
           </motion.div>
         </Box>
 
         {/* 1. Infinite Scrolling Stamp Ticker (Marquee) */}
         <Box sx={{ mb: { xs: 6, md: 10 }, mx: { xs: -2, md: 0 } }}>
-          <Marquee
-            pauseOnHover={true}
-            speed={35}
-            gradient={true}
-            gradientColor="#FAF8F5"
-            gradientWidth={80}
-          >
+          <Marquee pauseOnHover={true} speed={35} gradient={true} gradientColor="#FAF8F5" gradientWidth={80}>
             {marqueeProvinces.map((prov, index) => {
               const isStamped = stampedProvinces.has(prov.slug);
               return (
@@ -179,6 +193,8 @@ export default function StampShowcaseSection() {
                     rotationOffset={(index % 4) * 2 - 3}
                     badgeLabel={REGION_METAS[prov.region]?.labelTh}
                     animated={false}
+                    variant={stampVariant}
+                    hideText={true}
                   />
                 </Box>
               );
@@ -247,26 +263,41 @@ export default function StampShowcaseSection() {
                 {/* The Core Animated Stamp */}
                 <Box sx={{ my: 1, transform: 'scale(1.05)' }}>
                   <ProvincePostageStamp
-                    key={`showcase-stamp-${currentProvince.slug}-${isCurrentStamped}`}
+                    key={`showcase-stamp-${currentProvince.slug}-${isCurrentStamped}-${stampVariant}`}
                     province={currentProvince}
                     isVisited={isCurrentStamped}
                     size="large"
                     animated={true}
                     interactiveHover={true}
+                    variant={stampVariant}
+                    hideText={false}
                   />
                 </Box>
 
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2.5,
-                    color: 'text.secondary',
-                    fontWeight: 600,
-                    textAlign: 'center'
-                  }}
-                >
-                  ⚡ เวกเตอร์ SVG แผนที่แท้ วาดเส้นแบบไดนามิกตามพิกัดจังหวัด
-                </Typography>
+                {/* Stamp Style Switcher Pills */}
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.75rem' }}>
+                    รูปแบบ:
+                  </Typography>
+                  <Chip
+                    label="✨ 2026 "
+                    size="small"
+                    clickable
+                    color={stampVariant === 'stamp_1' ? 'primary' : 'default'}
+                    variant={stampVariant === 'stamp_1' ? 'filled' : 'outlined'}
+                    onClick={() => setStampVariant('stamp_1')}
+                    sx={{ fontWeight: 700, fontSize: '0.75rem' }}
+                  />
+                  <Chip
+                    label="📜 เก่า"
+                    size="small"
+                    clickable
+                    color={stampVariant === 'classic' ? 'primary' : 'default'}
+                    variant={stampVariant === 'classic' ? 'filled' : 'outlined'}
+                    onClick={() => setStampVariant('classic')}
+                    sx={{ fontWeight: 700, fontSize: '0.75rem' }}
+                  />
+                </Stack>
               </Box>
             </Grid>
 
@@ -323,8 +354,7 @@ export default function StampShowcaseSection() {
                   📍 รหัสจังหวัด: {currentProvince.id} • ภูมิภาค: {REGION_METAS[currentProvince.region]?.labelTh}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3, lineHeight: 1.6 }}>
-                  {currentProvince.slogan ||
-                    'สัมผัสเสน่ห์วิถีชีวิต วัฒนธรรมท้องถิ่น และธรรมชาติอันงดงามที่รอให้คุณไปค้นหา'}
+                  {currentProvince.slogan || 'สัมผัสเสน่ห์วิถีชีวิต วัฒนธรรมท้องถิ่น และธรรมชาติอันงดงามที่รอให้คุณไปค้นหา'}
                 </Typography>
 
                 {/* Progress bar simulation */}
@@ -339,9 +369,15 @@ export default function StampShowcaseSection() {
                 >
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                     <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.primary' }}>
-                      ความคืบหน้าการสะสมแสตมป์พาสปอร์ต
+                      ความคืบหน้าการสะสมแสตมป์พาสปอร์ต {!user && '(โหมดผู้เยี่ยมชม)'}
                     </Typography>
-                    <Typography variant="caption" sx={{ fontWeight: 800, color: '#059669' }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontWeight: 800,
+                        color: stampedProvinces.size > 0 ? '#059669' : '#64748B'
+                      }}
+                    >
                       {stampedProvinces.size} / 77 จังหวัด
                     </Typography>
                   </Stack>
@@ -357,7 +393,7 @@ export default function StampShowcaseSection() {
                     <Box
                       sx={{
                         width: `${Math.round((stampedProvinces.size / 77) * 100)}%`,
-                        minWidth: '6%',
+                        minWidth: stampedProvinces.size > 0 ? '6%' : 0,
                         height: '100%',
                         bgcolor: '#10B981',
                         borderRadius: 4,
@@ -366,7 +402,9 @@ export default function StampShowcaseSection() {
                     />
                   </Box>
                   <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 1 }}>
-                    🏆 ปลดล็อก Trio Bundle จองครบ 3 ขา (ที่พัก + รถเช่า + ไกด์) รับสิทธิ์อัปเกรด Gold Tier ทันที
+                    {user
+                      ? '🏆 ปลดล็อก Trio Bundle จองครบ 3 ขา (ที่พัก + รถเช่า + ไกด์) รับสิทธิ์อัปเกรด Gold Tier ทันที'
+                      : '🔒 เข้าสู่ระบบเพื่อเริ่มบันทึกตราประทับจริงและสะสมคะแนนในพาสปอร์ตการเดินทางของคุณ (สถานะปัจจุบัน: 0/77)'}
                   </Typography>
                 </Box>
 
@@ -386,17 +424,15 @@ export default function StampShowcaseSection() {
                       '&:hover': {
                         bgcolor: isCurrentStamped ? '#B91C1C' : '#047857'
                       },
-                      boxShadow: isCurrentStamped
-                        ? '0 8px 20px rgba(220, 38, 38, 0.3)'
-                        : '0 8px 20px rgba(5, 150, 105, 0.3)'
+                      boxShadow: isCurrentStamped ? '0 8px 20px rgba(220, 38, 38, 0.3)' : '0 8px 20px rgba(5, 150, 105, 0.3)'
                     }}
                   >
-                    {isCurrentStamped ? '🔄 ยกเลิกตราประทับ (Reset)' : '🔖 ประทับตราแสตมป์ (Stamp It!)'}
+                    {isCurrentStamped ? '🔄 ยกเลิกตราประทับ (Reset)' : '🔖 ทดลองประทับตรา (Stamp It!)'}
                   </Button>
 
                   <Button
                     component={NextLink}
-                    href="/profile"
+                    href={user ? '/profile' : '/login'}
                     variant="outlined"
                     size="large"
                     sx={{
@@ -414,7 +450,7 @@ export default function StampShowcaseSection() {
                       }
                     }}
                   >
-                    📖 เปิดดูสมุด Travel Passport ฉบับเต็ม
+                    {user ? '📖 เปิดดูสมุด Travel Passport ฉบับเต็ม' : '🔐 เข้าสู่ระบบเพื่อเริ่มสะสมแสตมป์'}
                   </Button>
                 </Stack>
               </Box>

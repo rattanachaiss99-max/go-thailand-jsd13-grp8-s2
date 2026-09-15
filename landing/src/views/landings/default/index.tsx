@@ -1,45 +1,23 @@
 'use client';
-
-import { useLanguage } from '@/contexts/LanguageContext';
-
-// @data
-import { hero } from './data';
-
-// @project
-import { Hero1 } from '@/blocks/hero';
 import FeaturedAccommodations from './FeaturedAccommodations';
+import ThreePillarsSection from './ThreePillarsSection';
 // import ExploreDestinations from './ExploreDestinations'; // ซ่อนแผนที่หน้า Home ชั่วคราว (แสดงเฉพาะในหน้า Profile)
-import StampShowcaseSection from './StampShowcaseSection';
+// import StampShowcaseSection from './StampShowcaseSection'; // ย้ายไปเปิดเป็น Route หมวดแนะนำฟีเจอร์แยกต่างหากที่ /features
 import TripBundleBar from '@/components/ecommerce/TripBundleBar';
 
 /***************************  PAGE - MAIN  ***************************/
 
 export default function Main() {
-  const { t } = useLanguage();
-
-  const translatedHero = {
-    ...hero,
-    headLine: t('hero.headLine'),
-    captionLine: t('hero.captionLine'),
-    primaryBtn: {
-      ...hero.primaryBtn,
-      children: t('hero.primaryBtn')
-    },
-    secondaryBtn: {
-      ...hero.secondaryBtn,
-      children: t('hero.secondaryBtn')
-    }
-  };
-
   return (
     <>
-      <Hero1 {...translatedHero} />
-      {/* ซ่อน component แผนที่หน้า Home ชั่วคราว (แสดงเฉพาะในหน้า Profile) */}
-      {/* <ExploreDestinations /> */}
-      <StampShowcaseSection />
+      {/* 1. ส่วนค้นหาและที่พักแนะนำยอดนิยม */}
       <FeaturedAccommodations />
+
+      {/* 2. 3 เสาหลักฟีเจอร์ (Chauffeur, Stamps, Trio Bundle) */}
+      <ThreePillarsSection />
+
+      {/* 3. แถบสรุปจัดทริปมัดรวม */}
       <TripBundleBar />
     </>
   );
 }
-

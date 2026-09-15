@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/server/db';
 import ProvinceKnowledge from '@/server/models/ProvinceKnowledge';
+import Product from '@/server/models/Product';
 import User from '@/server/models/User';
 import '@/server/models/Customer';
 import { verifyToken } from '@/server/lib/auth';
@@ -22,74 +23,51 @@ interface MatchedProvince {
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. ตรวจสอบ Authentication Token
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json(
-        {
-          success: false,
-          code: 'UNAUTHORIZED',
-          error: 'กรุณาเข้าสู่ระบบก่อนใช้งาน AI Travel Copilot'
-        },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.slice(7);
-    let payload: any;
-    try {
-      payload = verifyToken(token);
-    } catch {
-      return NextResponse.json(
-        {
-          success: false,
-          code: 'INVALID_TOKEN',
-          error: 'โทเคนของคุณหมดอายุหรือไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่อีกครั้ง'
-        },
-        { status: 401 }
-      );
-    }
-
     await connectDB();
 
-    // 2. ค้นหา User จาก Database และตรวจสอบสิทธิ์ canAccessAi & aiCredits
-    const user = await User.findById(payload.sub);
-    if (!user || !user.isActive) {
-      return NextResponse.json(
-        {
-          success: false,
-          code: 'USER_NOT_FOUND',
-          error: 'ไม่พบบัญชีผู้ใช้ หรือบัญชีถูกระงับการใช้งาน'
-        },
-        { status: 403 }
-      );
-    }
+    // 1. ตรวจสอบ Authentication Token (รองรับทั้งสมาชิกและ Guest Demo)
+    let user: any = null;
+    let isGuest = true;
+    let currentCredits = 0;
 
-    if (!user.canAccessAi) {
-      return NextResponse.json(
-        {
-          success: false,
-          code: 'FORBIDDEN_AI_ACCESS',
-          error: 'บัญชีของคุณยังไม่ได้รับสิทธิ์ใช้งาน AI Travel Copilot กรุณาติดต่อผู้ดูแลระบบเพื่อเปิดสิทธิ์จากฐานข้อมูล'
-        },
-        { status: 403 }
-      );
-    }
-
-    const currentCredits = typeof user.aiCredits === 'number' ? user.aiCredits : 0;
-    if (currentCredits <= 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          code: 'INSUFFICIENT_CREDITS',
-          error: 'โควต้าเครดิต AI ของคุณหมดแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อเติมเครดิต'
-        },
-        { status: 402 }
-      );
+    const authHeader = request.headers.get('authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.slice(7);
+      try {
+        const payload: any = verifyToken(token);
+        user = await User.findById(payload.sub);
+        if (user && user.isActive) {
+          if (!user.canAccessAi) {
+            return NextResponse.json(
+              {
+                success: false,
+                code: 'FORBIDDEN_AI_ACCESS',
+                error: 'บัญชีของคุณยังไม่ได้รับสิทธิ์ใช้งาน AI Travel Copilot กรุณาติดต่อผู้ดูแลระบบเพื่อเปิดสิทธิ์จากฐานข้อมูล'
+              },
+              { status: 403 }
+            );
+          }
+          currentCredits = typeof user.aiCredits === 'number' ? user.aiCredits : 0;
+          if (currentCredits <= 0) {
+            return NextResponse.json(
+              {
+                success: false,
+                code: 'INSUFFICIENT_CREDITS',
+                error: 'โควต้าเครดิต AI ของคุณหมดแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อเติมเครดิต'
+              },
+              { status: 402 }
+            );
+          }
+          isGuest = false;
+        }
+      } catch {
+        // กรณี token ไม่ถูกต้องหรือหมดอายุ ให้รันในโหมด Guest เพื่อไม่ให้ผู้ใช้สะดุด
+        isGuest = true;
+      }
     }
 
     const body = await request.json();
-    const { query, activeRegion } = body;
+    const { query, activeRegion, targetProvince } = body;
 
     if (!query || typeof query !== 'string' || !query.trim()) {
       return NextResponse.json(
@@ -225,6 +203,30 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // 1.3 หากผู้ใช้ระบุแสตมป์จังหวัดเป้าหมายไว้ (targetProvince) ให้ค้นหาและนำมาเป็น Priority #1 เสมอ
+    let directTargetDoc: any = null;
+    if (targetProvince && typeof targetProvince === 'string' && targetProvince.trim()) {
+      try {
+        const cleanTarget = targetProvince.trim();
+        directTargetDoc = await ProvinceKnowledge.findOne({
+          $or: [
+            { slug: cleanTarget.toLowerCase() },
+            { nameTh: cleanTarget },
+            { provinceId: cleanTarget.toUpperCase() }
+          ]
+        });
+      } catch (targetErr) {
+        console.warn('[AI Travel Advisor] Direct target province lookup error:', targetErr);
+      }
+    }
+
+    if (directTargetDoc) {
+      const otherProvinces = candidateProvinces.filter(
+        (p) => p.slug !== directTargetDoc.slug && p.provinceId !== directTargetDoc.provinceId
+      );
+      candidateProvinces = [directTargetDoc, ...otherProvinces].slice(0, 4);
+    }
+
     const matchedProvinces: MatchedProvince[] = candidateProvinces.map((p) => ({
       slug: p.slug,
       provinceId: p.provinceId,
@@ -261,8 +263,12 @@ export async function POST(request: NextRequest) {
           )
           .join('\n\n');
 
+        const targetPromptNote = directTargetDoc
+          ? `\n[สำคัญมาก]: ผู้ใช้งานได้เจาะจงเลือกหมุดหมายจังหวัดเป้าหมายไว้ล่วงหน้าคือ: "${directTargetDoc.nameTh} (${directTargetDoc.nameEn})" ขอให้วางแผนและแนะนำโปรแกรมท่องเที่ยวโดยเน้นหนักไปที่จังหวัดนี้เป็นหลัก!`
+          : '';
+
         const prompt = `คุณคือ "Go Thailand AI Travel Copilot" ผู้เชี่ยวชาญการท่องเที่ยวประเทศไทยประจำแพลตฟอร์ม Go Thailand
-โจทย์คำถามของผู้ใช้งาน: "${userQuery}"
+โจทย์คำถามของผู้ใช้งาน: "${userQuery}"${targetPromptNote}
 
 ข้อมูลบริบทจากฐานข้อมูล 77 จังหวัดของเรา (Knowledge Base):
 ${contextText}
@@ -298,18 +304,38 @@ ${contextText}
       }
     }
 
-    // 3. หักเครดิตการใช้งานใน Database 1 เครดิต
-    const remainingCredits = Math.max(0, currentCredits - 1);
-    user.aiCredits = remainingCredits;
-    await user.save();
+    // 3. ดึงสินค้าและแพ็กเกจทัวร์ที่เกี่ยวข้องกับจังหวัดที่แนะนำ
+    let recommendedProducts: any[] = [];
+    try {
+      const matchedSlugs = matchedProvinces.map((p) => p.slug);
+      recommendedProducts = await Product.find({
+        province: { $in: matchedSlugs },
+        isActive: true
+      })
+        .select('name description price quantity tag province serviceType imageUrl')
+        .limit(4)
+        .lean();
+    } catch (prodErr) {
+      console.warn('Could not fetch recommended products:', prodErr);
+    }
+
+    // 4. หักเครดิตการใช้งานใน Database 1 เครดิต (กรณีเป็นสมาชิก)
+    let remainingCredits: number | null = null;
+    if (user && !isGuest) {
+      remainingCredits = Math.max(0, currentCredits - 1);
+      user.aiCredits = remainingCredits;
+      await user.save();
+    }
 
     return NextResponse.json({
       success: true,
       query: userQuery,
       reply,
       matchedProvinces,
+      recommendedProducts,
       source,
-      creditsRemaining: remainingCredits
+      isGuest,
+      creditsRemaining: remainingCredits !== null ? remainingCredits : (isGuest ? 'guest-trial' : 0)
     });
   } catch (error: any) {
     console.error('Error in AI travel advisor:', error);

@@ -78,5 +78,9 @@ const customerSchema = new Schema<ICustomer>(
   { timestamps: true }
 );
 
-export const Customer: Model<ICustomer> = models.Customer || User.discriminator<ICustomer>('customer', customerSchema);
+export const Customer: Model<ICustomer> =
+  (User.discriminators && (User.discriminators['customer'] as Model<ICustomer>)) ||
+  (models.Customer as Model<ICustomer>) ||
+  (models.customer as Model<ICustomer>) ||
+  User.discriminator<ICustomer>('customer', customerSchema);
 export default Customer;

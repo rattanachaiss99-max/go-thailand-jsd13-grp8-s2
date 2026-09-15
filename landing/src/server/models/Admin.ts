@@ -24,5 +24,9 @@ const adminSchema = new Schema<IAdmin>(
   { timestamps: true }
 );
 
-export const Admin: Model<IAdmin> = models.Admin || User.discriminator<IAdmin>('admin', adminSchema);
+export const Admin: Model<IAdmin> =
+  (User.discriminators && (User.discriminators['admin'] as Model<IAdmin>)) ||
+  (models.Admin as Model<IAdmin>) ||
+  (models.admin as Model<IAdmin>) ||
+  User.discriminator<IAdmin>('admin', adminSchema);
 export default Admin;

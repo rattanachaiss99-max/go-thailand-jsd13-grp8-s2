@@ -2,10 +2,22 @@
 // บันทึกฐานข้อมูลเชิงลึก 77 จังหวัด (Province Knowledge Base) + ข้อมูล Vector ลง MongoDB Atlas
 // รันด้วย: npx tsx --env-file=.env scripts/seed-province-knowledge.ts
 
+import fs from 'fs';
+import path from 'path';
 import mongoose from 'mongoose';
 import { THAILAND_PROVINCES, Province } from '../src/data/thailandProvinces';
-import { PROVINCES_SVG_DATA } from '../src/data/northernProvincesSvg';
 import ProvinceKnowledge from '../src/server/models/ProvinceKnowledge';
+
+// โหลดข้อมูล SVG Vectors จาก JSON ฝั่ง Server-only
+let PROVINCES_SVG_DATA: Record<string, any> = {};
+try {
+  const jsonPath = path.resolve(__dirname, 'data/provinces-svg.json');
+  if (fs.existsSync(jsonPath)) {
+    PROVINCES_SVG_DATA = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  }
+} catch (e) {
+  console.warn('⚠️ ไม่สามารถโหลด scripts/data/provinces-svg.json ได้:', e);
+}
 
 // ข้อมูลเชิงลึกตัวอย่างตามภูมิภาคเพื่อเสริมมิติข้อมูลการท่องเที่ยว
 const REGION_VIBES_MAP: Record<string, { vibes: string[]; bestMonths: string[]; defaultTips: string }> = {
@@ -72,6 +84,33 @@ const PROVINCE_SPECIFIC_MAP: Record<
     unseenGems: ['บ้านแม่แมะ เชียงดาว', 'น้ำตกบัวตอง', 'ขุนแปะ', 'ห้วยกุ๊บกั๊บ'],
     signatureFood: ['ข้าวซอยไก่', 'ไส้อั่วสมุนไพร', 'น้ำพริกหนุ่ม-แคบหมู', 'แกงฮังเล'],
     extraVibes: ['คาเฟ่ฮอปปิ้ง', 'ยอดดอยหนาว', 'เดินป่าธรรมชาติ', 'งานคราฟต์และศิลปะ']
+  },
+  'chiang-rai': {
+    slogan: 'เหนือสุดในสยาม ชายแดนสามแผ่นดิน ชมนางนอน ดอยแม่สลอง ชาเลิศล้ำ วัฒนธรรมล้านนา',
+    summary: 'เมืองแห่งมหาพุทธศิลป์ระดับโลกและขุนเขา ดินแดนแห่งไร่ชาขั้นบันได แหล่งกาแฟ Specialty ดอยช้าง และจุดชมทะเลหมอกสุดตระการตาเหนือหน้าผาภูชี้ฟ้า',
+    unseenGems: [
+      'ดอยช้าง (เมืองหลวงกาแฟอาราบิก้าและ Slow Bar คาเฟ่เหนือทะเลหมอก)',
+      'หมู่บ้านผาฮี้ (หมู่บ้านชาวอาข่า จิบกาแฟหย่อนขาชมวิวเทือกเขาชายแดนไทย-พม่า)',
+      'ภูชี้ดาว & ภูชี้เดือน (สันเขาคมกริบชมทะเลหมอก 360 องศาที่ยังคงความบริสุทธิ์)',
+      'สามเหลี่ยมทองคำและหอฝิ่น เชียงแสน (จุดบรรจบ 3 แผ่นดิน ไทย-ลาว-พม่า ริมแม่น้ำโขง)',
+      'สิงห์ปาร์ค (Singha Park ฟาร์มทัวร์ ทุ่งดอกไม้ และกิจกรรมแอดเวนเจอร์)'
+    ],
+    signatureFood: [
+      'ขนมจีนน้ำเงี้ยวเชียงราย',
+      'ข้าวแรมฟืนทอดและยำ',
+      'ลาบหมูคั่วพริกลาบเมืองเหนือ',
+      'ยอดใบชาสดทอดกรอบ',
+      'แกงฮังเลลำไย',
+      'กาแฟ Specialty ดอยช้าง'
+    ],
+    extraVibes: [
+      'ศิลปะระดับโลก',
+      'จิบชาชมไร่ขั้นบันได',
+      'กาแฟ Specialty ดอยช้าง',
+      'ทะเลหมอกภูชี้ฟ้า 360 องศา',
+      'วิถีชีวิตชนเผ่าและวัฒนธรรมล้านนา',
+      'สโลว์ไลฟ์ท่ามกลางอากาศหนาว'
+    ]
   },
   krabi: {
     slogan: 'กระบี่ เมืองน่าอยู่ ผู้คนน่ารัก แหล่งหอยหวาน หาดทรายงาม ปะการังใต้ทะเล',

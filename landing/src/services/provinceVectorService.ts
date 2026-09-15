@@ -1,7 +1,6 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
-import { getProvinceSvgData, ProvinceSvgData } from '@/data/northernProvincesSvg';
 
 export interface ProvinceVectorData {
   viewBox: string;
@@ -10,10 +9,29 @@ export interface ProvinceVectorData {
   d: string;
 }
 
-// Global In-Memory Cache for Client Session
+// Global In-Memory Cache for Client Session (0ms instant access)
 const vectorCache = new Map<string, ProvinceVectorData>();
 const inFlightRequests = new Map<string, Promise<ProvinceVectorData | null>>();
 const loadedRegions = new Set<string>();
+
+/**
+ * Storage Helper for browser-level caching across page navigations
+ */
+function getStorageVector(key: string): ProvinceVectorData | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(`gt_vec_${key}`);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+}
+
+function setStorageVector(key: string, data: ProvinceVectorData): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.setItem(`gt_vec_${key}`, JSON.stringify(data));
+  } catch {}
+}
 
 /**
  * Normalize slug or province ID for consistent cache keys
@@ -28,9 +46,20 @@ export function normalizeProvinceKey(slugOrId: string): string {
  */
 export function getCachedProvinceVector(slugOrId: string): ProvinceVectorData | null {
   const key = normalizeProvinceKey(slugOrId);
+  if (!key) return null;
+
+  // 1. In-Memory Cache
   if (vectorCache.has(key)) {
     return vectorCache.get(key)!;
   }
+
+  // 2. SessionStorage Cache
+  const storageData = getStorageVector(key);
+  if (storageData) {
+    vectorCache.set(key, storageData);
+    return storageData;
+  }
+
   return null;
 }
 
@@ -46,12 +75,19 @@ export async function fetchProvinceVector(slugOrId: string): Promise<ProvinceVec
     return vectorCache.get(key)!;
   }
 
-  // 2. Reuse pending in-flight request to avoid duplicate network calls
+  // 2. Check browser session storage
+  const storageData = getStorageVector(key);
+  if (storageData) {
+    vectorCache.set(key, storageData);
+    return storageData;
+  }
+
+  // 3. Reuse pending in-flight request to avoid duplicate network calls
   if (inFlightRequests.has(key)) {
     return inFlightRequests.get(key)!;
   }
 
-  // 3. Initiate fetch from MongoDB API
+  // 4. Initiate fetch from MongoDB Atlas REST API
   const requestPromise = (async () => {
     try {
       const res = await fetch(`/api/provinces/vectors/${encodeURIComponent(key)}`, {
@@ -68,32 +104,26 @@ export async function fetchProvinceVector(slugOrId: string): Promise<ProvinceVec
             height: Number(json.vectorData.height) || 200,
             d: json.vectorData.d
           };
-          // Cache by slug and provinceId
+
+          // Cache in memory and browser session
           vectorCache.set(key, vData);
+          setStorageVector(key, vData);
+
           if (json.province?.slug) {
-            vectorCache.set(normalizeProvinceKey(json.province.slug), vData);
+            const sKey = normalizeProvinceKey(json.province.slug);
+            vectorCache.set(sKey, vData);
+            setStorageVector(sKey, vData);
           }
           if (json.province?.provinceId) {
-            vectorCache.set(normalizeProvinceKey(json.province.provinceId), vData);
+            const idKey = normalizeProvinceKey(json.province.provinceId);
+            vectorCache.set(idKey, vData);
+            setStorageVector(idKey, vData);
           }
           return vData;
         }
       }
     } catch (err) {
-      console.warn(`[ProvinceVectorService] API fetch failed for ${key}, falling back to static backup:`, err);
-    }
-
-    // 4. Graceful fallback to local static data if MongoDB is unreachable
-    const fallback = getProvinceSvgData(key);
-    if (fallback) {
-      const fallbackData: ProvinceVectorData = {
-        viewBox: fallback.viewBox,
-        width: fallback.width,
-        height: fallback.height,
-        d: fallback.d
-      };
-      vectorCache.set(key, fallbackData);
-      return fallbackData;
+      console.warn(`[ProvinceVectorService] API fetch failed for province "${key}":`, err);
     }
 
     return null;
@@ -110,7 +140,9 @@ export async function fetchProvinceVector(slugOrId: string): Promise<ProvinceVec
  */
 export async function prefetchRegionVectors(region: string): Promise<number> {
   const normRegion = region?.toLowerCase().trim();
-  if (!normRegion || loadedRegions.has(normRegion)) {
+  if (!normRegion) return 0;
+
+  if (loadedRegions.has(normRegion)) {
     return 0;
   }
 
@@ -136,9 +168,20 @@ export async function prefetchRegionVectors(region: string): Promise<number> {
               height: Number(item.vectorData.height) || 200,
               d: item.vectorData.d
             };
-            vectorCache.set(normalizeProvinceKey(key), vData);
-            if (item.slug) vectorCache.set(normalizeProvinceKey(item.slug), vData);
-            if (item.provinceId) vectorCache.set(normalizeProvinceKey(item.provinceId), vData);
+            const nKey = normalizeProvinceKey(key);
+            vectorCache.set(nKey, vData);
+            setStorageVector(nKey, vData);
+
+            if (item.slug) {
+              const sKey = normalizeProvinceKey(item.slug);
+              vectorCache.set(sKey, vData);
+              setStorageVector(sKey, vData);
+            }
+            if (item.provinceId) {
+              const idKey = normalizeProvinceKey(item.provinceId);
+              vectorCache.set(idKey, vData);
+              setStorageVector(idKey, vData);
+            }
             loadedCount++;
           }
         }
@@ -195,7 +238,7 @@ export function useProvinceVector(
           if (data) {
             setVectorData(data);
           } else {
-            setError('Vector data not found');
+            setError('Vector data not found in MongoDB Atlas');
           }
           setIsLoading(false);
         }
@@ -213,4 +256,48 @@ export function useProvinceVector(
   }, [key]);
 
   return { vectorData, isLoading, error, isFromMongo: Boolean(vectorData) };
+}
+
+/**
+ * React Hook to access all province vectors in a region from MongoDB Atlas
+ */
+export function useRegionVectors(region: string) {
+  const normRegion = region?.toLowerCase().trim();
+  const [vectors, setVectors] = useState<Record<string, ProvinceVectorData>>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!normRegion) {
+      setVectors({});
+      setIsLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+    setIsLoading(true);
+    setError(null);
+
+    prefetchRegionVectors(normRegion)
+      .then(() => {
+        if (!isMounted) return;
+        const result: Record<string, ProvinceVectorData> = {};
+        vectorCache.forEach((v, k) => {
+          result[k] = v;
+        });
+        setVectors(result);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        setError(err?.message || 'Failed to load region vectors');
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [normRegion]);
+
+  return { vectors, isLoading, error };
 }

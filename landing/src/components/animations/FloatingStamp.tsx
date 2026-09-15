@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import ProvincePostageStamp from '@/components/profile/ProvincePostageStamp';
+import { StampVariant } from '@/components/profile/stamps/types';
 import { Province, REGION_METAS } from '@/data/thailandProvinces';
 
 export interface FloatingStampProps {
@@ -18,6 +19,8 @@ export interface FloatingStampProps {
   badgeLabel?: string;
   onClick?: (province: Province) => void;
   animated?: boolean;
+  variant?: StampVariant;
+  hideText?: boolean;
 }
 
 export default function FloatingStamp({
@@ -30,7 +33,9 @@ export default function FloatingStamp({
   interactiveTilt = true,
   badgeLabel,
   onClick,
-  animated = true
+  animated = true,
+  variant,
+  hideText = false
 }: FloatingStampProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const regionMeta = REGION_METAS[province.region];
@@ -133,6 +138,8 @@ export default function FloatingStamp({
           size={size}
           onClick={onClick}
           animated={animated}
+          variant={variant}
+          hideText={hideText}
         />
       </motion.div>
     </motion.div>

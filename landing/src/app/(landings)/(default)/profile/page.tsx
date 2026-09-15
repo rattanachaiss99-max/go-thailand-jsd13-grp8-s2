@@ -31,6 +31,8 @@ import { useUser } from '@/contexts/UserContext';
 import { submitFeedback } from '@/server/api/auth';
 import SvgIcon from '@/components/SvgIcon';
 import TravelTrophyPassport from '@/components/profile/TravelTrophyPassport';
+import MyJourneyAndChauffeurTab from '@/components/profile/MyJourneyAndChauffeurTab';
+import CarStampAlbum from '@/components/profile/CarStampAlbum';
 
 const TIER_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   bronze: { bg: '#CD7F32', text: '#FFFFFF', label: 'Bronze Member' },
@@ -248,32 +250,47 @@ export default function ProfilePage() {
               {user.email} {user.phone ? `• 📞 ${user.phone}` : ''}
             </Typography>
 
-            <Stack direction="row" spacing={3} flexWrap="wrap" useFlexGap sx={{ rowGap: 1.5 }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
+                gap: { xs: 1.5, sm: 2.5 },
+                width: '100%'
+              }}
+            >
               <Box>
-                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase' }}>
+                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase', fontSize: { xs: '0.65rem', sm: '0.75rem' } }}>
                   คะแนนสะสม (Points)
                 </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#D4AF37' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#D4AF37', fontSize: { xs: '0.95rem', sm: '1.25rem' } }}>
                   🪙 {(user.points || 0).toLocaleString()} pt
                 </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase' }}>
+                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase', fontSize: { xs: '0.65rem', sm: '0.75rem' } }}>
                   ยอดการจอง (Bookings)
                 </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#38BDF8' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#38BDF8', fontSize: { xs: '0.95rem', sm: '1.25rem' } }}>
                   🎟️ {user.bookingCount || 0} รายการ
                 </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase' }}>
+                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase', fontSize: { xs: '0.65rem', sm: '0.75rem' } }}>
                   เที่ยวไทย (Provinces)
                 </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#10B981' }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#10B981', fontSize: { xs: '0.95rem', sm: '1.25rem' } }}>
                   🗺️ {(user.visitedProvinces?.length || 0)} / 77 จว.
                 </Typography>
               </Box>
-            </Stack>
+              <Box>
+                <Typography variant="caption" sx={{ color: '#94A3B8', textTransform: 'uppercase', fontSize: { xs: '0.65rem', sm: '0.75rem' } }}>
+                  พนักงานขับรถ (Chauffeur)
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#38BDF8', fontSize: { xs: '0.95rem', sm: '1.25rem' } }}>
+                  🚗 พร้อมให้บริการ
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
 
           <Grid size={{ xs: 12, md: 'auto' }} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
@@ -291,29 +308,50 @@ export default function ProfilePage() {
       </Card>
 
       {/* Main Tabs Navigation */}
-      <Paper sx={{ mb: 3, borderRadius: 3, borderBottom: 1, borderColor: 'divider' }}>
+      <Paper sx={{ mb: 3, borderRadius: { xs: 2.5, sm: 3 }, borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={tab}
           onChange={(_, val) => setTab(val)}
           variant="scrollable"
           scrollButtons="auto"
+          allowScrollButtonsMobile
           aria-label="profile tabs"
-          sx={{ px: 2 }}
+          sx={{
+            px: { xs: 1, sm: 2 },
+            '& .MuiTab-root': {
+              fontSize: { xs: '0.78rem', sm: '0.875rem' },
+              minHeight: { xs: 44, sm: 48 },
+              px: { xs: 1.5, sm: 2 },
+              whiteSpace: 'nowrap'
+            }
+          }}
         >
-          <Tab label="🏆 พาสปอร์ต & แผนที่ท่องเที่ยว 77 จังหวัด" />
+          <Tab label="🌟 การเดินทาง & คนขับประจำตัว (My Journey & Chauffeur)" />
+          <Tab label="🛠️ ดีบักเกอร์และจัดการคนขับ (Admin Chauffeur Console)" />
+          <Tab label="🗺️ แผนที่พาสปอร์ต 77 จังหวัด (Explorer Map)" />
           <Tab label="👤 ข้อมูลส่วนตัว & ที่อยู่" />
           <Tab label="💬 ส่งความคิดเห็น / รีวิว" />
           <Tab label="🧭 แพ็กเกจ & เมนูด่วน" />
         </Tabs>
       </Paper>
 
-      {/* Tab 0: Travel Trophy & Thailand Map */}
+      {/* Tab 0: Unified My Journey & Chauffeur Hub (Customer / Tourist View) */}
       {tab === 0 && (
+        <MyJourneyAndChauffeurTab visitedProvinces={user?.visitedProvinces || []} />
+      )}
+
+      {/* Tab 1: Admin Chauffeur Simulator & Fleet Console (Debug / Admin View) */}
+      {tab === 1 && (
+        <CarStampAlbum />
+      )}
+
+      {/* Tab 2: Full Travel Trophy & Thailand Interactive Map */}
+      {tab === 2 && (
         <TravelTrophyPassport />
       )}
 
-      {/* Tab 1: Profile & Address Form */}
-      {tab === 1 && (
+      {/* Tab 3: Profile & Address Form */}
+      {tab === 3 && (
         <Card sx={{ borderRadius: 3, p: { xs: 2.5, md: 4 } }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
             จัดการข้อมูลส่วนตัว
@@ -452,8 +490,8 @@ export default function ProfilePage() {
         </Card>
       )}
 
-      {/* Tab 2: Feedback Form */}
-      {tab === 2 && (
+      {/* Tab 4: Feedback Form */}
+      {tab === 4 && (
         <Card sx={{ borderRadius: 3, p: { xs: 2.5, md: 4 }, maxWidth: 720 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
             ส่งข้อเสนอแนะและรีวิวการบริการ
@@ -484,26 +522,26 @@ export default function ProfilePage() {
 
               <TextField
                 select
-                label="หัวข้อความคิดเห็น (Topic)"
+                fullWidth
+                label="หัวข้อข้อเสนอแนะ (Topic)"
                 value={feedbackTopic}
                 onChange={(e) => setFeedbackTopic(e.target.value)}
-                fullWidth
               >
                 <MenuItem value="แพ็กเกจท่องเที่ยว">แพ็กเกจท่องเที่ยว (Tour Packages)</MenuItem>
-                <MenuItem value="ที่พักและโรงแรม">ที่พักและโรงแรม (Accommodations)</MenuItem>
-                <MenuItem value="ไกด์นำเที่ยว">ไกด์นำเที่ยว (Tour Guides)</MenuItem>
-                <MenuItem value="ระบบเว็บไซต์และการชำระเงิน">ระบบเว็บไซต์และการชำระเงิน (Website & Payment)</MenuItem>
+                <MenuItem value="การจองและชำระเงิน">การจองและชำระเงิน (Booking & Payment)</MenuItem>
+                <MenuItem value="การบริการของไกด์ / คนขับ">การบริการของไกด์ / คนขับ (Guide & Driver)</MenuItem>
+                <MenuItem value="การใช้งานเว็บไซต์ / แอปพลิเคชัน">การใช้งานเว็บไซต์ / แอปพลิเคชัน (Website & UI)</MenuItem>
                 <MenuItem value="อื่นๆ">อื่นๆ (Other)</MenuItem>
               </TextField>
 
               <TextField
-                label="รายละเอียดความคิดเห็น (Comment)"
-                placeholder="เล่าประสบการณ์หรือแนะนำสิ่งที่ต้องการให้เราปรับปรุง..."
+                fullWidth
                 multiline
                 rows={4}
+                label="ข้อความรีวิว / คำติชมของคุณ (Review & Feedback)"
+                placeholder="บอกเล่าประสบการณ์ที่คุณประทับใจ หรือสิ่งที่อยากให้เราปรับปรุงเพิ่มเติม..."
                 value={feedbackComment}
                 onChange={(e) => setFeedbackComment(e.target.value)}
-                fullWidth
                 required
               />
 
@@ -522,8 +560,8 @@ export default function ProfilePage() {
         </Card>
       )}
 
-      {/* Tab 3: Quick Links & Summary */}
-      {tab === 3 && (
+      {/* Tab 5: Quick Links & Summary */}
+      {tab === 5 && (
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Card

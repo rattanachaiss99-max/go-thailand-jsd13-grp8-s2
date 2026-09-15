@@ -21,6 +21,15 @@ interface NavMegamenuProps {
   hoverToggler?: boolean;
 }
 
+export interface NavSubItemProps {
+  id: string | number;
+  title: string;
+  link: string;
+  icon?: string;
+  badge?: string;
+  desc?: string;
+}
+
 export interface NavItemProps {
   id: string | number;
   title: string;
@@ -29,6 +38,7 @@ export interface NavItemProps {
   icon?: SpriteIconProps;
   expanded?: boolean;
   megaMenu?: NavMegamenuProps;
+  children?: NavSubItemProps[];
 }
 
 export interface NavbarContentProps {

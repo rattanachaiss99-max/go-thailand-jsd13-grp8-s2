@@ -14,8 +14,8 @@ import { useBooking } from "../context/BookingContext";
  */
 export default function PropertyCard({ property, mode = "list" }) {
   const navigate = useNavigate();
-  const { selectProperty, booking, nights } = useBooking();
-  const handlePick = () => selectProperty(property.id);
+  const { selectProperty, previewProperty, cart, nights } = useBooking();
+  const handlePick = () => previewProperty(property.id);
 
   const handleBookNow = (e) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ export default function PropertyCard({ property, mode = "list" }) {
         <div className="hotel-foot">
           <div>
             <div className="muted" style={{ fontSize: ".85rem" }}>
-              {nights} nights, {booking.guests.adults} adults
+              {nights} nights, {cart.accommodation.guests.adults} adults
             </div>
             <div className="price">
               ฿{(property.base_price_per_night || property.pricePerNight).toLocaleString()} <small>/ night</small>

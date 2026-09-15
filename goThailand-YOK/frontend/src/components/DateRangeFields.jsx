@@ -11,8 +11,8 @@ import { useBooking } from "../context/BookingContext";
  * ------------------------------------------------------------
  */
 export default function DateRangeFields() {
-  const { booking, todayISO, updateDates } = useBooking();
-  const minCheckOut = addDays(booking.checkIn, 1);
+  const { cart, todayISO, updateDates } = useBooking();
+  const minCheckOut = addDays(cart.accommodation.checkIn, 1);
 
   return (
     <div className="date-grid">
@@ -22,7 +22,7 @@ export default function DateRangeFields() {
           id="checkInInput"
           type="date"
           className="date-input"
-          value={booking.checkIn}
+          value={cart.accommodation.checkIn}
           min={todayISO}
           onChange={(e) => updateDates({ checkIn: e.target.value })}
         />
@@ -33,7 +33,7 @@ export default function DateRangeFields() {
           id="checkOutInput"
           type="date"
           className="date-input"
-          value={booking.checkOut}
+          value={cart.accommodation.checkOut}
           min={minCheckOut}
           onChange={(e) => updateDates({ checkOut: e.target.value })}
         />

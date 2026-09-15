@@ -5,7 +5,8 @@ import SearchBar from "../components/SearchBar";
 import FilterSidebar from "../components/FilterSidebar";
 import PropertyCard from "../components/PropertyCard";
 import Chip from "../components/Chip";
-import { properties, bedroomOptions, renovationOptions } from "../data/properties";
+import { useCatalog } from "../context/CatalogContext";
+import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
 
 /**
  * AccommodationListing (หน้าที่ 1/5)
@@ -20,6 +21,7 @@ import { properties, bedroomOptions, renovationOptions } from "../data/propertie
  * ------------------------------------------------------------
  */
 export default function AccommodationListing() {
+  const { properties } = useCatalog();
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedKeywords, setSelectedKeywords] = useState([]); // Popular Filters: ไม่ติ๊กอะไรไว้ก่อน (opt-in)
   const [selectedBedroom, setSelectedBedroom] = useState(null); // radio: เลือกได้ทีละ 1 ค่า หรือไม่เลือกเลย

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Stepper from "../components/Stepper";
@@ -18,8 +18,9 @@ function shortDate(iso) {
 /**
  * Checkout (หน้าที่ 4/5)
  * ------------------------------------------------------------
- * ฟอร์มกรอกข้อมูลลูกค้า และข้อมูลผู้ขับขี่ (กรณีเช่ารถ)
- * สอดคล้องกับ Data Schema:
+ * ฟอร์มกรอกข้อมูลลูกค้า และข้อมูลผู้ขับขี่ (ถ้ามีรถเช่าในตะกร้า)
+ * รวมยอดของทุกรายการที่อยู่ในตะกร้า (ที่พัก + รถเช่า พร้อมกันได้)
+ * เป็นออเดอร์เดียว สอดคล้องกับ Data Schema:
  *  - bookings: contact_name, contact_email, contact_phone, payment_method
  *  - booking_items (car): traveler_info, driver_info, payment_info
  *  - booking_items (accommodation): guest_details, guest_names
@@ -28,16 +29,20 @@ function shortDate(iso) {
 export default function Checkout() {
   const navigate = useNavigate();
   const {
-    booking,
+    cart,
     selectedProperty,
     selectedRoom,
     selectedCar,
     nights,
     carDays,
+    hasAccommodationInCart,
+    hasCarInCart,
     confirmBooking,
   } = useBooking();
 
-  const isCar = booking.cartType === "car";
+  if (!hasAccommodationInCart && !hasCarInCart) {
+    return <Navigate to="/cart" replace />;
+  }
 
   const [payMethod, setPayMethod] = useState("Card");
   const [form, setForm] = useState({
@@ -45,7 +50,7 @@ export default function Checkout() {
     email: "sj.siwat@gmail.com",
     phone: "0812345678",
     country: "Thailand",
-    requests: isCar ? "" : "ขอห้องชั้นสูง ไม่สูบบุหรี่",
+    requests: hasAccommodationInCart ? "ขอห้องชั้นสูง ไม่สูบบุหรี่" : "",
     // Car driver info
     driverName: "Siwat J.",
     driverLicenseNo: "DL-12345678",
@@ -64,35 +69,44 @@ export default function Checkout() {
       price_per_night: selectedProperty.base_price_per_night || selectedProperty.pricePerNight,
     };
   const roomPrice = activeRoom.price_per_night || selectedProperty.base_price_per_night;
-  const roomCount = booking.rooms || 1;
-  const hotelSubtotal = roomPrice * nights * roomCount;
-  const hotelServiceFee = 500;
-  const hotelTaxes = Math.round(hotelSubtotal * 0.05);
+  const roomCount = cart.accommodation.rooms || 1;
+  const hotelSubtotal = hasAccommodationInCart ? roomPrice * nights * roomCount : 0;
+  const hotelServiceFee = hasAccommodationInCart ? 500 : 0;
+  const hotelTaxes = hasAccommodationInCart ? Math.round(hotelSubtotal * 0.05) : 0;
   const hotelTotal = hotelSubtotal + hotelServiceFee + hotelTaxes;
 
   // Car calculations
   const carRate = selectedCar.daily_rate || selectedCar.pricePerDay;
-  const carSubtotal = carRate * carDays;
+  const carSubtotal = hasCarInCart ? carRate * carDays : 0;
   const carTotal = carSubtotal;
 
-  const currentSubtotal = isCar ? carSubtotal : hotelSubtotal;
-  const currentTotal = isCar ? carTotal : hotelTotal;
+  const grandSubtotal = hotelSubtotal + carSubtotal;
+  const grandTotal = hotelTotal + carTotal;
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const handleChange = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.fullName || !form.email) return;
 
-    confirmBooking({
-      ...form,
-      payMethod,
-      total: currentTotal,
-      subtotal: currentSubtotal,
-    });
-
-    navigate("/success");
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const { ref } = await confirmBooking({
+        ...form,
+        payMethod,
+        total: grandTotal,
+        subtotal: grandSubtotal,
+      });
+      navigate(`/success?ref=${encodeURIComponent(ref)}`);
+    } catch (err) {
+      setSubmitError(err.message || "จองไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -141,8 +155,8 @@ export default function Checkout() {
                 </div>
               </div>
 
-              {/* ---------- ฟิลด์ข้อมูลคนขับรถ (Driver Info) สำหรับ Car Rental ---------- */}
-              {isCar && (
+              {/* ---------- ฟิลด์ข้อมูลคนขับรถ (Driver Info) ถ้ามีรถเช่าในตะกร้า ---------- */}
+              {hasCarInCart && (
                 <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--color-line)" }}>
                   <h3 style={{ marginBottom: 16 }}>Driver Information</h3>
                   <div className="grid-2">
@@ -175,7 +189,7 @@ export default function Checkout() {
                 <label className="fl" htmlFor="requests">Special Requests (optional)</label>
                 <textarea
                   className="inp" id="requests" rows={3}
-                  placeholder={isCar ? "e.g., GPS navigation, child safety seat..." : "e.g., Early check-in, high floor, non-smoking..."}
+                  placeholder={hasAccommodationInCart ? "e.g., Early check-in, high floor, non-smoking..." : "e.g., GPS navigation, child safety seat..."}
                   value={form.requests} onChange={handleChange("requests")}
                 />
               </div>
@@ -241,108 +255,131 @@ export default function Checkout() {
               )}
             </div>
 
-            <Button type="submit" variant="gold" full size="lg" style={{ marginTop: 24 }} id="confirmBookingBtn">
-              Confirm &amp; Pay ฿{currentTotal.toLocaleString()}
+            {submitError && (
+              <p
+                className="muted"
+                style={{ color: "#C0392B", marginTop: 16, marginBottom: 0 }}
+                role="alert"
+              >
+                {submitError}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              variant="gold"
+              full
+              size="lg"
+              disabled={submitting}
+              style={{ marginTop: 24 }}
+              id="confirmBookingBtn"
+            >
+              {submitting ? "Processing…" : `Confirm & Pay ฿${grandTotal.toLocaleString()}`}
             </Button>
           </form>
 
           {/* ---------- คอลัมน์ขวา: สรุปการจอง ---------- */}
           <aside>
             <div className="card sticky" style={{ padding: 26 }}>
-              <div className="summary-thumb">
-                <PhotoPlaceholder
-                  src={isCar ? selectedCar.images?.[0] || selectedCar.image : selectedProperty.images[0]}
-                  alt={isCar ? selectedCar.name : selectedProperty.name}
-                />
-              </div>
+              {hasAccommodationInCart && (
+                <div style={{ marginBottom: hasCarInCart ? 20 : 0 }}>
+                  <div className="summary-thumb">
+                    <PhotoPlaceholder src={selectedProperty.images[0]} alt={selectedProperty.name} />
+                  </div>
+                  <div className="row" style={{ gap: 8, marginTop: 12, marginBottom: 4 }}>
+                    <span className="tag" style={{ background: "var(--color-brand)", color: "#fff" }}>
+                      {selectedProperty.category}
+                    </span>
+                  </div>
+                  <h3 style={{ marginTop: 6 }}>{selectedProperty.name}</h3>
+                  <div className="muted" style={{ fontSize: ".88rem" }}>{activeRoom.name}</div>
 
-              <div className="row" style={{ gap: 8, marginTop: 12, marginBottom: 4 }}>
-                <span className="tag" style={{ background: "var(--color-brand)", color: "#fff" }}>
-                  {isCar ? selectedCar.category.toUpperCase() : selectedProperty.category}
-                </span>
-              </div>
-
-              <h3 style={{ marginTop: 6 }}>{isCar ? selectedCar.name : selectedProperty.name}</h3>
-              {!isCar && <div className="muted" style={{ fontSize: ".88rem" }}>{activeRoom.name}</div>}
-
-              <div style={{ marginTop: 16 }}>
-                {isCar ? (
-                  <>
-                    <div className="sum-line">
-                      <span className="lbl-ico">📅 Pick-up</span>
-                      <b>{shortDate(booking.pickupDate)} ({booking.pickupTime})</b>
-                    </div>
-                    <div className="sum-line">
-                      <span className="lbl-ico">📅 Drop-off</span>
-                      <b>{shortDate(booking.dropoffDate)} ({booking.dropoffTime})</b>
-                    </div>
-                    <div className="sum-line">
-                      <span className="lbl-ico">📍 Station</span>
-                      <b>{booking.pickupLocation || selectedCar.current_station?.name}</b>
-                    </div>
-                    <div className="sum-line">
-                      <span className="lbl-ico">⏱️ Duration</span>
-                      <b>{carDays} Days</b>
-                    </div>
-                  </>
-                ) : (
-                  <>
+                  <div style={{ marginTop: 16 }}>
                     <div className="sum-line">
                       <span className="lbl-ico">📅 Check-in</span>
-                      <b>{shortDate(booking.checkIn)}</b>
+                      <b>{shortDate(cart.accommodation.checkIn)}</b>
                     </div>
                     <div className="sum-line">
                       <span className="lbl-ico">📅 Check-out</span>
-                      <b>{shortDate(booking.checkOut)}</b>
+                      <b>{shortDate(cart.accommodation.checkOut)}</b>
                     </div>
                     <div className="sum-line">
                       <span className="lbl-ico">👤 Guests</span>
-                      <b>{booking.guests.adults} Adults · {roomCount} Room</b>
+                      <b>{cart.accommodation.guests.adults} Adults · {roomCount} Room</b>
                     </div>
                     <div className="sum-line">
                       <span className="lbl-ico">🌙 Duration</span>
                       <b>{nights} Nights</b>
                     </div>
-                  </>
-                )}
-              </div>
+                  </div>
+                </div>
+              )}
+
+              {hasAccommodationInCart && hasCarInCart && <div className="divider" />}
+
+              {hasCarInCart && (
+                <div style={{ marginBottom: 16 }}>
+                  {!hasAccommodationInCart && (
+                    <div className="summary-thumb">
+                      <PhotoPlaceholder src={selectedCar.images?.[0] || selectedCar.image} alt={selectedCar.name} />
+                    </div>
+                  )}
+                  <div className="row" style={{ gap: 8, marginTop: 12, marginBottom: 4 }}>
+                    <span className="tag" style={{ background: "var(--color-brand)", color: "#fff" }}>
+                      {selectedCar.category.toUpperCase()}
+                    </span>
+                  </div>
+                  <h3 style={{ marginTop: 6 }}>{selectedCar.name}</h3>
+
+                  <div style={{ marginTop: 16 }}>
+                    <div className="sum-line">
+                      <span className="lbl-ico">📅 Pick-up</span>
+                      <b>{shortDate(cart.car.pickupDate)} ({cart.car.pickupTime})</b>
+                    </div>
+                    <div className="sum-line">
+                      <span className="lbl-ico">📅 Drop-off</span>
+                      <b>{shortDate(cart.car.dropoffDate)} ({cart.car.dropoffTime})</b>
+                    </div>
+                    <div className="sum-line">
+                      <span className="lbl-ico">📍 Station</span>
+                      <b>{cart.car.pickupLocation || selectedCar.current_station?.name}</b>
+                    </div>
+                    <div className="sum-line">
+                      <span className="lbl-ico">⏱️ Duration</span>
+                      <b>{carDays} Days</b>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="divider" />
-              {isCar ? (
-                <>
-                  <div className="sum-row">
-                    <span>Daily Rate (฿{carRate.toLocaleString()} × {carDays} d)</span>
-                    <b>฿{carSubtotal.toLocaleString()}</b>
-                  </div>
-                  <div className="sum-row">
-                    <span>Service Fee</span>
-                    <b>฿0</b>
-                  </div>
-                  <div className="sum-row">
-                    <span>Taxes &amp; Fees</span>
-                    <b style={{ color: "#2E7D32" }}>Included</b>
-                  </div>
-                </>
-              ) : (
+
+              {hasAccommodationInCart && (
                 <>
                   <div className="sum-row">
                     <span>Accommodation ({nights} n)</span>
                     <b>฿{hotelSubtotal.toLocaleString()}</b>
                   </div>
                   <div className="sum-row">
-                    <span>Service Fee</span>
+                    <span>Accommodation Service Fee</span>
                     <b>฿{hotelServiceFee.toLocaleString()}</b>
                   </div>
                   <div className="sum-row">
-                    <span>Taxes &amp; Fees (5%)</span>
+                    <span>Accommodation Taxes &amp; Fees (5%)</span>
                     <b>฿{hotelTaxes.toLocaleString()}</b>
                   </div>
                 </>
               )}
+              {hasCarInCart && (
+                <div className="sum-row">
+                  <span>Car Rental (฿{carRate.toLocaleString()} × {carDays} d)</span>
+                  <b>฿{carSubtotal.toLocaleString()}</b>
+                </div>
+              )}
 
               <div className="sum-total">
                 <h3>Total</h3>
-                <div className="price">฿{currentTotal.toLocaleString()}</div>
+                <div className="price">฿{grandTotal.toLocaleString()}</div>
               </div>
 
               <div className="perk-row">

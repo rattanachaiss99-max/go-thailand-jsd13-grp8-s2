@@ -18,6 +18,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "../components/Layout";
 import HomePage from "../pages/HomePage";
 import TouristGuide from "../pages/TouristGuide";
+import GuideSelectionDemo from "../pages/GuideSelectionDemo";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Products from "../pages/Products";
@@ -36,7 +37,8 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/", element: <HomePage /> },            // GoThailand home page
-      { path: "tourist-guide", element: <TouristGuide /> }, // tourist guide selection
+      { path: "tourist-guide", element: <TouristGuide /> }, // production guide selection page
+      { path: "guide-selection-demo", element: <GuideSelectionDemo /> }, // optional demo route for the mock flow
       { path: "about", element: <About /> },           // original pages are kept
       { path: "contact", element: <Contact /> },
       { path: "products", element: <Products /> },

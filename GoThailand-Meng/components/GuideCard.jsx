@@ -35,7 +35,7 @@ export default function GuideCard({ guide }) {
     // bottom edge of the card (absolute positioning below).
     <article
       className="
-        relative rounded-xl border-2 border-transparent bg-white p-3 shadow-md
+        relative rounded-xl border-2 border-transparent bg-white p-3 pb-5 shadow-md
         transition-all duration-200
         hover:-translate-y-0.5 hover:border-thai-gold hover:shadow-xl  /* mouse over  */
         active:translate-y-0 active:scale-[0.98]
@@ -45,7 +45,7 @@ export default function GuideCard({ guide }) {
       <div className="flex gap-3">
         {/* ----- left side: portrait photo ----- */}
         <div className="h-44 w-[36%] shrink-0 overflow-hidden rounded-lg">
-          <GuideAvatar avatar={guide.avatar} name={guide.name} />
+          <GuideAvatar avatar={guide.avatar} name={guide.name} guideId={guide.id} />
         </div>
 
         {/* ----- right side: information ----- */}
@@ -64,12 +64,12 @@ export default function GuideCard({ guide }) {
         </div>
       </div>
 
-      {/* ----- "More information" button overlapping the card edge ----- */}
+      {/* ----- "More information" button stays under the photo area ----- */}
       <button
         type="button"
         className="
-          absolute -bottom-3 left-4 flex items-center gap-1 rounded-full bg-thai-navy
-          px-4 py-1.5 text-xs font-semibold text-white shadow-md transition-all duration-150
+          ml-1 mt-[5px] flex w-[150px] items-center justify-center gap-1 rounded-full bg-thai-navy
+          px-3 py-1.5 text-xs font-semibold text-white shadow-md transition-all duration-150
           hover:bg-thai-navy-light hover:shadow-lg      /* mouse over  */
           active:scale-95 active:bg-thai-gold active:text-thai-navy /* mouse press */
         "

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoThailand - Explore Thailand with a Local Guide</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#476083",
+                        "on-secondary-fixed": "#221b00",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#705d00",
+                        "on-secondary-fixed-variant": "#544600",
+                        "primary": "#000613",
+                        "outline-variant": "#c4c6cf",
+                        "primary-fixed-dim": "#afc8f0",
+                        "surface-container": "#efeded",
+                        "inverse-primary": "#afc8f0",
+                        "secondary-fixed": "#ffe16d",
+                        "surface-container-highest": "#e4e2e2",
+                        "surface-variant": "#e4e2e2",
+                        "on-surface-variant": "#43474e",
+                        "tertiary": "#040607",
+                        "on-primary-container": "#6f88ad",
+                        "primary-container": "#001f3f",
+                        "tertiary-container": "#1c1f20",
+                        "surface-container-low": "#f5f3f3",
+                        "surface": "#fbf9f8",
+                        "surface-container-high": "#eae8e7",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1b1c1c",
+                        "surface-bright": "#fbf9f8",
+                        "outline": "#74777f",
+                        "on-background": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d4e3ff",
+                        "surface-dim": "#dbd9d9",
+                        "tertiary-fixed": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001c3a",
+                        "on-secondary-container": "#6e5c00",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fcd400",
+                        "secondary-fixed-dim": "#e9c400",
+                        "tertiary-fixed-dim": "#c5c7c8",
+                        "inverse-surface": "#303030",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#191c1d",
+                        "on-tertiary-container": "#848688",
+                        "background": "#fbf9f8",
+                        "on-primary-fixed-variant": "#2f486a",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-tertiary-fixed-variant": "#454748",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1200px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "section-gap": "80px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "label-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "headline-lg-mobile": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["56px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["28px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom styles for precise matching */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-secondary selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm sticky top-0 z-50">
+<div class="flex justify-between items-center px-margin-desktop py-4 w-full max-w-container-max mx-auto">
+<!-- Brand -->
+<a class="font-display-lg text-headline-md text-primary dark:text-inverse-primary tracking-tight" href="#">GoThailand</a>
+<!-- Navigation -->
+<nav class="hidden md:flex items-center gap-stack-lg">
+<a class="text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-inverse-primary transition-colors font-label-lg text-label-lg" href="#">Accommodation</a>
+<a class="text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-inverse-primary transition-colors font-label-lg text-label-lg" href="#">Car Rental</a>
+<a aria-current="page" class="text-primary dark:text-inverse-primary border-b-2 border-secondary font-bold pb-1 font-label-lg text-label-lg" href="#">Local Guide</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-stack-md">
+<button aria-label="Search" class="text-primary hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all rounded-full p-2 scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="bg-primary-container text-on-primary hover:opacity-90 transition-opacity font-label-lg text-label-lg px-6 py-2.5 rounded-lg font-semibold scale-95 duration-200 ease-in-out">
+                    Book Now
+                </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative h-[600px] w-full flex items-center justify-center">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A beautiful cinematic shot of a young couple walking along an ancient stone path in Ayutthaya, Thailand. The female guide is pointing towards a stunning ruined temple in the background. The lighting is golden hour, creating a warm, inviting, and premium travel atmosphere with a slight background blur for depth." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBOvqrnCeCcJhPoNmYLcTbC8aqUFKA1mm233TKxmiBaLkuDjFwWAJ8f5C8UkFSErsmRnyTCgSyMRUWfGoSgbOgAJNWm0SBGtD7WFJqwwPgtQgPIAJ550AyXJznzwcITCLX8N4rldCSbnHLZhvtb4TmfINmMu3EeEcb1Ey3z8ceRpOjUueRZWUo78pt38H2Yp5SLd30AIHxksWngr47LRW9zEy_ZANOKEhykKH7QP2uSVI-pvwKmgSZx')">
+<div class="absolute inset-0 hero-overlay"></div>
+</div>
+<!-- Hero Content -->
+<div class="relative z-10 text-center px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto flex flex-col items-center pt-10">
+<h1 class="font-display-lg text-display-lg text-on-primary mb-stack-sm drop-shadow-md max-w-3xl leading-tight">Explore Thailand with a Local Guide</h1>
+<p class="font-body-lg text-body-lg text-on-primary opacity-90 drop-shadow-sm mb-section-gap">Discover authentic experiences with trusted local experts.</p>
+<!-- Search Widget -->
+<div class="glass-panel rounded-xl p-4 w-full max-w-5xl flex flex-col md:flex-row gap-4 items-center justify-between transform translate-y-8">
+<!-- Destination Input -->
+<div class="flex-1 w-full bg-surface-container-low rounded-lg flex items-center px-4 py-3 border border-transparent focus-within:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-outline mr-3">location_on</span>
+<input class="bg-transparent border-none outline-none w-full font-body-md text-on-surface placeholder-outline-variant focus:ring-0 p-0" placeholder="Destination (e.g. Bangkok)" type="text"/>
+</div>
+<!-- Dates Input -->
+<div class="flex-1 w-full bg-surface-container-low rounded-lg flex items-center px-4 py-3 border border-transparent focus-within:border-primary-container transition-colors">
+<span class="material-symbols-outlined text-outline mr-3">calendar_today</span>
+<input class="bg-transparent border-none outline-none w-full font-body-md text-on-surface placeholder-outline-variant focus:ring-0 p-0" placeholder="Dates" type="text"/>
+</div>
+<!-- Guests Dropdown -->
+<div class="w-full md:w-48 bg-surface-container-low rounded-lg flex items-center px-4 py-3 border border-transparent focus-within:border-primary-container transition-colors cursor-pointer justify-between">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-outline mr-3">group</span>
+<span class="font-body-md text-on-surface">2 Guests</span>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+<!-- Submit Button -->
+<button class="w-full md:w-auto bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim transition-colors font-label-lg text-label-lg px-8 py-3.5 rounded-lg font-bold flex items-center justify-center whitespace-nowrap">
+<span class="material-symbols-outlined mr-2">search</span>
+                    Find a Guide
+                </button>
+</div>
+</div>
+</section>
+<!-- Main Content: Filters & Listings -->
+<main class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap pt-32">
+<div class="flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-1/4 flex flex-col gap-stack-lg">
+<div class="flex items-center justify-between border-b border-outline-variant pb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface">Filters</h2>
+<button class="font-label-sm text-label-sm text-outline hover:text-primary transition-colors">Clear All</button>
+</div>
+<!-- Guide Type Filter -->
+<div class="flex flex-col gap-stack-sm">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider mb-2">Guide Type</h3>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[16px] font-bold">check</span>
+</div>
+<span class="font-body-md text-on-surface group-hover:text-primary transition-colors">Cultural Expert</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant group-hover:border-primary transition-colors bg-surface-container-lowest"></div>
+<span class="font-body-md text-outline group-hover:text-on-surface transition-colors">Food &amp; Culinary</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant group-hover:border-primary transition-colors bg-surface-container-lowest"></div>
+<span class="font-body-md text-outline group-hover:text-on-surface transition-colors">Adventure &amp; Nature</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-5 h-5 rounded border border-outline-variant group-hover:border-primary transition-colors bg-surface-container-lowest"></div>
+<span class="font-body-md text-outline group-hover:text-on-surface transition-colors">Photography</span>
+</label>
+</div>
+<!-- Language Filter -->
+<div class="flex flex-col gap-stack-sm pt-4 border-t border-outline-variant">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider mb-2">Language</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full border border-primary text-primary font-label-sm text-label-sm bg-primary-fixed hover:bg-primary-fixed-dim transition-colors">English</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-outline font-label-sm text-label-sm hover:border-primary hover:text-primary transition-colors">Mandarin</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-outline font-label-sm text-label-sm hover:border-primary hover:text-primary transition-colors">French</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-outline font-label-sm text-label-sm hover:border-primary hover:text-primary transition-colors">German</button>
+</div>
+</div>
+<!-- Price Range Filter -->
+<div class="flex flex-col gap-stack-sm pt-4 border-t border-outline-variant">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider mb-4">Price Range (Per Day)</h3>
+<!-- Fake Range Slider -->
+<div class="relative w-full h-1 bg-surface-container-high rounded-full mb-6 mt-2">
+<div class="absolute left-1/4 right-1/4 h-full bg-secondary-container rounded-full"></div>
+<div class="absolute left-1/4 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-surface-container-lowest border-2 border-secondary-container rounded-full cursor-pointer shadow-sm"></div>
+<div class="absolute right-1/4 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 bg-surface-container-lowest border-2 border-secondary-container rounded-full cursor-pointer shadow-sm"></div>
+</div>
+<div class="flex justify-between items-center text-outline font-label-sm text-label-sm">
+<span>฿1,500</span>
+<span>฿5,000+</span>
+</div>
+</div>
+</aside>
+<!-- Listings Area -->
+<div class="w-full md:w-3/4 flex flex-col">
+<!-- Results Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-stack-lg gap-4">
+<p class="font-body-lg text-body-lg text-on-surface-variant">Showing <span class="font-semibold text-on-surface">124</span> available guides in Thailand</p>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="text-outline">Sort by:</span>
+<div class="flex items-center gap-1 cursor-pointer font-semibold text-on-surface">
+                            Recommended
+                            <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Guides Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-section-gap">
+<!-- Guide Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 border border-outline-variant/30 flex flex-col group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional portrait of a friendly Thai male tour guide smiling warmly. He is wearing a clean beige linen shirt and a discreet name badge. He stands inside an elegant museum gallery with traditional Thai art softly blurred in the background. Crisp lighting, premium corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrdk5NcM-QG_NQdHDHBOnryV-Jtx6xI3j73MZU48FIMFab3YbCOzTss2FwckXFvO48tNhXnEFoaMpjpuCRUMu3qKZsrpD9pcfzcJxN1HPCfBnYdojaDtJF4au3gW11ycYfGgCNhGaY9H-gUVZjRDUXYXEpZsmuZjY7gWZstI07EpbTaM0ToSfmHDg8CSfuVs2j2JmIsUxtY5QBI7-QtyfI8mgeq9t28TQZXK_nv9UC61O4BFcWmhtp"/>
+<div class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm px-2 py-1 rounded flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-secondary-container text-[14px] fill-icon">star</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">4.9</span>
+<span class="font-label-sm text-label-sm text-outline">(120 reviews)</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Niran S.</h3>
+<div class="text-right">
+<span class="font-headline-md text-[24px] text-secondary font-bold">฿2,500</span>
+<span class="font-body-md text-outline"> / day</span>
+</div>
+</div>
+<div class="flex items-center text-outline mb-4">
+<span class="material-symbols-outlined text-[18px] mr-1">location_on</span>
+<span class="font-body-md text-body-md">Bangkok &amp; Ayutthaya</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-on-surface-variant">Culture &amp; History</span>
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-on-surface-variant">English, Thai</span>
+</div>
+<div class="mt-auto">
+<button class="w-full py-3 border border-primary-container text-primary-container hover:bg-primary-container hover:text-on-primary transition-colors font-label-lg text-label-lg font-semibold rounded-lg">
+                                    View Profile
+                                </button>
+</div>
+</div>
+</div>
+<!-- Guide Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0px_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 border border-outline-variant/30 flex flex-col group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A bright, engaging portrait of a Thai female tour guide with a radiant smile. She is wearing a stylish light-colored casual blouse with a cross-body bag strap visible. She is outdoors in a lush, green tropical garden in Chiang Mai, Thailand, with a beautiful shallow depth of field. High-end lifestyle photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjl9yP3f2sXJHGDjfoSHGbkH11jqUdnQUCKxOBYCkj_Y0zXNG9TcrA6DMDrIOAc-wbM4Xdsl3ImuFGiCMQXespCogEDMWeKS7lA_D6Uwqq0iE3s2JzwZUEzj45T54RtvUFXXFTDGpRDi4kbMgW5ycSOvLVDfwm43k0sx46F30V7GJLV7J2xiv0vkVqaftqGSobi-RUMZuKFuibgD5b-t0BJfztzwnihlo3CLD1kM7JJFI0HoDZZNLI"/>
+<div class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm px-2 py-1 rounded flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-secondary-container text-[14px] fill-icon">star</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">5.0</span>
+<span class="font-label-sm text-label-sm text-outline">(85 reviews)</span>
+</div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Mali V.</h3>
+<div class="text-right">
+<span class="font-headline-md text-[24px] text-secondary font-bold">฿3,000</span>
+<span class="font-body-md text-outline"> / day</span>
+</div>
+</div>
+<div class="flex items-center text-outline mb-4">
+<span class="material-symbols-outlined text-[18px] mr-1">location_on</span>
+<span class="font-body-md text-body-md">Chiang Mai</span>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-on-surface-variant">Culinary Arts</span>
+<span class="px-3 py-1 bg-surface-container rounded-md font-label-sm text-label-sm text-on-surface-variant">English, French</span>
+</div>
+<div class="mt-auto">
+<button class="w-full py-3 border border-primary-container text-primary-container hover:bg-primary-container hover:text-on-primary transition-colors font-label-lg text-label-lg font-semibold rounded-lg">
+                                    View Profile
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More -->
+<div class="flex justify-center">
+<button class="px-8 py-3 border-2 border-outline text-on-surface-variant hover:border-primary hover:text-primary transition-colors font-label-lg text-label-lg font-semibold rounded-lg shadow-sm">
+                        Load More Guides
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Why Travel with a Local Guide Section -->
+<section class="bg-surface-container-low py-section-gap border-t border-outline-variant/30">
+<div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<h2 class="font-display-lg text-[40px] md:text-display-lg text-center text-on-surface mb-16">Why Travel with a Local Guide?</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-stack-lg">
+<!-- Feature 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 flex flex-col items-center text-center shadow-[0px_4px_20px_rgba(0,0,0,0.03)] hover:-translate-y-1 transition-transform duration-300">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]">explore</span>
+</div>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-3">Authentic Experiences</h3>
+<p class="font-body-md text-body-md text-outline">Go beyond the tourist trails and experience Thailand through the eyes of a local.</p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 flex flex-col items-center text-center shadow-[0px_4px_20px_rgba(0,0,0,0.03)] hover:-translate-y-1 transition-transform duration-300">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]">verified_user</span>
+</div>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-3">Verified Experts</h3>
+<p class="font-body-md text-body-md text-outline">Every guide is thoroughly vetted to ensure professionalism, knowledge, and safety.</p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 flex flex-col items-center text-center shadow-[0px_4px_20px_rgba(0,0,0,0.03)] hover:-translate-y-1 transition-transform duration-300">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]">tune</span>
+</div>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-3">Personalized</h3>
+<p class="font-body-md text-body-md text-outline">Tailor your itinerary on the fly. Your guide adapts to your interests and pace.</p>
+</div>
+<!-- Feature 4 -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 flex flex-col items-center text-center shadow-[0px_4px_20px_rgba(0,0,0,0.03)] hover:-translate-y-1 transition-transform duration-300">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]">forum</span>
+</div>
+<h3 class="font-headline-md text-[22px] text-on-surface mb-3">Seamless Translation</h3>
+<p class="font-body-md text-body-md text-outline">Bridge the language gap effortlessly, ensuring smooth interactions wherever you go.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-tertiary dark:bg-tertiary-container border-t border-outline-variant dark:border-outline">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-12 w-full max-w-container-max mx-auto gap-stack-lg">
+<div class="flex flex-col gap-2 items-center md:items-start">
+<a class="font-headline-md text-headline-md text-secondary dark:text-secondary-fixed tracking-tight" href="#">GoThailand</a>
+<p class="font-body-md text-body-md text-on-tertiary dark:text-on-tertiary-container opacity-80 text-sm">© 2024 GoThailand. All rights reserved.</p>
+</div>
+<nav class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="font-label-sm text-label-sm text-on-tertiary dark:text-on-tertiary-container opacity-80 hover:opacity-100 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">About Us</a>
+<a class="font-label-sm text-label-sm text-on-tertiary dark:text-on-tertiary-container opacity-80 hover:opacity-100 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-tertiary dark:text-on-tertiary-container opacity-80 hover:opacity-100 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-tertiary dark:text-on-tertiary-container opacity-80 hover:opacity-100 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Contact Us</a>
+<a class="font-label-sm text-label-sm text-on-tertiary dark:text-on-tertiary-container opacity-80 hover:opacity-100 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-300" href="#">Partner Program</a>
+</nav>
+</div>
+</footer>
+</body></html>

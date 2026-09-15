@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - GoThailand</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#476083",
+                        "on-secondary-fixed": "#221b00",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#705d00",
+                        "on-secondary-fixed-variant": "#544600",
+                        "primary": "#000613",
+                        "outline-variant": "#c4c6cf",
+                        "primary-fixed-dim": "#afc8f0",
+                        "surface-container": "#efeded",
+                        "inverse-primary": "#afc8f0",
+                        "secondary-fixed": "#ffe16d",
+                        "surface-container-highest": "#e4e2e2",
+                        "surface-variant": "#e4e2e2",
+                        "on-surface-variant": "#43474e",
+                        "tertiary": "#040607",
+                        "on-primary-container": "#6f88ad",
+                        "primary-container": "#001f3f",
+                        "tertiary-container": "#1c1f20",
+                        "surface-container-low": "#f5f3f3",
+                        "surface": "#fbf9f8",
+                        "surface-container-high": "#eae8e7",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1b1c1c",
+                        "surface-bright": "#fbf9f8",
+                        "outline": "#74777f",
+                        "on-background": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d4e3ff",
+                        "surface-dim": "#dbd9d9",
+                        "tertiary-fixed": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001c3a",
+                        "on-secondary-container": "#6e5c00",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fcd400",
+                        "secondary-fixed-dim": "#e9c400",
+                        "tertiary-fixed-dim": "#c5c7c8",
+                        "inverse-surface": "#303030",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#191c1d",
+                        "on-tertiary-container": "#848688",
+                        "background": "#fbf9f8",
+                        "on-primary-fixed-variant": "#2f486a",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-tertiary-fixed-variant": "#454748",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1200px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "section-gap": "80px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "label-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "headline-lg-mobile": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "display-lg": ["56px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["28px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .input-field {
+            @apply w-full bg-[#F4F4F4] border-transparent focus:border-primary focus:ring-0 rounded font-body-md text-on-surface py-3 px-4 transition-colors duration-200;
+        }
+        .input-label {
+            @apply block font-label-lg text-on-surface-variant mb-2;
+        }
+        .btn-primary {
+            @apply bg-[#FFD700] text-[#001F3F] font-label-lg font-bold py-3 px-6 rounded-lg transition-transform hover:-translate-y-0.5 shadow-sm hover:shadow-md;
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+<!-- Simple Header (No Navigation) -->
+<header class="bg-surface shadow-sm sticky top-0 z-50">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4 flex justify-between items-center">
+<a class="font-display-lg text-headline-md text-primary tracking-tight" href="#">GoThailand</a>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+<span class="font-label-lg uppercase tracking-wider text-xs font-bold text-outline">Secure Checkout</span>
+</div>
+</div>
+</header>
+<!-- Main Checkout Content -->
+<main class="flex-grow max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-stack-lg md:py-section-gap grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Checkout Steps -->
+<div class="lg:col-span-8 flex flex-col gap-stack-lg">
+<h1 class="font-headline-lg text-headline-lg text-primary">Complete Your Booking</h1>
+<!-- Step 1: Contact Info -->
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-outline-variant/30">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold">1</div>
+<h2 class="font-headline-md text-[24px]">Contact Information</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="input-label" for="firstName">First Name</label>
+<input class="input-field" id="firstName" placeholder="Jane" type="text"/>
+</div>
+<div>
+<label class="input-label" for="lastName">Last Name</label>
+<input class="input-field" id="lastName" placeholder="Doe" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="input-label" for="email">Email Address</label>
+<input class="input-field" id="email" placeholder="jane@example.com" type="email"/>
+<p class="font-label-sm text-outline mt-1">We'll send your booking confirmation here.</p>
+</div>
+<div class="md:col-span-2">
+<label class="input-label" for="phone">Phone Number</label>
+<input class="input-field" id="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Step 2: Traveler Details -->
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-outline-variant/30">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<h2 class="font-headline-md text-[24px]">Traveler Details</h2>
+</div>
+<div class="mb-4">
+<label class="input-label" for="specialReq">Special Requirements or Requests (Optional)</label>
+<textarea class="input-field resize-none" id="specialReq" placeholder="Dietary restrictions, accessibility needs, etc." rows="3"></textarea>
+</div>
+</section>
+<!-- Step 3: Payment -->
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-outline-variant/30">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<h2 class="font-headline-md text-[24px]">Payment Method</h2>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Credit Card Option -->
+<label class="flex items-start gap-4 p-4 border border-outline-variant rounded cursor-pointer hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-low">
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="payment_method" type="radio"/>
+<div class="flex-grow">
+<span class="font-label-lg block mb-1">Credit or Debit Card</span>
+<div class="grid grid-cols-2 gap-4 mt-3">
+<div class="col-span-2">
+<input class="input-field py-2" placeholder="Card Number" type="text"/>
+</div>
+<div>
+<input class="input-field py-2" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<input class="input-field py-2" placeholder="CVC" type="text"/>
+</div>
+</div>
+</div>
+</label>
+<!-- PromptPay Option -->
+<label class="flex items-center gap-4 p-4 border border-outline-variant rounded cursor-pointer hover:bg-surface-container-low transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-low">
+<input class="text-primary focus:ring-primary" name="payment_method" type="radio"/>
+<div class="flex-grow flex justify-between items-center">
+<span class="font-label-lg">PromptPay</span>
+<span class="material-symbols-outlined text-outline" data-icon="qr_code">qr_code</span>
+</div>
+</label>
+</div>
+</section>
+<div class="pt-4 flex justify-end">
+<button class="btn-primary w-full md:w-auto text-lg py-4 px-10">Complete Booking</button>
+</div>
+<div class="flex items-center justify-center md:justify-end gap-6 text-on-surface-variant mt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified_user">verified_user</span>
+<span class="font-label-sm">Secure 256-bit SSL Encryption</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="thumb_up">thumb_up</span>
+<span class="font-label-sm">Satisfaction Guarantee</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Order Summary -->
+<div class="lg:col-span-4 mt-8 lg:mt-0">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant/20 sticky top-[100px] overflow-hidden">
+<!-- Experience Image -->
+<div class="h-48 w-full relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A bright, professional photograph of a local Thai guide smiling warmly, standing in front of an ancient temple ruin in Ayutthaya. The lighting is golden hour, soft and inviting, emphasizing a premium travel experience. Corporate modern style, high resolution." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6Snxk4DOHqvpwME2wx4F4zUxVTt7APwsQMjEXJzkrLw0EuHTt_7LRw4JZD23EVYNHmeBCko8Txi2konr-qpg990sQDW4gAsukfHsu4shiPT7vaDy4nohczjeSHIIJuW-Cnav1dtt436IrA-ouMe9H3zolRt9qs1Iwy1VCUQmdIJeTjLt-ZfJTKOabCp17LMTcNTcTfrWCUCwfQx0GBFxy3XfpNKrZerVBl7q_DYCu3eNKIYJOEtGI')"></div>
+</div>
+<div class="p-6">
+<div class="mb-6 pb-6 border-b border-outline-variant/30">
+<h3 class="font-headline-md text-[20px] text-primary mb-2">Ayutthaya Historical Tour with Niran S.</h3>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md mb-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+<span>Oct 15, 2024</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span>2 Guests</span>
+</div>
+</div>
+<div class="space-y-4 mb-6 pb-6 border-b border-outline-variant/30 font-body-md">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Tour Base Price</span>
+<span class="text-primary font-medium">฿5,000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Taxes &amp; Fees</span>
+<span class="text-primary font-medium">฿350</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-6">
+<span class="font-headline-md text-[20px] text-primary">Total</span>
+<span class="font-headline-md text-[24px] text-primary">฿5,350</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="bg-tertiary text-on-tertiary mt-auto">
+<div class="max-w-container-max mx-auto px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-stack-lg border-t border-outline-variant/20">
+<div class="font-headline-md text-[24px] text-secondary-fixed">
+                GoThailand
+            </div>
+<div class="font-body-md text-on-tertiary opacity-80 text-sm">
+                © 2024 GoThailand. All rights reserved. Secure Checkout.
+            </div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined opacity-80" data-icon="lock">lock</span>
+<span class="material-symbols-outlined opacity-80" data-icon="shield">shield</span>
+</div>
+</div>
+</footer>
+</body></html>

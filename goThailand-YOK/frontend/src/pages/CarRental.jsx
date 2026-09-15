@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import CarSearchBar from "../components/CarSearchBar";
 import CarFilterSidebar from "../components/CarFilterSidebar";
 import CarCard from "../components/CarCard";
-import { cars } from "../data/cars";
+import { useCatalog } from "../context/CatalogContext";
 
 /**
  * CarRental (หน้าจองรถเช่า)
@@ -22,6 +22,7 @@ import { cars } from "../data/cars";
  * ------------------------------------------------------------
  */
 export default function CarRental() {
+  const { cars } = useCatalog();
   const [selectedTypes, setSelectedTypes] = useState([]); // ไม่ติ๊กอะไรไว้ก่อน = ไม่กรองประเภท
   const [maxPrice, setMaxPrice] = useState(5000);
 

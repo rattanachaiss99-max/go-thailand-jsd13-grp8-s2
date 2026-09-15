@@ -1,4 +1,4 @@
-import { carTypes, cars } from "../data/cars";
+import { useCatalog } from "../context/CatalogContext";
 
 /**
  * CarFilterSidebar
@@ -19,6 +19,8 @@ export default function CarFilterSidebar({
   maxPrice,
   onMaxPriceChange,
 }) {
+  const { carTypes, cars } = useCatalog();
+
   return (
     <div className="card sticky" style={{ padding: 24 }}>
       <div className="filter-title">Car Type</div>

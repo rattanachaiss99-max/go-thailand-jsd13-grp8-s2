@@ -4,8 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PhotoPlaceholder from "../components/PhotoPlaceholder";
 import Button from "../components/Button";
-import { cars, getCarById, pickupLocations } from "../data/cars";
 import { useBooking } from "../context/BookingContext";
+import { useCatalog } from "../context/CatalogContext";
 
 function toISODate(date) {
   const y = date.getFullYear();
@@ -33,6 +33,7 @@ export default function CarDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { selectCar } = useBooking();
+  const { cars, getCarById, pickupLocations } = useCatalog();
   const car = getCarById(id) || cars[0];
 
   const [activeImage, setActiveImage] = useState(0);

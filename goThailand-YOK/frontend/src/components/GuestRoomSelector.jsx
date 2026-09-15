@@ -11,14 +11,14 @@ import { useBooking } from "../context/BookingContext";
  * ------------------------------------------------------------
  */
 export default function GuestRoomSelector() {
-  const { booking, guestLimits, changeGuestCount, changeRoomCount } = useBooking();
+  const { cart, guestLimits, changeGuestCount, changeRoomCount } = useBooking();
 
   return (
     <div className="guest-editor">
       <QuantityStepper
         label="Adults"
         hint="Age 13+"
-        value={booking.guests.adults}
+        value={cart.accommodation.guests.adults}
         min={guestLimits.adults[0]}
         max={guestLimits.adults[1]}
         onDecrement={() => changeGuestCount("adults", -1)}
@@ -27,7 +27,7 @@ export default function GuestRoomSelector() {
       <QuantityStepper
         label="Children"
         hint="Age 0-12"
-        value={booking.guests.children}
+        value={cart.accommodation.guests.children}
         min={guestLimits.children[0]}
         max={guestLimits.children[1]}
         onDecrement={() => changeGuestCount("children", -1)}
@@ -35,7 +35,7 @@ export default function GuestRoomSelector() {
       />
       <QuantityStepper
         label="Rooms"
-        value={booking.rooms}
+        value={cart.accommodation.rooms}
         min={guestLimits.rooms[0]}
         max={guestLimits.rooms[1]}
         onDecrement={() => changeRoomCount(-1)}

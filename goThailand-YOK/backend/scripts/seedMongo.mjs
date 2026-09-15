@@ -1,7 +1,7 @@
 /**
  * seedMongo.mjs
  * ------------------------------------------------------------
- * Seeds the mock data in src/data/*.js into MongoDB, database
+ * Seeds the mock data in backend/seed-data/*.js into MongoDB, database
  * "gothailand", one collection per data type (cars, properties,
  * regions, hotelCategories, hotelSpecialOptions).
  *
@@ -12,10 +12,10 @@
  */
 import "dotenv/config";
 import { MongoClient } from "mongodb";
-import { cars } from "../src/data/cars.js";
-import { properties } from "../src/data/properties.js";
-import { regions } from "../src/data/regions.js";
-import { hotelCategories, hotelSpecialOptions } from "../src/data/masters.js";
+import { cars } from "../seed-data/cars.js";
+import { properties } from "../seed-data/properties.js";
+import { regions } from "../seed-data/regions.js";
+import { hotelCategories, hotelSpecialOptions } from "../seed-data/masters.js";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DB_NAME || "gothailand";

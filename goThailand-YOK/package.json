@@ -1,27 +1,19 @@
 {
-  "name": "firstdraft",
+  "name": "gothailand-yok",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "description": "Root orchestrator for the frontend/ (Vite+React) and backend/ (Express+MongoDB) packages. Run `npm run install:all` once, then `npm run dev:full`.",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "seed": "node scripts/seedMongo.mjs"
-  },
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "mongodb": "^7.6.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2"
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "seed": "npm run seed --prefix backend",
+    "server": "npm run server --prefix backend",
+    "server:dev": "npm run server:dev --prefix backend",
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "dev:full": "concurrently -n API,WEB -c blue,green \"npm:server:dev\" \"npm:dev\""
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "oxlint": "^1.75.0",
-    "vite": "^8.2.0"
+    "concurrently": "^10.0.5"
   }
 }

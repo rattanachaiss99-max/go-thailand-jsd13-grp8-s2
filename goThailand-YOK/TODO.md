@@ -25,11 +25,11 @@
 
 ## ✅ ทำไปแล้ว
 
-- **Product Card** — [`PropertyCard.jsx`](src/components/PropertyCard.jsx) (โหมด `list`/`mini`) และ [`CarCard.jsx`](src/components/CarCard.jsx) → ครอบคลุม `GT06`, `S2-12`
-- **Product List** — [`AccommodationListing.jsx`](src/pages/AccommodationListing.jsx) (ค้นหา + filter ราคา/keyword/ห้องนอน/ช่วงปรับปรุง) และ [`CarRental.jsx`](src/pages/CarRental.jsx) (filter ประเภทรถ/ราคา) → ครอบคลุม `S2-13`
-- **ตะกร้า** — [`BookingCart.jsx`](src/pages/BookingCart.jsx) + [`OrderSummary.jsx`](src/components/OrderSummary.jsx) (แก้วันที่/จำนวนผู้เข้าพักได้ในตะกร้า) → ครอบคลุม `GT09`, `S2-14` **(เฉพาะที่พัก)**
-- **หน้าชำระเงิน** — [`Checkout.jsx`](src/pages/Checkout.jsx) (ฟอร์มลูกค้า + เลือกวิธีจ่าย + สรุปยอด) → ครอบคลุม `GT10`, `S2-15` **(เฉพาะที่พัก)**
-- **หน้าสรุปรายการ** — [`BookingSuccess.jsx`](src/pages/BookingSuccess.jsx) (เลข booking ref + guard ห้ามเข้าตรง ๆ) → ครอบคลุม `GT11`, `S2-16` **(เฉพาะที่พัก)**
+- **Product Card** — [`PropertyCard.jsx`](frontend/src/components/PropertyCard.jsx) (โหมด `list`/`mini`) และ [`CarCard.jsx`](frontend/src/components/CarCard.jsx) → ครอบคลุม `GT06`, `S2-12`
+- **Product List** — [`AccommodationListing.jsx`](frontend/src/pages/AccommodationListing.jsx) (ค้นหา + filter ราคา/keyword/ห้องนอน/ช่วงปรับปรุง) และ [`CarRental.jsx`](frontend/src/pages/CarRental.jsx) (filter ประเภทรถ/ราคา) → ครอบคลุม `S2-13`
+- **ตะกร้า** — [`BookingCart.jsx`](frontend/src/pages/BookingCart.jsx) + [`OrderSummary.jsx`](frontend/src/components/OrderSummary.jsx) (แก้วันที่/จำนวนผู้เข้าพักได้ในตะกร้า) → ครอบคลุม `GT09`, `S2-14` **(เฉพาะที่พัก)**
+- **หน้าชำระเงิน** — [`Checkout.jsx`](frontend/src/pages/Checkout.jsx) (ฟอร์มลูกค้า + เลือกวิธีจ่าย + สรุปยอด) → ครอบคลุม `GT10`, `S2-15` **(เฉพาะที่พัก)**
+- **หน้าสรุปรายการ** — [`BookingSuccess.jsx`](frontend/src/pages/BookingSuccess.jsx) (เลข booking ref + guard ห้ามเข้าตรง ๆ) → ครอบคลุม `GT11`, `S2-16` **(เฉพาะที่พัก)**
 - **State กลาง** — `BookingContext` เชื่อม Detail → Cart → Checkout → Success ครบ flow ที่พัก
 - **รูปภาพ** — มีรูปจริงครบทั้งที่พัก (14 รายการ) และรถ (6 คัน) แล้ว ไม่ใช่ placeholder ว่างเปล่าเหมือนที่ Sprint 1 เคยติดปัญหาไว้
 - ทำเกินขอบเขตเดิม: เพิ่ม flow **รถเช่า** (Home, `CarRental.jsx` list, `CarDetail.jsx`) ที่ไม่ได้อยู่ใน backlog เดิม

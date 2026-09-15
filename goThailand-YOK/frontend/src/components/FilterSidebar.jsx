@@ -1,4 +1,5 @@
-import { facilityKeywords, bedroomOptions, renovationOptions } from "../data/properties";
+import { useCatalog } from "../context/CatalogContext";
+import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
 
 /**
  * FilterSidebar
@@ -28,6 +29,8 @@ export default function FilterSidebar({
   selectedRenovations,
   onToggleRenovation,
 }) {
+  const { facilityKeywords } = useCatalog();
+
   return (
     <div className="card sticky" style={{ padding: 24 }}>
       <div className="filter-title">Price Range (per night)</div>

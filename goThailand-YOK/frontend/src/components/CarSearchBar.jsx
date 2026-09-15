@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { carTypes } from "../data/cars";
+import { useCatalog } from "../context/CatalogContext";
 
 /** แปลง Date เป็นสตริง YYYY-MM-DD สำหรับ <input type="date"> (เหมือนกับ SearchBar) */
 function toISODate(date) {
@@ -21,6 +21,7 @@ const TODAY = toISODate(new Date());
  * ------------------------------------------------------------
  */
 export default function CarSearchBar() {
+  const { carTypes } = useCatalog();
   const [location, setLocation] = useState("Bangkok, Thailand");
   const [date, setDate] = useState(TODAY);
   const [vehicleType, setVehicleType] = useState("All Types");

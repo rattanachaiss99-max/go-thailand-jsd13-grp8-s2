@@ -8,8 +8,7 @@ import Button from "../components/Button";
 import DateRangeFields from "../components/DateRangeFields";
 import GuestRoomSelector from "../components/GuestRoomSelector";
 import { useBooking } from "../context/BookingContext";
-import { getPropertyById, properties } from "../data/properties";
-import { getRegionLabel } from "../data/regions";
+import { useCatalog } from "../context/CatalogContext";
 
 /**
  * AccommodationDetail (หน้าที่ 2/5)
@@ -25,11 +24,15 @@ import { getRegionLabel } from "../data/regions";
 export default function AccommodationDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { selectProperty, selectRoomType, selectedRoom, booking, nights } = useBooking();
+  const { selectProperty, previewProperty, selectRoomType, selectedRoom, cart, nights } = useBooking();
+  const { properties, getPropertyById, getRegionLabel } = useCatalog();
   const property = getPropertyById(id) || properties[0];
 
+  // แค่พรีวิว (ยังไม่ถือว่าอยู่ในตะกร้า) ให้ DateRangeFields/GuestRoomSelector
+  // บนหน้านี้แก้ไขค่าของที่พักที่กำลังดูอยู่ได้ — ต้องกด "Book Now" ถึงจะ
+  // commit เข้าตะกร้าจริง (ดู handleReserve ด้านล่าง)
   useEffect(() => {
-    selectProperty(property.id);
+    previewProperty(property.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [property.id]);
 
@@ -42,7 +45,7 @@ export default function AccommodationDetail() {
     };
 
   const currentPricePerNight = activeRoom.price_per_night || property.base_price_per_night || property.pricePerNight;
-  const roomCount = booking.rooms || 1;
+  const roomCount = cart.accommodation.rooms || 1;
   const subtotal = currentPricePerNight * nights * roomCount;
   const serviceFee = 500;
   const taxes = Math.round(subtotal * 0.05);

@@ -3,13 +3,13 @@ const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://vercel.live https://va.vercel-scripts.com https://*.clarity.ms https://fomo.codedthemes.com;
     style-src 'self' 'unsafe-inline' https://fomo.codedthemes.com https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://www.googletagmanager.com https://flagcdn.com https://*.openstreetmap.org https://*.clarity.ms https://*.bing.com https://fomo.codedthemes.com;
+    img-src 'self' blob: data: https://www.googletagmanager.com https://flagcdn.com https://*.openstreetmap.org https://*.tile.openstreetmap.org https://*.clarity.ms https://*.bing.com https://*.virtualearth.net https://*.arcgisonline.com https://server.arcgisonline.com https://fomo.codedthemes.com;
     font-src 'self' https://*.gstatic.com;
     object-src 'self';
     base-uri 'self';
     form-action 'self';
     media-src 'self' https://*.cloudfront.net;
-    connect-src 'self' https://*.onrender.com https://www.googletagmanager.com https://raw.githubusercontent.com https://fomo.codedthemes.com https://*.clarity.ms https://*.azurewebsites.net;
+    connect-src 'self' https://*.onrender.com https://www.googletagmanager.com https://raw.githubusercontent.com https://fomo.codedthemes.com https://*.clarity.ms https://*.azurewebsites.net https://*.openstreetmap.org https://*.arcgisonline.com https://*.virtualearth.net;
 `;
 
 const nextConfig = {

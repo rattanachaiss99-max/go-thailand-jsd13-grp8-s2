@@ -20,16 +20,25 @@ import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
  * AccommodationDetail (/detail/:id) พร้อมบันทึกที่พักที่เลือกไว้
  * ------------------------------------------------------------
  */
+const specialOptionChips = ["Free Cancellation", "Breakfast Included", "Parking", "Hotel Transfer"];
+
 export default function AccommodationListing() {
   const { properties } = useCatalog();
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedKeywords, setSelectedKeywords] = useState([]); // Popular Filters: ไม่ติ๊กอะไรไว้ก่อน (opt-in)
   const [selectedBedroom, setSelectedBedroom] = useState(null); // radio: เลือกได้ทีละ 1 ค่า หรือไม่เลือกเลย
   const [selectedRenovations, setSelectedRenovations] = useState([]); // checkbox: เลือกได้หลายค่า
+  const [selectedChips, setSelectedChips] = useState(["Breakfast Included"]); // chips แถวบน: ผูกกับ special_options ของ property
 
   const toggleKeyword = (keyword) => {
     setSelectedKeywords((prev) =>
       prev.includes(keyword) ? prev.filter((k) => k !== keyword) : [...prev, keyword]
+    );
+  };
+
+  const toggleChip = (label) => {
+    setSelectedChips((prev) =>
+      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
     );
   };
 
@@ -54,6 +63,8 @@ export default function AccommodationListing() {
       if (p.pricePerNight > maxPrice) return false;
       // ที่พักต้องมี keyword ที่ติ๊กไว้ "ครบทุกอัน" (AND) ถึงจะผ่านตัวกรอง
       if (!selectedKeywords.every((k) => p.keywords.includes(k))) return false;
+      // เช่นเดียวกัน chip แถวบนต้องมีครบทุกอันที่กดเลือกไว้ (AND)
+      if (!selectedChips.every((c) => p.special_options?.includes(c))) return false;
       if (bedroomTest && !bedroomTest(p.bedrooms)) return false;
       // ผ่านช่วงเวลาที่ติ๊กไว้ "อันใดอันหนึ่ง" (OR) ก็พอ
       if (renovationMaxMonths.length > 0) {
@@ -64,7 +75,7 @@ export default function AccommodationListing() {
       }
       return true;
     });
-  }, [maxPrice, selectedKeywords, selectedBedroom, selectedRenovations]);
+  }, [maxPrice, selectedKeywords, selectedChips, selectedBedroom, selectedRenovations]);
 
   return (
     <>
@@ -101,10 +112,14 @@ export default function AccommodationListing() {
 
           <section>
             <div className="chips">
-              <Chip label="Free Cancellation" />
-              <Chip label="Breakfast Included" defaultOn />
-              <Chip label="Private Pool" />
-              <Chip label="Beachfront" />
+              {specialOptionChips.map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  active={selectedChips.includes(label)}
+                  onToggle={() => toggleChip(label)}
+                />
+              ))}
             </div>
 
             <p className="muted" style={{ marginBottom: 18 }}>

@@ -17,7 +17,7 @@
  * ------------------------------------------------------------
  */
 
-export { hotelCategories, hotelSpecialOptions } from "./masters.js";
+export { hotelSpecialOptions } from "./masters.js";
 
 function imagesFor(id) {
   return [1, 2, 3, 4, 5].map((n) => `/images/${id}/${n}.jpg`);
@@ -171,18 +171,16 @@ export const properties = [
     descriptionExtra:
       "Each villa is a masterpiece of design — teak interiors, towering vaulted ceilings and curated antiques. Step outside to your expansive private deck, where a personal infinity pool merges visually with the river beyond.",
     facilities: [
-      "Free High-Speed Wi-Fi",
-      "Private Infinity Pool",
       "24/7 Butler Service",
-      "Holistic Spa",
+      "Spa",
       "State-of-the-Art Gym",
       "Fine Dining",
     ],
     specialOptions: [
       "Breakfast Included",
       "Free Cancellation",
-      "Private Pool",
-      "Beachfront",
+      "Parking",
+      "Hotel Transfer",
     ],
     rooms: [
       {
@@ -339,7 +337,7 @@ export const properties = [
       "Floating eco-villas moored on the Kwai Noi River, surrounded by sheer limestone cliffs and untouched rainforest.",
     descriptionExtra:
       "Step directly from your bedroom terrace into the cool, flowing river water for an authentic jungle experience.",
-    facilities: ["River Access", "Spa", "Free Wi-Fi"],
+    facilities: ["Spa", "Free Wi-Fi"],
     specialOptions: ["Breakfast Included", "Free Cancellation"],
     amenities: [
       { icon: "🌊", label: "Direct river access" },
@@ -378,8 +376,8 @@ export const properties = [
       "Colonial-inspired beachfront residence with a manicured lawn rolling down to the golden sands of Hua Hin's royal coast.",
     descriptionExtra:
       "Generous veranda living, private infinity pool and dedicated staff make this villa the choice for multi-generational escapes.",
-    facilities: ["Free Wi-Fi", "Pool", "Beach Access", "Spa"],
-    specialOptions: ["Breakfast Included", "Free Cancellation", "Private Pool", "Beachfront"],
+    facilities: ["Free Wi-Fi", "Pool", "Spa"],
+    specialOptions: ["Breakfast Included", "Free Cancellation", "Parking", "Hotel Transfer"],
     amenities: [
       { icon: "🏖️", label: "Direct beach access" },
       { icon: "🏊", label: "Private lap pool" },
@@ -418,7 +416,7 @@ export const properties = [
       "Canopy tents suspended above a private valley, with open-air bathing, forest dining and guided morning treks through the highlands surrounding Chiang Mai.",
     descriptionExtra:
       "A rare blend of adventure and comfort — wake to birdsong and mist rolling through the canopy below your deck.",
-    facilities: ["Free Wi-Fi", "Breakfast Included", "Forest Dining"],
+    facilities: ["Free Wi-Fi", "Breakfast Included"],
     specialOptions: ["Breakfast Included", "Free Cancellation"],
     amenities: [
       { icon: "🍳", label: "Breakfast included" },
@@ -536,7 +534,7 @@ export const properties = [
       "Elevated teak wood pavilions surrounded by emerald paddies, offering an authentic glimpse of rural northeast living.",
     descriptionExtra:
       "Participate in morning sticky rice rituals, cycle quiet village lanes and fall asleep to the gentle chorus of the fields.",
-    facilities: ["Free Wi-Fi", "Breakfast Included", "Cooking Class"],
+    facilities: ["Free Wi-Fi", "Breakfast Included"],
     specialOptions: ["Breakfast Included", "Free Cancellation"],
     amenities: [
       { icon: "🌾", label: "Paddy field view" },
@@ -614,8 +612,8 @@ export const properties = [
       "Tuscan-inspired private stone villas tucked between rolling grapevines with cool mountain breezes year-round.",
     descriptionExtra:
       "Private wine tastings on your terrace, outdoor fireplace for chilly evenings, and waking to mist over the vines.",
-    facilities: ["Free Wi-Fi", "Wine Tasting", "Pool", "Spa"],
-    specialOptions: ["Breakfast Included", "Free Cancellation", "Private Pool"],
+    facilities: ["Free Wi-Fi", "Pool", "Spa"],
+    specialOptions: ["Breakfast Included", "Free Cancellation", "Parking"],
     amenities: [
       { icon: "🍇", label: "Vineyard view" },
       { icon: "🍷", label: "Private wine tasting" },
@@ -655,8 +653,8 @@ export const properties = [
       "Iconic pavilions set within a coconut grove overlooking the Andaman Sea, setting the global standard for secluded coastal luxury.",
     descriptionExtra:
       "Private black-tiled swimming pool, direct steps to Pansea Beach's secluded cove and a holistic wellness centre.",
-    facilities: ["Free Wi-Fi", "Pool", "Spa", "Gym", "Beach Access"],
-    specialOptions: ["Breakfast Included", "Free Cancellation", "Private Pool", "Beachfront"],
+    facilities: ["Free Wi-Fi", "Pool", "Spa", "Gym"],
+    specialOptions: ["Breakfast Included", "Free Cancellation", "Parking", "Hotel Transfer"],
     amenities: [
       { icon: "🏖️", label: "Private beach access" },
       { icon: "🏊", label: "Private infinity pool" },
@@ -694,8 +692,8 @@ export const properties = [
       "Accessible only by sea, these cliffside pavilions sit wedged between towering limestone karsts and turquoise Andaman waters.",
     descriptionExtra:
       "Listen to the gentle slap of waves against the rocks below while watching rock climbers scale the sheer limestone faces.",
-    facilities: ["Free Wi-Fi", "Pool", "Beach Access", "Spa"],
-    specialOptions: ["Breakfast Included", "Free Cancellation", "Beachfront"],
+    facilities: ["Free Wi-Fi", "Pool", "Spa"],
+    specialOptions: ["Breakfast Included", "Free Cancellation", "Hotel Transfer"],
     amenities: [
       { icon: "🧗", label: "Rock climbing access" },
       { icon: "🏖️", label: "Steps to Railay West" },
@@ -733,8 +731,8 @@ export const properties = [
       "Hillside pool villas cascading down a private bay with uninterrupted views across the Gulf of Thailand.",
     descriptionExtra:
       "Surrounded by tropical gardens and fruit orchards, every villa offers an infinity-edge pool that merges with the horizon.",
-    facilities: ["Free Wi-Fi", "Pool", "Beach Access", "Spa", "Gym"],
-    specialOptions: ["Breakfast Included", "Free Cancellation", "Private Pool", "Beachfront"],
+    facilities: ["Free Wi-Fi", "Pool", "Spa", "Gym"],
+    specialOptions: ["Breakfast Included", "Free Cancellation", "Parking", "Hotel Transfer"],
     amenities: [
       { icon: "🌊", label: "Gulf of Thailand views" },
       { icon: "🏊", label: "Private plunge pool" },

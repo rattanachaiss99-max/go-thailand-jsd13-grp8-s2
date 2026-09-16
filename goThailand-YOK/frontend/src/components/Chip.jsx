@@ -1,20 +1,19 @@
-import { useState } from "react";
-
 /**
  * Chip
  * ------------------------------------------------------------
  * ปุ่มแท็กกรองข้อมูลแบบกดติด/กดปลด (toggle) ใช้ในแถบตัวกรองด้านบน
  * ของหน้ารายการค้นหา (เช่น "Free Cancellation", "Breakfast Included")
- * เก็บสถานะ on/off ไว้ในตัวเอง เพราะเป็น UI-only ยังไม่ผูกกับ query จริง
+ * เป็น controlled component — สถานะ on/off ถูกยกขึ้นไปเก็บที่หน้า
+ * AccommodationListing เพื่อให้ผูกกับการกรอง `special_options` ของ
+ * property ได้จริง
  * ------------------------------------------------------------
  */
-export default function Chip({ label, defaultOn = false }) {
-  const [on, setOn] = useState(defaultOn);
+export default function Chip({ label, active, onToggle }) {
   return (
     <button
       type="button"
-      className={`chip ${on ? "on" : ""}`}
-      onClick={() => setOn((v) => !v)}
+      className={`chip ${active ? "on" : ""}`}
+      onClick={onToggle}
     >
       {label}
     </button>

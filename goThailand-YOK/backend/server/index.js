@@ -104,11 +104,8 @@ app.get("/api/regions", async (_req, res, next) => {
 app.get("/api/masters", async (_req, res, next) => {
   try {
     const db = await getDb();
-    const [hotelCategories, hotelSpecialOptions] = await Promise.all([
-      db.collection("hotelCategories").find({}).toArray(),
-      db.collection("hotelSpecialOptions").find({}).toArray(),
-    ]);
-    res.json({ hotelCategories, hotelSpecialOptions });
+    const hotelSpecialOptions = await db.collection("hotelSpecialOptions").find({}).toArray();
+    res.json({ hotelSpecialOptions });
   } catch (err) {
     next(err);
   }

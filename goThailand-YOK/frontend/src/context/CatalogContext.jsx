@@ -29,7 +29,6 @@ const INITIAL_STATE = {
   cars: [],
   properties: [],
   regions: [],
-  hotelCategories: [],
   hotelSpecialOptions: [],
 };
 
@@ -56,7 +55,6 @@ export function CatalogProvider({ children }) {
           cars,
           properties,
           regions,
-          hotelCategories: masters.hotelCategories,
           hotelSpecialOptions: masters.hotelSpecialOptions,
         });
       } catch (err) {

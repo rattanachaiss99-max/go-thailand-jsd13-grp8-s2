@@ -22,16 +22,15 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
   guides,
   onSelectGuide,
 }) => {
-  const [destinationQuery, setDestinationQuery] = useState('Bangkok');
+  const [destinationQuery, setDestinationQuery] = useState('');
   const [selectedDates, setSelectedDates] = useState('15 Sep 2026');
   const [guestsCount, setGuestsCount] = useState('2 Guests');
 
   // Filters
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(['Cultural Expert']);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('English');
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [priceMax, setPriceMax] = useState<number>(5000);
   const [sortBy, setSortBy] = useState<string>('recommended');
-  const [showMore, setShowMore] = useState<boolean>(false);
 
   const guideTypes = [
     'Cultural Expert',
@@ -40,7 +39,7 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
     'Photography',
   ];
 
-  const languages = ['English', 'Mandarin', 'French', 'German'];
+  const languages = ['English', 'Mandarin', 'French', 'German', 'Thai', 'Spanish', 'Japanese', 'Korean'];
 
   const toggleType = (type: string) => {
     setSelectedTypes((prev) =>
@@ -50,13 +49,13 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
 
   const handleClearAll = () => {
     setSelectedTypes([]);
-    setSelectedLanguage('English');
+    setSelectedLanguage('');
     setPriceMax(5000);
     setDestinationQuery('');
   };
 
   const filteredGuides = useMemo(() => {
-    return guides.filter((guide) => {
+    const list = guides.filter((guide) => {
       // Price filter
       if (guide.pricePerDay > priceMax) return false;
 
@@ -73,7 +72,8 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
           if (type === 'Food & Culinary') {
             return (
               guide.specialties.includes('Local Food') ||
-              guide.specialties.includes('Culinary Arts')
+              guide.specialties.includes('Culinary Arts') ||
+              guide.specialties.includes('Food & Culinary')
             );
           }
           if (type === 'Adventure & Nature') {
@@ -97,14 +97,23 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
         const q = destinationQuery.toLowerCase();
         const inLocation = guide.location.toLowerCase().includes(q);
         const inName = guide.name.toLowerCase().includes(q);
-        if (!inLocation && !inName) return false;
+        const inBio = guide.bio.toLowerCase().includes(q);
+        if (!inLocation && !inName && !inBio) return false;
       }
 
       return true;
     });
-  }, [guides, selectedTypes, selectedLanguage, priceMax, destinationQuery]);
 
-  const displayedGuides = showMore ? filteredGuides : filteredGuides.slice(0, 2);
+    // Sorting
+    return [...list].sort((a, b) => {
+      if (sortBy === 'price-low') return a.pricePerDay - b.pricePerDay;
+      if (sortBy === 'price-high') return b.pricePerDay - a.pricePerDay;
+      if (sortBy === 'rating') return b.rating - a.rating;
+      return 0; // recommended default
+    });
+  }, [guides, selectedTypes, selectedLanguage, priceMax, destinationQuery, sortBy]);
+
+  const displayedGuides = filteredGuides;
 
   return (
     <div className="min-h-screen bg-[#faf9f6]">
@@ -391,18 +400,12 @@ export const Page1GuideList: React.FC<Page1GuideListProps> = ({
               ))}
             </div>
 
-            {/* Load More Guides button */}
-            {filteredGuides.length > 2 && (
-              <div className="text-center pt-6">
-                <button
-                  id="load-more-guides-btn"
-                  onClick={() => setShowMore(!showMore)}
-                  className="px-8 py-3 border border-stone-300 rounded-lg text-xs font-semibold text-stone-700 hover:bg-stone-100 transition-colors uppercase tracking-wider cursor-pointer bg-white"
-                >
-                  {showMore ? 'Show Fewer Guides' : 'Load More Guides'}
-                </button>
-              </div>
-            )}
+            {/* Footer guide count summary */}
+            <div className="text-center pt-8 border-t border-stone-200">
+              <p className="text-xs text-stone-500">
+                Displaying all <strong className="font-semibold text-stone-800">{displayedGuides.length}</strong> licensed local guides across Thailand • Fully verified & background-checked
+              </p>
+            </div>
           </div>
         </div>
 

@@ -52,4 +52,4 @@ export interface BookingState {
   createdAt?: string;
 }
 
-export type PageStep = 1 | 2 | 3 | 4 | 5;
+export type PageStep = 0 | 1 | 2 | 3 | 4 | 5;

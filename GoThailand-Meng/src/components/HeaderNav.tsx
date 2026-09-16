@@ -16,6 +16,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   isConfirmedPage = false,
 }) => {
   const stepsList: { step: PageStep; label: string; pageLabel: string }[] = [
+    { step: 0, label: 'Home Page', pageLabel: 'GoThailandHomePage.png' },
     { step: 1, label: 'Guide Directory', pageLabel: 'Guide_Page1.png' },
     { step: 2, label: 'Guide Profile', pageLabel: 'Guide_Page2.png' },
     { step: 3, label: 'Booking Details', pageLabel: 'Guide_Page3.png' },
@@ -33,12 +34,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               Page Sequence Flow
             </span>
             <span className="hidden sm:inline text-stone-400">
-              เรียงลำดับขั้นตอนตาม Page 1 → 5
+              Home → Guide 1 → Profile 2 → Details 3 → Checkout 4 → Confirm 5
             </span>
           </div>
           
           <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto py-0.5">
-            {stepsList.map((item, idx) => {
+            {stepsList.map((item) => {
               const isActive = currentStep === item.step;
               const isPassed = currentStep > item.step;
               return (
@@ -46,7 +47,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                   key={item.step}
                   id={`flow-step-btn-${item.step}`}
                   onClick={() => onSelectStep(item.step)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-all whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'bg-[#c99726] text-white font-medium shadow-sm ring-1 ring-amber-300/40'
                       : isPassed
@@ -61,7 +62,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
                     {isPassed ? '✓' : item.step}
                   </span>
                   <span>{item.label}</span>
-                  <span className="hidden md:inline text-[10px] opacity-75">({item.pageLabel.replace('.png','')})</span>
+                  <span className="hidden lg:inline text-[10px] opacity-75">({item.pageLabel.replace('.png','')})</span>
                 </button>
               );
             })}
@@ -76,11 +77,14 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <div className="flex items-center">
             <button
               id="brand-logo-btn"
-              onClick={() => onSelectStep(1)}
+              onClick={() => onSelectStep(0)}
               className="text-left group cursor-pointer"
             >
               <span className="font-serif-luxury text-2xl sm:text-3xl font-bold tracking-tight text-[#0b1a30] group-hover:text-[#c99726] transition-colors">
                 GoThailand
+              </span>
+              <span className="block text-[9px] text-stone-500 font-sans tracking-widest uppercase -mt-1">
+                Experience the Best of Asia
               </span>
             </button>
           </div>
@@ -89,15 +93,26 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {!isConfirmedPage ? (
             <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
               <button
+                id="nav-home-btn"
+                onClick={() => onSelectStep(0)}
+                className={`transition-colors cursor-pointer pb-1 ${
+                  currentStep === 0
+                    ? "relative text-[#0b1a30] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#c99726]"
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                Home
+              </button>
+              <button
                 id="nav-accommodation-btn"
-                onClick={() => onSelectStep(1)}
+                onClick={() => onSelectStep(0)}
                 className="text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
               >
                 Accommodation
               </button>
               <button
                 id="nav-carrental-btn"
-                onClick={() => onSelectStep(1)}
+                onClick={() => onSelectStep(0)}
                 className="text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
               >
                 Car Rental
@@ -105,20 +120,31 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               <button
                 id="nav-localguide-btn"
                 onClick={() => onSelectStep(1)}
-                className="relative text-[#0b1a30] font-semibold transition-colors cursor-pointer pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#c99726]"
+                className={`transition-colors cursor-pointer pb-1 ${
+                  currentStep >= 1
+                    ? "relative text-[#0b1a30] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#c99726]"
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
               >
-                Local Guide
+                Tourist Guide
               </button>
             </nav>
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
+              <button
+                id="nav-home-from-confirmation-btn"
+                onClick={() => onSelectStep(0)}
+                className="text-xs text-stone-600 hover:text-stone-900 font-medium px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+              >
+                Back to Home
+              </button>
               <button
                 id="nav-close-confirmation-btn"
                 onClick={() => onSelectStep(1)}
-                className="flex items-center gap-1.5 text-stone-600 hover:text-stone-900 text-sm font-medium px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                className="flex items-center gap-1.5 text-stone-600 hover:text-stone-900 text-xs font-medium px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
               >
                 <span>✕</span>
-                <span>Close</span>
+                <span>Guide Directory</span>
               </button>
             </div>
           )}
@@ -137,8 +163,8 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               
               <button
                 id="nav-booknow-btn"
-                onClick={() => onSelectStep(currentStep === 1 ? 2 : currentStep)}
-                className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 bg-[#0b1a30] text-white text-sm font-medium rounded-md hover:bg-[#152a4a] transition-colors cursor-pointer shadow-sm"
+                onClick={() => onSelectStep(1)}
+                className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 bg-[#f3ba36] text-stone-900 text-sm font-bold rounded-full hover:bg-[#e0a623] transition-all transform hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
               >
                 Book Now
               </button>

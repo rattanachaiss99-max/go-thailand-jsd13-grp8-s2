@@ -1,6 +1,6 @@
 {
   "name": "GoThailand - Local Guide Booking",
-  "description": "Comprehensive 5-step local tour guide booking platform in Thailand, featuring guide directory, profile, booking details, checkout, and booking confirmation.",
+  "description": "GoThailand luxury travel platform featuring Accommodation, Car Rental, and 10 verified Tourist Guides across Thailand with a multi-step booking experience.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

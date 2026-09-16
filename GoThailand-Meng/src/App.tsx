@@ -8,6 +8,7 @@ import { PageStep, Guide, BookingState } from './types';
 import { guidesData } from './data/mockData';
 import { HeaderNav } from './components/HeaderNav';
 import { Footer } from './components/Footer';
+import { Page0Home } from './components/Page0Home';
 import { Page1GuideList } from './components/Page1GuideList';
 import { Page2GuideProfile } from './components/Page2GuideProfile';
 import { Page3BookingDetails } from './components/Page3BookingDetails';
@@ -17,9 +18,9 @@ import { ContactGuideModal } from './components/ContactGuideModal';
 import { ViewBookingModal } from './components/ViewBookingModal';
 
 export default function App() {
-  const [currentStep, setCurrentStep] = useState<PageStep>(1);
+  const [currentStep, setCurrentStep] = useState<PageStep>(0);
   const [guides, setGuides] = useState<Guide[]>(guidesData);
-  const [selectedGuide, setSelectedGuide] = useState<Guide>(guidesData[0]); // Narin
+  const [selectedGuide, setSelectedGuide] = useState<Guide>(guidesData[0]); // Niran S.
   const [isProcessingPayment, setIsProcessingPayment] = useState<boolean>(false);
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
   const [showBookingModal, setShowBookingModal] = useState<boolean>(false);
@@ -165,6 +166,14 @@ export default function App() {
 
       {/* Main Step Render */}
       <main className="flex-1">
+        {currentStep === 0 && (
+          <Page0Home
+            onNavigateToGuides={() => navigateToStep(1)}
+            onSelectGuideFromHome={handleSelectGuide}
+            guides={guides}
+          />
+        )}
+
         {currentStep === 1 && (
           <Page1GuideList
             guides={guides}
@@ -215,8 +224,8 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
-      <Footer onSelectStep={navigateToStep} />
+      {/* Footer (for Steps 1 to 5; Step 0 has its own dedicated footer) */}
+      {currentStep !== 0 && <Footer onSelectStep={navigateToStep} />}
 
       {/* Modals */}
       {showContactModal && (

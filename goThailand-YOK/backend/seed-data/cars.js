@@ -252,18 +252,3 @@ export const cars = [
       "Leather upholstery, ambient lighting, and a smooth ride make every trip feel like an occasion of its own.",
   }),
 ];
-
-export const carTypes = [...new Set(cars.map((c) => c.category))];
-
-export const pickupLocations = [
-  "Bangkok (BKK) Suvarnabhumi Airport",
-  "Bangkok (DMK) Don Mueang Airport",
-  "Phuket (HKT) International Airport",
-  "Chiang Mai (CNX) International Airport",
-];
-
-export function getCarById(id) {
-  return cars.find(
-    (c) => String(c._id) === String(id) || String(c.id) === String(id)
-  );
-}

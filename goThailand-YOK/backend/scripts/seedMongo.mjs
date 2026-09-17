@@ -2,8 +2,7 @@
  * seedMongo.mjs
  * ------------------------------------------------------------
  * Seeds the mock data in backend/seed-data/*.js into MongoDB, database
- * "gothailand", one collection per data type (cars, properties,
- * regions, hotelSpecialOptions).
+ * "gothailand", one collection per data type (cars, properties, regions).
  *
  * Usage:
  *   1. cp .env.example .env   (fill in MONGODB_URI)
@@ -15,7 +14,6 @@ import { MongoClient } from "mongodb";
 import { cars } from "../seed-data/cars.js";
 import { properties } from "../seed-data/properties.js";
 import { regions } from "../seed-data/regions.js";
-import { hotelSpecialOptions } from "../seed-data/masters.js";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DB_NAME || "gothailand";
@@ -31,7 +29,6 @@ const collections = {
   cars,
   properties,
   regions,
-  hotelSpecialOptions,
 };
 
 async function seed() {
@@ -41,8 +38,9 @@ async function seed() {
   console.log(`Connected. Seeding database "${DB_NAME}"...`);
 
   try {
-    // hotelCategories ไม่ใช้แล้ว ลบ collection เก่าทิ้งถ้ายังหลงเหลืออยู่
+    // hotelCategories / hotelSpecialOptions ไม่ใช้แล้ว ลบ collection เก่าทิ้งถ้ายังหลงเหลืออยู่
     await db.collection("hotelCategories").drop().catch(() => {});
+    await db.collection("hotelSpecialOptions").drop().catch(() => {});
 
     for (const [name, docs] of Object.entries(collections)) {
       const collection = db.collection(name);

@@ -101,16 +101,6 @@ app.get("/api/regions", async (_req, res, next) => {
   }
 });
 
-app.get("/api/masters", async (_req, res, next) => {
-  try {
-    const db = await getDb();
-    const hotelSpecialOptions = await db.collection("hotelSpecialOptions").find({}).toArray();
-    res.json({ hotelSpecialOptions });
-  } catch (err) {
-    next(err);
-  }
-});
-
 /**
  * สร้างการจองจริง: รับตะกร้าที่อาจมีทั้งรถและที่พักพร้อมกัน (`cart.car`
  * และ/หรือ `cart.accommodation`) ค้นรถ/ที่พักจาก MongoDB สดๆ (ไม่เชื่อ

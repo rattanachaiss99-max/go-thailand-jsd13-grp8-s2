@@ -164,8 +164,8 @@ export function buildAccommodationItem({ cartAccommodation, customerInfo, proper
       category: property.category,
       room_name: room.name,
       location_label: property.location?.address_label || String(property.location),
-      featured_image: property.pictures?.[0] || property.images?.[0],
-      rating_avg: property.rating_avg || property.rating,
+      featured_image: property.pictures?.[0],
+      rating_avg: property.rating_avg,
     },
 
     hotel_name: property.name,

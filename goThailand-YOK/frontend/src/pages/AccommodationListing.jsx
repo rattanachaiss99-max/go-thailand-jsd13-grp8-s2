@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import FilterSidebar from "../components/FilterSidebar";
 import PropertyCard from "../components/PropertyCard";
-import Chip from "../components/Chip";
 import { useCatalog } from "../context/CatalogContext";
 import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
 
@@ -20,25 +19,16 @@ import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
  * AccommodationDetail (/detail/:id) พร้อมบันทึกที่พักที่เลือกไว้
  * ------------------------------------------------------------
  */
-const specialOptionChips = ["Free Cancellation", "Breakfast Included", "Parking", "Hotel Transfer"];
-
 export default function AccommodationListing() {
   const { properties } = useCatalog();
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedKeywords, setSelectedKeywords] = useState([]); // Popular Filters: ไม่ติ๊กอะไรไว้ก่อน (opt-in)
   const [selectedBedroom, setSelectedBedroom] = useState(null); // radio: เลือกได้ทีละ 1 ค่า หรือไม่เลือกเลย
   const [selectedRenovations, setSelectedRenovations] = useState([]); // checkbox: เลือกได้หลายค่า
-  const [selectedChips, setSelectedChips] = useState(["Breakfast Included"]); // chips แถวบน: ผูกกับ special_options ของ property
 
   const toggleKeyword = (keyword) => {
     setSelectedKeywords((prev) =>
       prev.includes(keyword) ? prev.filter((k) => k !== keyword) : [...prev, keyword]
-    );
-  };
-
-  const toggleChip = (label) => {
-    setSelectedChips((prev) =>
-      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
     );
   };
 
@@ -60,11 +50,16 @@ export default function AccommodationListing() {
       .map((o) => o.maxMonths);
 
     return properties.filter((p) => {
-      if (p.pricePerNight > maxPrice) return false;
+      if (p.base_price_per_night > maxPrice) return false;
       // ที่พักต้องมี keyword ที่ติ๊กไว้ "ครบทุกอัน" (AND) ถึงจะผ่านตัวกรอง
-      if (!selectedKeywords.every((k) => p.keywords.includes(k))) return false;
-      // เช่นเดียวกัน chip แถวบนต้องมีครบทุกอันที่กดเลือกไว้ (AND)
-      if (!selectedChips.every((c) => p.special_options?.includes(c))) return false;
+      // เทียบกับทั้ง facilities และ special_options รวมกัน เพราะ
+      // Popular Filters ตอนนี้รวม 2 ฟิลด์นี้ไว้เป็น list เดียวกันแล้ว
+      if (
+        !selectedKeywords.every(
+          (k) => p.facilities.includes(k) || p.special_options?.includes(k)
+        )
+      )
+        return false;
       if (bedroomTest && !bedroomTest(p.bedrooms)) return false;
       // ผ่านช่วงเวลาที่ติ๊กไว้ "อันใดอันหนึ่ง" (OR) ก็พอ
       if (renovationMaxMonths.length > 0) {
@@ -75,7 +70,7 @@ export default function AccommodationListing() {
       }
       return true;
     });
-  }, [maxPrice, selectedKeywords, selectedChips, selectedBedroom, selectedRenovations]);
+  }, [maxPrice, selectedKeywords, selectedBedroom, selectedRenovations]);
 
   return (
     <>
@@ -111,17 +106,6 @@ export default function AccommodationListing() {
           </aside>
 
           <section>
-            <div className="chips">
-              {specialOptionChips.map((label) => (
-                <Chip
-                  key={label}
-                  label={label}
-                  active={selectedChips.includes(label)}
-                  onToggle={() => toggleChip(label)}
-                />
-              ))}
-            </div>
-
             <p className="muted" style={{ marginBottom: 18 }}>
               {filteredProperties.length} propert{filteredProperties.length === 1 ? "y" : "ies"} found
             </p>

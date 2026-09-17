@@ -28,12 +28,12 @@ export default function PropertyCard({ property, mode = "list" }) {
   if (mode === "mini") {
     return (
       <article className="card hotel-mini">
-        <PhotoPlaceholder src={property.images[0]} alt={property.name} caption={locationText} />
+        <PhotoPlaceholder src={property.pictures[0]} alt={property.name} caption={locationText} />
         <div className="hotel-mini-body">
           <div className="between">
             <h3 style={{ fontSize: "1.05rem" }}>{property.name}</h3>
             <span className="badge-rate">
-              {(property.rating_avg || property.rating).toFixed(1)} <i>★</i>
+              {property.rating_avg.toFixed(1)} <i>★</i>
             </span>
           </div>
           <div className="loc" style={{ margin: "6px 0" }}>
@@ -42,7 +42,7 @@ export default function PropertyCard({ property, mode = "list" }) {
           <div className="between">
             <div className="muted" style={{ fontSize: ".85rem" }}>From</div>
             <div className="price" style={{ fontSize: "1.15rem" }}>
-              ฿{(property.base_price_per_night || property.pricePerNight).toLocaleString()}
+              ฿{property.base_price_per_night.toLocaleString()}
               <small>/night</small>
             </div>
           </div>
@@ -61,14 +61,14 @@ export default function PropertyCard({ property, mode = "list" }) {
 
   return (
     <article className="card hotel">
-      <PhotoPlaceholder src={property.images[0]} alt={property.name} caption={locationText}>
-        <span className="pill-img">{property.category || property.type}</span>
+      <PhotoPlaceholder src={property.pictures[0]} alt={property.name} caption={locationText}>
+        <span className="pill-img">{property.category}</span>
       </PhotoPlaceholder>
       <div className="hotel-body">
         <div className="between">
           <h3>{property.name}</h3>
           <span className="badge-rate">
-            {(property.rating_avg || property.rating).toFixed(1)} <i>★</i>
+            {property.rating_avg.toFixed(1)} <i>★</i>
           </span>
         </div>
         <div className="loc">
@@ -81,7 +81,7 @@ export default function PropertyCard({ property, mode = "list" }) {
           {property.description}
         </p>
         <div className="row" style={{ margin: "14px 0", flexWrap: "wrap", gap: 8 }}>
-          {(property.special_options || property.tags)?.map((tag) => (
+          {property.special_options?.map((tag) => (
             <span className="tag" key={tag}>
               {tag}
             </span>
@@ -93,7 +93,7 @@ export default function PropertyCard({ property, mode = "list" }) {
               {nights} nights, {cart.accommodation.guests.adults} adults
             </div>
             <div className="price">
-              ฿{(property.base_price_per_night || property.pricePerNight).toLocaleString()} <small>/ night</small>
+              ฿{property.base_price_per_night.toLocaleString()} <small>/ night</small>
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>

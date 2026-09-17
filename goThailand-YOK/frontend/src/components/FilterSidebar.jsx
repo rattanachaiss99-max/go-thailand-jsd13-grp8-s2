@@ -6,8 +6,10 @@ import { bedroomOptions, renovationOptions } from "../config/propertyFilters";
  * ------------------------------------------------------------
  * แถบตัวกรองด้านซ้ายของหน้ารายการค้นหา ประกอบด้วย:
  *  - ช่วงราคาสูงสุด (maxPrice) — กรองที่พักที่แพงกว่าราคาที่เลือกออก
- *  - Popular Filters (facilityKeywords) — checkbox เรียบ ๆ ดึงจาก
- *    ฟิลด์ `keywords` ของ properties จริงโดยตรง
+ *  - Popular Filters (facilityKeywords) — checkbox เรียบ ๆ รวม keyword
+ *    จากทั้งฟิลด์ `keywords` และ `special_options` ของ properties จริง
+ *    ไว้เป็น list เดียวกัน (special_options เดิมเคยเป็น chip แถวบนของ
+ *    หน้า AccommodationListing ย้ายมารวมที่นี่)
  *  - คะแนนรีวิว — ตัวกรอง UI เสริม (ยังไม่ผูก logic)
  *  - Number of bedrooms (bedroomOptions) — radio เลือกได้ทีละ 1 ค่า
  *    เทียบกับฟิลด์ `bedrooms` ของที่พัก กดตัวเลือกที่เลือกอยู่ซ้ำเพื่อ

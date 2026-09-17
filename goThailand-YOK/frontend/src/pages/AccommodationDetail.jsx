@@ -41,10 +41,10 @@ export default function AccommodationDetail() {
       room_type_id: "default",
       name: property.name,
       bed_type: "1 King Bed",
-      price_per_night: property.base_price_per_night || property.pricePerNight,
+      price_per_night: property.base_price_per_night,
     };
 
-  const currentPricePerNight = activeRoom.price_per_night || property.base_price_per_night || property.pricePerNight;
+  const currentPricePerNight = activeRoom.price_per_night || property.base_price_per_night;
   const roomCount = cart.accommodation.rooms || 1;
   const subtotal = currentPricePerNight * nights * roomCount;
   const serviceFee = 500;
@@ -70,7 +70,7 @@ export default function AccommodationDetail() {
         </p>
 
         <div className="gallery">
-          {property.images.map((src, i) => (
+          {property.pictures.map((src, i) => (
             <PhotoPlaceholder key={src} src={src} alt={`${property.name} photo ${i + 1}`} />
           ))}
         </div>
@@ -92,9 +92,9 @@ export default function AccommodationDetail() {
             <h1>{property.name}</h1>
             <div className="row" style={{ marginTop: 12, flexWrap: "wrap", gap: 12 }}>
               <span className="rate-box">
-                ★ {(property.rating_avg || property.rating).toFixed(1)}{" "}
+                ★ {property.rating_avg.toFixed(1)}{" "}
                 <span className="muted" style={{ fontWeight: 400 }}>
-                  ({property.total_reviews || property.reviews} reviews)
+                  ({property.total_reviews} reviews)
                 </span>
               </span>
               <span className="tag">{getRegionLabel(property.region)}</span>

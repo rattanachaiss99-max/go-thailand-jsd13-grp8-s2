@@ -41,10 +41,6 @@ export function fetchRegions() {
   return getJSON("/regions");
 }
 
-export function fetchMasters() {
-  return getJSON("/masters");
-}
-
 /** สร้างการจองจริง — บันทึกลง MongoDB (collections `bookings` + `booking_items`) คืน { order, item, ref } */
 export function createBooking(payload) {
   return postJSON("/bookings", payload);

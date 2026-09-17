@@ -66,7 +66,7 @@ export default function Checkout() {
   const activeRoom =
     selectedRoom || selectedProperty?.rooms?.[0] || {
       name: "Standard Suite",
-      price_per_night: selectedProperty.base_price_per_night || selectedProperty.pricePerNight,
+      price_per_night: selectedProperty.base_price_per_night,
     };
   const roomPrice = activeRoom.price_per_night || selectedProperty.base_price_per_night;
   const roomCount = cart.accommodation.rooms || 1;
@@ -284,7 +284,7 @@ export default function Checkout() {
               {hasAccommodationInCart && (
                 <div style={{ marginBottom: hasCarInCart ? 20 : 0 }}>
                   <div className="summary-thumb">
-                    <PhotoPlaceholder src={selectedProperty.images[0]} alt={selectedProperty.name} />
+                    <PhotoPlaceholder src={selectedProperty.pictures[0]} alt={selectedProperty.name} />
                   </div>
                   <div className="row" style={{ gap: 8, marginTop: 12, marginBottom: 4 }}>
                     <span className="tag" style={{ background: "var(--color-brand)", color: "#fff" }}>

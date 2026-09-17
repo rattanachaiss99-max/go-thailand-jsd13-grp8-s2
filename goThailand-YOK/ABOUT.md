@@ -45,7 +45,7 @@
 
 **สรุปสั้นๆ**: frontend ไม่เคย "คุยกับ MongoDB โดยตรง" — มันคุยกับ backend เท่านั้น ส่วน backend คือตัวเดียวที่คุยกับ MongoDB ได้ (นี่คือสถาปัตยกรรมมาตรฐานที่ทุกเว็บใหญ่ๆ ใช้ เพื่อไม่ให้ connection string/รหัสฐานข้อมูลหลุดไปอยู่บนเบราว์เซอร์ของผู้ใช้)
 
-**ข้อควรรู้สำคัญ**: backend มี endpoint 2 กลุ่ม — (1) **ดึงข้อมูล** (`GET /api/cars`, `/api/properties`, `/api/regions`, `/api/masters`) และ (2) **สร้าง/ดึงการจองจริง** (`POST /api/bookings`, `GET /api/bookings/:ref`) ตอนผู้ใช้กด "Confirm Booking" หน้า Checkout จะยิง `POST /api/bookings` ไปที่ backend จริง — **1 คำสั่งจองสามารถมีได้ทั้งที่พัก "และ" รถเช่าพร้อมกันในออเดอร์เดียว** (เพราะตะกร้ารองรับ "อย่างละ 1 รายการพร้อมกัน" ดูหัวข้อ 2.4) backend เป็นคนค้นรถ/ที่พักจาก MongoDB สดๆ คำนวณราคาเอง (ไม่เชื่อราคาที่ frontend ส่งมา) แล้ว **บันทึกลง MongoDB จริง** ใน collection `bookings` (หัวออเดอร์ใบเดียว รวมยอดทุกรายการ) และ `booking_items` (1 เอกสารต่อ 1 รายการที่จอง เช่น จองพร้อมกัน 2 อย่างจะมี 2 เอกสารใน `booking_items` แต่ `booking_ref` เดียวกัน) จากนั้นหน้า Booking Success จะยิง `GET /api/bookings/:ref` **ดึงข้อมูลที่บันทึกไว้จริงกลับมาแสดงครบทุกรายการ** — ดูหัวข้อ 1.2 และ 1.3 ด้านล่าง
+**ข้อควรรู้สำคัญ**: backend มี endpoint 2 กลุ่ม — (1) **ดึงข้อมูล** (`GET /api/cars`, `/api/properties`, `/api/regions`) และ (2) **สร้าง/ดึงการจองจริง** (`POST /api/bookings`, `GET /api/bookings/:ref`) ตอนผู้ใช้กด "Confirm Booking" หน้า Checkout จะยิง `POST /api/bookings` ไปที่ backend จริง — **1 คำสั่งจองสามารถมีได้ทั้งที่พัก "และ" รถเช่าพร้อมกันในออเดอร์เดียว** (เพราะตะกร้ารองรับ "อย่างละ 1 รายการพร้อมกัน" ดูหัวข้อ 2.4) backend เป็นคนค้นรถ/ที่พักจาก MongoDB สดๆ คำนวณราคาเอง (ไม่เชื่อราคาที่ frontend ส่งมา) แล้ว **บันทึกลง MongoDB จริง** ใน collection `bookings` (หัวออเดอร์ใบเดียว รวมยอดทุกรายการ) และ `booking_items` (1 เอกสารต่อ 1 รายการที่จอง เช่น จองพร้อมกัน 2 อย่างจะมี 2 เอกสารใน `booking_items` แต่ `booking_ref` เดียวกัน) จากนั้นหน้า Booking Success จะยิง `GET /api/bookings/:ref` **ดึงข้อมูลที่บันทึกไว้จริงกลับมาแสดงครบทุกรายการ** — ดูหัวข้อ 1.2 และ 1.3 ด้านล่าง
 
 ---
 
@@ -117,8 +117,7 @@ goThailand-YOK/
 │   ├── seed-data/                 # ไฟล์ข้อมูล mock ต้นทาง (เป็นแค่ "วัตถุดิบ" ให้ seed script อ่าน)
 │   │   ├── cars.js
 │   │   ├── properties.js
-│   │   ├── regions.js
-│   │   └── masters.js
+│   │   └── regions.js
 │   ├── .env                      # (ไม่ commit ขึ้น git) เก็บรหัสลับต่อ MongoDB
 │   ├── .env.example              # ตัวอย่างไฟล์ .env ให้เพื่อนในทีม copy ไปใช้
 │   └── package.json
@@ -174,7 +173,6 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | `GET /api/properties`         | `properties`               | ที่พักทั้งหมด เรียงตาม `_id` น้อยไปมาก                                                                                  |
 | `GET /api/properties/:id`     | `properties`               | ที่พัก 1 รายการที่ตรงกับ id/slug — ถ้าไม่เจอตอบกลับ `404`                                                              |
 | `GET /api/regions`            | `regions`                  | รายชื่อภาคทั้งหมด (เหนือ/อีสาน/กลาง/ใต้)                                                                                |
-| `GET /api/masters`            | `hotelCategories` + `hotelSpecialOptions` | รวมสองอย่างไว้ใน object เดียว `{ hotelCategories: [...], hotelSpecialOptions: [...] }`                       |
 | `POST /api/bookings`          | `cars`/`properties` (ค้นหา) → เขียนลง `bookings` + `booking_items` | **สร้างการจองจริง** รับ body `{ cart: { accommodation?, car? }, customerInfo }` — มีได้ 1 หรือ 2 ฟิลด์ใน `cart` พร้อมกัน (ตามที่ตะกร้ามีตอนนั้น) ดูรายละเอียดขั้นตอนที่หัวข้อ 1.3 ด้านล่าง คืน `201 { order, items, ref }` (**`items` เป็น array เสมอ** มี 1 element ถ้าจองอย่างเดียว หรือ 2 elements ถ้าจองพร้อมกันทั้งคู่) |
 | `GET /api/bookings/:ref`      | `bookings` + `booking_items`| ดึงการจองที่บันทึกไว้แล้วกลับมาด้วยเลขที่การจอง (`booking_ref`) คืน `{ order, items }` (**`items` เป็น array** — ดึงมาครบทุกรายการที่อยู่ใน order นั้น ด้วย `booking_ref` เดียวกัน) — ถ้าไม่เจอตอบกลับ `404` |
 
@@ -213,8 +211,8 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 **ทำงานตามลำดับนี้:**
 
 1. อ่านค่า `MONGODB_URI` และ `MONGODB_DB_NAME` จาก `.env` — ถ้าไม่มี `MONGODB_URI` จะพิมพ์เตือนแล้วหยุดทันที
-2. import ข้อมูลดิบจากไฟล์ในโฟลเดอร์ `backend/seed-data/` (`cars`, `properties`, `regions`, `hotelCategories`, `hotelSpecialOptions`)
-3. เก็บทั้ง 5 อย่างไว้ใน object ชื่อ `collections` — key คือชื่อ collection ที่จะสร้างใน MongoDB, value คือ array ข้อมูล
+2. import ข้อมูลดิบจากไฟล์ในโฟลเดอร์ `backend/seed-data/` (`cars`, `properties`, `regions`)
+3. เก็บทั้ง 3 อย่างไว้ใน object ชื่อ `collections` — key คือชื่อ collection ที่จะสร้างใน MongoDB, value คือ array ข้อมูล
 4. เชื่อมต่อ MongoDB แล้ว **วนลูปทีละ collection**: ลบของเก่าทั้งหมดใน collection นั้นทิ้งก่อน (`deleteMany({})`) แล้วค่อยใส่ข้อมูลใหม่ทั้งหมดเข้าไป (`insertMany(...)`)
 5. ปิดการเชื่อมต่อ พิมพ์สรุปจำนวน document ที่ใส่ไปในแต่ละ collection
 
@@ -231,7 +229,6 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | `galleryFor(mainImage)`     | ฟังก์ชัน   | รับรูปหลัก 1 รูป แล้วคืน array รูป 4 รูป (รูปหลักซ้ำ + รูปภายในรถ + รูปท้ายรถ) เพื่อให้ทุกคันมีแกลเลอรีอย่างน้อย 4 รูปโดยไม่ต้องหารูปจริงทุกมุม            |
 | `buildCar({...})`           | ฟังก์ชัน   | "โรงงานสร้างรถ 1 คัน" — รับพารามิเตอร์ดิบๆ เช่น `brand`, `model`, `dailyRate`, `seats` แล้วประกอบเป็น object เต็มรูปแบบตาม schema จริงที่จะเก็บใน MongoDB (มี `registration_and_license`, `specs`, `reviews_summary` ฯลฯ ซ้อนกันเป็นชั้นๆ) |
 | `cars`                      | array      | ผลลัพธ์จากการเรียก `buildCar()` 6 ครั้ง = รถ 6 คัน — **นี่คือตัวที่ seed script เอาไปใส่ MongoDB collection `cars`**                                        |
-| `carTypes`, `pickupLocations`, `getCarById()` | (เหลืออยู่ในไฟล์) | เป็น export เก่าที่ frontend เคยใช้ตอนยังอ่าน mock file ตรงๆ **ตอนนี้ไม่มีใครเรียกใช้แล้ว** (frontend มีของตัวเองใน `CatalogContext` แทน) — ปล่อยไว้เฉยๆ ไม่กระทบอะไร |
 
 ### `properties.js`
 
@@ -239,23 +236,16 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | ------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `imagesFor(id)`                 | ฟังก์ชัน   | สร้าง path รูปภาพ 5 รูปจาก id ที่พัก (เช่น `/images/siam-heritage-sanctuary/1.jpg` ... `5.jpg`)                                              |
 | `makeLocation(...)`             | ฟังก์ชัน   | ประกอบข้อมูลตำแหน่งที่ตั้ง (เมือง, เขต, พิกัด, สถานที่ใกล้เคียง) เป็น object เดียว                                                          |
-| `buildAccommodation({...})`     | ฟังก์ชัน   | "โรงงานสร้างที่พัก 1 แห่ง" เหมือน `buildCar` แต่สำหรับที่พัก — ใส่ `rooms[]`, `facilities[]`, `pricing_rules[]` ฯลฯ ตาม schema             |
+| `buildAccommodation({...})`     | ฟังก์ชัน   | "โรงงานสร้างที่พัก 1 แห่ง" เหมือน `buildCar` แต่สำหรับที่พัก — ใส่ `rooms[]`, `facilities[]` ฯลฯ ตาม schema (ตัด `categories`, `is_featured`, `status`, `currency`, `pricing_rules`, `created_at`, `updated_at`, `amenities` และ top-level `nearby` alias ออกแล้ว เพราะไม่มีจุดไหนในระบบอ่านค่าพวกนี้ไปใช้จริง — `nearby` ที่ยังใช้จริงคือ `location.nearby_landmarks`) |
 | `properties`                    | array      | ผลลัพธ์จาก `buildAccommodation()` 14 ครั้ง = ที่พัก 14 แห่ง (กลาง 5, เหนือ 3, อีสาน 3, ใต้ 3) — **สิ่งที่ seed เข้า collection `properties`** |
-| `getPropertyById()`, `getOtherProperties()`, `facilityKeywords`, `bedroomOptions`, `renovationOptions` | (เหลืออยู่ในไฟล์) | export เก่าเช่นกัน ไม่มีใครเรียกใช้แล้ว — ตัวที่ frontend ใช้จริงตอนนี้คือของใน `CatalogContext` (สำหรับ `getPropertyById`/`getOtherProperties`) และ `frontend/src/config/propertyFilters.js` (สำหรับ `bedroomOptions`/`renovationOptions`) |
-
-### `masters.js`
-
-| ชื่อ                   | ประเภท | หน้าที่                                                                          |
-| ----------------------- | ------ | ----------------------------------------------------------------------------------- |
-| `hotelCategories`       | array  | 3 หมวดหมู่ที่พัก (Private Villa, Luxury Hotel, B&B) — seed เข้า collection ชื่อเดียวกัน |
-| `hotelSpecialOptions`   | array  | 4 ตัวเลือกพิเศษ (Breakfast, Private Pool, Beach Front, Free Cancellation) — seed เข้า collection ชื่อเดียวกัน |
 
 ### `regions.js`
 
 | ชื่อ                   | ประเภท   | หน้าที่                                                                 |
 | ----------------------- | -------- | ---------------------------------------------------------------------- |
 | `regions`               | array    | 4 ภาคของไทย (north/isan/central/south) พร้อมชื่อไทย+อังกฤษ — seed เข้า collection `regions` |
-| `getRegionLabel(id)`    | ฟังก์ชัน | เหลืออยู่ในไฟล์แต่ไม่มีใครเรียกใช้แล้ว (frontend มีของตัวเองใน `CatalogContext`) |
+
+> `masters.js` (`hotelCategories`, `hotelSpecialOptions`), และ export เก่าที่เคยเหลือค้าง (`getCarById`, `carTypes`, `pickupLocations` ใน `cars.js`, `getPropertyById`/`getOtherProperties`/`facilityKeywords`/`bedroomOptions`/`renovationOptions` ใน `properties.js`, `getRegionLabel` ใน `regions.js`) **ถูกลบออกทั้งหมดแล้ว** เพราะเป็น dead code ที่ไม่มีจุดไหนเรียกใช้ (frontend มีของตัวเองใน `CatalogContext`/`config/propertyFilters.js` ครบอยู่แล้ว) และไม่มี collection ไหนใน MongoDB ที่ยังต้องใช้ `hotelCategories`/`hotelSpecialOptions` อีกต่อไป
 
 ---
 
@@ -267,7 +257,7 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 
 ```
 <BrowserRouter>                 ← เปิดใช้การเปลี่ยนหน้าแบบ SPA (ไม่ reload หน้าเว็บ)
-  <CatalogProvider>             ← ①  ดึงข้อมูล cars/properties/regions/masters จาก API ก่อน
+  <CatalogProvider>             ← ①  ดึงข้อมูล cars/properties/regions จาก API ก่อน
     <BookingProvider>           ← ②  เตรียม state การจอง (ใช้ข้อมูลจาก ① เป็นค่าเริ่มต้น)
       <App />                   ← ③  ทุกหน้าเว็บ/ทุก route อยู่ในนี้
     </BookingProvider>
@@ -288,12 +278,13 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | `fetchCars()`        | ฟังก์ชัน   | เรียก `getJSON("/cars")` → คืนรถทั้งหมด                                                                                                    |
 | `fetchProperties()`  | ฟังก์ชัน   | เรียก `getJSON("/properties")` → คืนที่พักทั้งหมด                                                                                          |
 | `fetchRegions()`     | ฟังก์ชัน   | เรียก `getJSON("/regions")` → คืนรายชื่อภาค                                                                                                |
-| `fetchMasters()`     | ฟังก์ชัน   | เรียก `getJSON("/masters")` → คืน `{ hotelCategories, hotelSpecialOptions }`                                                               |
 | `postJSON(path, body)` | ฟังก์ชัน | ฟังก์ชันกลางฝั่ง POST: ยิง `fetch()` แบบ `method: "POST"` พร้อม `body` เป็น JSON — ถ้า response ไม่ ok จะโยน error พร้อมข้อความจาก backend (ถ้ามี) |
 | `createBooking(payload)` | ฟังก์ชัน | เรียก `postJSON("/bookings", payload)` → **สร้างการจองจริง** คืน `{ order, items, ref }` (`items` เป็น array) |
 | `fetchBookingByRef(ref)` | ฟังก์ชัน | เรียก `getJSON(\`/bookings/${ref}\`)` → ดึงการจองที่บันทึกไว้แล้วกลับมา คืน `{ order, items }` (`items` เป็น array) |
 
-**ใครเรียกไฟล์นี้**: `CatalogContext.jsx` เรียก `fetchCars`/`fetchProperties`/`fetchRegions`/`fetchMasters`, `BookingContext.jsx` เรียก `createBooking` (ใน `confirmBooking()`), และ `BookingSuccess.jsx` เรียก `fetchBookingByRef` โดยตรง (หน้าอื่นไม่ต้องรู้จักไฟล์นี้เลย เพราะดึงข้อมูลผ่าน `useCatalog()`/`useBooking()` อีกที)
+> `fetchMasters()` / `GET /api/masters` เคยมีไว้ดึง `hotelCategories`/`hotelSpecialOptions` **ถูกลบออกแล้ว** เพราะทั้งสอง master data นี้ไม่มี component ไหนใน frontend เรียกใช้จริงเลย (เป็น dead data ที่เดินทางมาไกลถึง context แต่ไม่มีใครหยิบไปโชว์)
+
+**ใครเรียกไฟล์นี้**: `CatalogContext.jsx` เรียก `fetchCars`/`fetchProperties`/`fetchRegions`, `BookingContext.jsx` เรียก `createBooking` (ใน `confirmBooking()`), และ `BookingSuccess.jsx` เรียก `fetchBookingByRef` โดยตรง (หน้าอื่นไม่ต้องรู้จักไฟล์นี้เลย เพราะดึงข้อมูลผ่าน `useCatalog()`/`useBooking()` อีกที)
 
 ## 2.3 `frontend/src/context/CatalogContext.jsx` — คลังข้อมูล "แคตตาล็อกสินค้า"
 
@@ -308,13 +299,11 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | `cars`               | array           | รถทั้งหมดที่ได้จาก `GET /api/cars`                                                                    |
 | `properties`         | array           | ที่พักทั้งหมดที่ได้จาก `GET /api/properties`                                                         |
 | `regions`            | array           | รายชื่อภาคที่ได้จาก `GET /api/regions`                                                               |
-| `hotelCategories`    | array           | หมวดหมู่ที่พักที่ได้จาก `GET /api/masters`                                                            |
-| `hotelSpecialOptions`| array           | ตัวเลือกพิเศษที่ได้จาก `GET /api/masters`                                                            |
 
 **ขั้นตอนการทำงาน (`useEffect` ที่รันตอน component นี้เกิดขึ้นครั้งแรก):**
 
 1. ตั้ง `status` เป็น `"loading"`
-2. ยิง 4 คำขอพร้อมกัน (`fetchCars`, `fetchProperties`, `fetchRegions`, `fetchMasters`) ด้วย `Promise.all` (เร็วกว่ายิงทีละอัน เพราะรอพร้อมกันแทนที่จะรอเรียงคิว)
+2. ยิง 3 คำขอพร้อมกัน (`fetchCars`, `fetchProperties`, `fetchRegions`) ด้วย `Promise.all` (เร็วกว่ายิงทีละอัน เพราะรอพร้อมกันแทนที่จะรอเรียงคิว)
 3. ถ้าสำเร็จหมดทุกอัน → เซฟผลลัพธ์ทั้งหมดลง state, ตั้ง `status = "ready"`
 4. ถ้าอันใดอันหนึ่ง fail (เช่น backend ปิดอยู่) → ตั้ง `status = "error"` พร้อมข้อความ error
 
@@ -330,7 +319,7 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 | `getRegionLabel(regionId)`               | `regionId` เช่น `"central"`    | คืนชื่อภาคภาษาไทย เช่น `"ภาคกลาง"` — คืนสตริงว่างถ้าไม่เจอ                                                |
 | `pickupLocations`                        | -                              | รายชื่อจุดรับ-คืนรถ 4 จุด — **เป็นค่าคงที่ hardcode ไว้ในไฟล์นี้เลย ไม่ได้ดึงจาก MongoDB** (เพราะเป็นแค่ตัวเลือก UI ไม่ใช่ "ข้อมูลธุรกิจ" ที่ต้องเก็บในฐานข้อมูล) |
 
-**สิ่งที่แจกจ่ายออกไปผ่าน `useCatalog()`** (เรียกใช้จากไฟล์ไหนก็ได้ที่อยู่ภายใต้ `<CatalogProvider>`): รวมทุกอย่างข้างบน (`status`, `error`, `cars`, `properties`, `regions`, `hotelCategories`, `hotelSpecialOptions`, `pickupLocations`, `carTypes`, `facilityKeywords`, `getCarById`, `getPropertyById`, `getOtherProperties`, `getRegionLabel`)
+**สิ่งที่แจกจ่ายออกไปผ่าน `useCatalog()`** (เรียกใช้จากไฟล์ไหนก็ได้ที่อยู่ภายใต้ `<CatalogProvider>`): รวมทุกอย่างข้างบน (`status`, `error`, `cars`, `properties`, `regions`, `pickupLocations`, `carTypes`, `facilityKeywords`, `getCarById`, `getPropertyById`, `getOtherProperties`, `getRegionLabel`)
 
 ## 2.4 `frontend/src/context/BookingContext.jsx` — คลังข้อมูล "ตะกร้า/การจองปัจจุบัน"
 
@@ -508,7 +497,7 @@ Backend มี 2 หน้าที่: (1) **เปิดประตู (API) 
 
 | ชื่อ                                                                     | อยู่ที่ไหน                              | ความหมาย                                                                                                                   |
 | ------------------------------------------------------------------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `cars`, `properties`, `regions`, `hotelCategories`, `hotelSpecialOptions` | `CatalogContext`                        | ข้อมูล "แคตตาล็อก" จาก MongoDB — ห้ามสร้าง state ซ้ำแยกในหน้าอื่นสำหรับข้อมูลเดียวกัน ให้ดึงจาก `useCatalog()` เสมอ       |
+| `cars`, `properties`, `regions` | `CatalogContext`                        | ข้อมูล "แคตตาล็อก" จาก MongoDB — ห้ามสร้าง state ซ้ำแยกในหน้าอื่นสำหรับข้อมูลเดียวกัน ให้ดึงจาก `useCatalog()` เสมอ       |
 | `cart`                                                                    | `BookingContext`                        | state ตะกร้าตรงกลาง แยกเป็น `cart.accommodation` และ `cart.car` (คนละ field, อยู่ด้วยกันได้พร้อมกัน แต่ละอย่างมี `inCart: boolean`) — ห้ามสร้าง state ชื่อซ้ำแยกในหน้าอื่น ให้ดึงจาก `useBooking()` แทน (ชื่อเก่า `booking` object เดี่ยวถูกเลิกใช้แล้ว) |
 | `hasAccommodationInCart`, `hasCarInCart`                                 | `BookingContext`                        | shortcut boolean ของ `cart.accommodation.inCart`/`cart.car.inCart` — ใช้ guard route และแสดง/ซ่อน section แบบมีเงื่อนไขในหลายหน้า |
 | `selectedProperty`, `selectedCar`, `selectedRoom`                       | `BookingContext`                        | ของที่กำลังจองอยู่ (มาจาก `cart.accommodation.propertyId`/`cart.car.carId`/`cart.accommodation.roomTypeId`)               |

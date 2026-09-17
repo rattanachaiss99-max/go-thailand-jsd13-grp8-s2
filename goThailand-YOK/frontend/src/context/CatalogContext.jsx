@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { fetchCars, fetchProperties, fetchRegions, fetchMasters } from "../api/client";
+import { fetchCars, fetchProperties, fetchRegions } from "../api/client";
 
 /**
  * CatalogContext
  * ------------------------------------------------------------
- * โหลดข้อมูล cars / properties / regions / masters จาก MongoDB
+ * โหลดข้อมูล cars / properties / regions จาก MongoDB
  * ผ่าน GoThailand API (server/index.js) ครั้งเดียวตอนแอปเริ่มทำงาน
  * แล้วแจกจ่ายให้ทุกหน้าใช้แทนการ import จาก src/data/*.js ตรง ๆ
  *
@@ -29,7 +29,6 @@ const INITIAL_STATE = {
   cars: [],
   properties: [],
   regions: [],
-  hotelSpecialOptions: [],
 };
 
 export function CatalogProvider({ children }) {
@@ -42,11 +41,10 @@ export function CatalogProvider({ children }) {
     async function load() {
       setState((prev) => ({ ...prev, status: "loading", error: null }));
       try {
-        const [cars, properties, regions, masters] = await Promise.all([
+        const [cars, properties, regions] = await Promise.all([
           fetchCars(),
           fetchProperties(),
           fetchRegions(),
-          fetchMasters(),
         ]);
         if (cancelled) return;
         setState({
@@ -55,7 +53,6 @@ export function CatalogProvider({ children }) {
           cars,
           properties,
           regions,
-          hotelSpecialOptions: masters.hotelSpecialOptions,
         });
       } catch (err) {
         if (cancelled) return;
@@ -75,7 +72,12 @@ export function CatalogProvider({ children }) {
   );
 
   const facilityKeywords = useMemo(
-    () => [...new Set(state.properties.flatMap((p) => p.keywords || []))].sort(),
+    () =>
+      [
+        ...new Set(
+          state.properties.flatMap((p) => [...(p.facilities || []), ...(p.special_options || [])])
+        ),
+      ].sort(),
     [state.properties]
   );
 

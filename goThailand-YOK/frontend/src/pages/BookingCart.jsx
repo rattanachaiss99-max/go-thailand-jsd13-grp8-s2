@@ -62,7 +62,7 @@ export default function BookingCart() {
   const activeRoom =
     selectedRoom || selectedProperty?.rooms?.[0] || {
       name: "Standard Suite",
-      price_per_night: selectedProperty.base_price_per_night || selectedProperty.pricePerNight,
+      price_per_night: selectedProperty.base_price_per_night,
     };
   const roomPrice = activeRoom.price_per_night || selectedProperty.base_price_per_night;
   const roomCount = cart.accommodation.rooms || 1;
@@ -102,7 +102,7 @@ export default function BookingCart() {
           <div>
             {hasAccommodationInCart && (
               <div className="card cart-item">
-                <PhotoPlaceholder src={selectedProperty.images[0]} alt={selectedProperty.name} />
+                <PhotoPlaceholder src={selectedProperty.pictures[0]} alt={selectedProperty.name} />
                 <div className="cart-item-body">
                   <div className="between">
                     <div>

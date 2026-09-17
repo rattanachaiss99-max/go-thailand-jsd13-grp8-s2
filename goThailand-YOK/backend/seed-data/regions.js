@@ -12,8 +12,3 @@ export const regions = [
   { id: "central", label: "ภาคกลาง", labelEn: "Central" },
   { id: "south", label: "ภาคใต้", labelEn: "South" },
 ];
-
-/** หา label ภาษาไทยของภาคจาก id — ใช้แสดงผลในหน้ารายละเอียด/breadcrumb */
-export function getRegionLabel(regionId) {
-  return regions.find((r) => r.id === regionId)?.label || "";
-}

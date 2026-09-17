@@ -129,7 +129,7 @@ export default function BookingSuccess() {
                       src={
                         isCar
                           ? selectedCar.images?.[0] || selectedCar.image
-                          : item.accommodation_snapshot?.featured_image || selectedProperty.images[0]
+                          : item.accommodation_snapshot?.featured_image || selectedProperty.pictures[0]
                       }
                       alt={isCar ? `${item.car_snapshot?.brand} ${item.car_snapshot?.model}` : item.accommodation_snapshot?.name}
                     />
